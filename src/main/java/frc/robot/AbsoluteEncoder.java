@@ -1,17 +1,17 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.simulation.AnalogInputSim;
 
 public class AbsoluteEncoder {
     private AnalogInput m_analogIn;
-    private AnalogInputSim m_analogInputSim;
+    private AnalogEncoder m_analogEncoder;
 
     private double m_offset;
 
     public AbsoluteEncoder(int channel, double offset) {
         m_analogIn = new AnalogInput(channel);
-        m_analogInputSim = new AnalogInputSim(m_analogIn);
+        m_analogEncoder = new AnalogEncoder(m_analogIn);
 
         m_offset = offset;
     }
@@ -23,7 +23,7 @@ public class AbsoluteEncoder {
      * @return the angle in radians
      */
     public double getAngleRadians() {
-        return ((m_analogInputSim.getVoltage() % 5 / 5) * 2 * Math.PI) + m_offset;
+        return ((m_analogEncoder.get() % 5 / 5) * 2 * Math.PI) + m_offset;
     }
 
     /**

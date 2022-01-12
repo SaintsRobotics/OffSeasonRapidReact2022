@@ -19,7 +19,7 @@ public final class Constants {
     }
 
     public static final class XboxControllerConstants {
-        public static final int idNumber = 1;
+        public static final int idNumber = 0;
     }
 
     public static final class SwerveConstants {

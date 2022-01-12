@@ -52,6 +52,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     m_frontRightWheel.setState(swerveModuleArray[1]);
     m_rearLeftWheel.setState(swerveModuleArray[2]);
     m_rearRightWheel.setState(swerveModuleArray[3]);
+
+    for (int i = 0; i < 4; i++) {
+      SmartDashboard.putNumber("state angle " + i, swerveModuleArray[i].angle.getDegrees());
+    }
+
   }
 
   @Override

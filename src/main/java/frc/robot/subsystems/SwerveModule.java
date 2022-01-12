@@ -33,7 +33,8 @@ public class SwerveModule {
     public SwerveModule(SwerveModuleHardware hardware, CANSparkMax driveMotor, CANSparkMax turningMotor, double x,
             double y, AbsoluteEncoder absEncoder) {
         m_absoluteEncoder = absEncoder;
-        m_pidController = new PIDController(0, 0, 0);
+        m_pidController = new PIDController(0.03, 0, 0);
+        m_pidController.enableContinuousInput(-Math.PI, Math.PI);
         m_driveMotor = driveMotor;
         m_turningMotor = turningMotor;
         m_location = new Translation2d(x, y);

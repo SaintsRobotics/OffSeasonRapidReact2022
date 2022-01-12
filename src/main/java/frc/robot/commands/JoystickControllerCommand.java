@@ -5,8 +5,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Utils;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /** Controls the {@link SwerveDriveSubsystem} using an {@link XboxController}. */
@@ -28,9 +30,13 @@ public class JoystickControllerCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double y = -m_xboxController.getLeftX() * Constants.SwerveConstants.MAX_DRIVE_SPEED_MPS;
-        double x = m_xboxController.getLeftY() * Constants.SwerveConstants.MAX_DRIVE_SPEED_MPS;
-        double rotation = -m_xboxController.getRightX() * Constants.SwerveConstants.MAX_TURNING_SPEED_RADIANS_PER_SECOND;
+        double y = Utils.deadZone(-m_xboxController.getLeftX() * Constants.SwerveConstants.MAX_DRIVE_SPEED_MPS, 0.25);
+        double x = Utils.deadZone(m_xboxController.getLeftY() * Constants.SwerveConstants.MAX_DRIVE_SPEED_MPS, 0.25);
+        double rotation = Utils.deadZone(-m_xboxController.getRightX() * Constants.SwerveConstants.MAX_TURNING_SPEED_RADIANS_PER_SECOND, 0.25);
         m_subsystem.drive(x, y, rotation);
+
+        SmartDashboard.putNumber("ControllerX", x);
+        SmartDashboard.putNumber("ControllerY", y);
+        SmartDashboard.putNumber("ControllerRot", rotation);
     }
 }
