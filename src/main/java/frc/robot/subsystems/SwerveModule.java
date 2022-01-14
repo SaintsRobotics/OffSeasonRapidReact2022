@@ -14,47 +14,47 @@ import frc.robot.HardwareMap.SwerveModuleHardware;
 
 /** Class that controls the swerve wheel and reads the swerve encoder. */
 public class SwerveModule {
-    private AbsoluteEncoder m_absoluteEncoder;
-    private CANSparkMax m_driveMotor;
-    private CANSparkMax m_turningMotor;
-    private PIDController m_pidController;
+  private AbsoluteEncoder m_absoluteEncoder;
+  private CANSparkMax m_driveMotor;
+  private CANSparkMax m_turningMotor;
+  private PIDController m_pidController;
 
-    /**
-     * Creates a new {@link SwerveModule}.
-     * 
-     * @param hardware     the hardware for the swerve module
-     * @param driveMotor   motor that drives the wheel
-     * @param turningMotor motor that changes the angle of the wheel
-     * @param absEncoder   absolute encoder for the swerve module
-     */
-    public SwerveModule(SwerveModuleHardware hardware, CANSparkMax driveMotor, CANSparkMax turningMotor,
-            AbsoluteEncoder absEncoder) {
-        m_absoluteEncoder = absEncoder;
-        m_pidController = new PIDController(0.03, 0, 0);
-        m_pidController.enableContinuousInput(-Math.PI, Math.PI);
-        m_driveMotor = driveMotor;
-        m_turningMotor = turningMotor;
-        m_driveMotor.setIdleMode(IdleMode.kCoast);
-        m_turningMotor.setIdleMode(IdleMode.kCoast);
-    }
+  /**
+   * Creates a new {@link SwerveModule}.
+   * 
+   * @param hardware     the hardware for the swerve module
+   * @param driveMotor   motor that drives the wheel
+   * @param turningMotor motor that changes the angle of the wheel
+   * @param absEncoder   absolute encoder for the swerve module
+   */
+  public SwerveModule(SwerveModuleHardware hardware, CANSparkMax driveMotor, CANSparkMax turningMotor,
+      AbsoluteEncoder absEncoder) {
+    m_absoluteEncoder = absEncoder;
+    m_pidController = new PIDController(0.03, 0, 0);
+    m_pidController.enableContinuousInput(-Math.PI, Math.PI);
+    m_driveMotor = driveMotor;
+    m_turningMotor = turningMotor;
+    m_driveMotor.setIdleMode(IdleMode.kCoast);
+    m_turningMotor.setIdleMode(IdleMode.kCoast);
+  }
 
-    /**
-     * Sets the desired state for the module.
-     *
-     * @param desiredState Desired state with speed and angle.
-     */
-    public void setState(SwerveModuleState desiredState) {
-        m_turningMotor
-                .set(m_pidController.calculate(m_absoluteEncoder.getAngleRadians(), desiredState.angle.getRadians()));
-        m_driveMotor.set(desiredState.speedMetersPerSecond);
-    }
+  /**
+   * Sets the desired state for the module.
+   *
+   * @param desiredState Desired state with speed and angle.
+   */
+  public void setState(SwerveModuleState desiredState) {
+    m_turningMotor
+        .set(m_pidController.calculate(m_absoluteEncoder.getAngleRadians(), desiredState.angle.getRadians()));
+    m_driveMotor.set(desiredState.speedMetersPerSecond);
+  }
 
-    /**
-     * Returns the current radian value from the encoder.
-     * 
-     * @return the current radian value from the encoder
-     */
-    public double getRadians() {
-        return m_absoluteEncoder.getAngleRadians();
-    }
+  /**
+   * Returns the current radian value from the encoder.
+   * 
+   * @return the current radian value from the encoder
+   */
+  public double getRadians() {
+    return m_absoluteEncoder.getAngleRadians();
+  }
 }
