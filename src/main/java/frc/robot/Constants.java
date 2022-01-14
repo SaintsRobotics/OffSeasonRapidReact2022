@@ -29,10 +29,15 @@ public final class Constants {
     public static final int kFrontRightTurningMotorPort = 5;
     public static final int kRearRightTurningMotorPort = 7;
 
-    public static final int kFrontLeftEncoderPort = 0;
-    public static final int kRearLeftEncoderPort = 3;
-    public static final int kFrontRightEncoderPort = 1;
-    public static final int kRearRightEncoderPort = 2;
+    public static final int kFrontLeftTurningEncoderPort = 0;
+    public static final int kRearLeftTurningEncoderPort = 3;
+    public static final int kFrontRightTurningEncoderPort = 1;
+    public static final int kRearRightTurningEncoderPort = 2;
+
+    public static final double kFrontLeftTurningEncoderOffset = 2.122;
+    public static final double kRearLeftTurningEncoderOffset = 2.573;
+    public static final double kFrontRightTurningEncoderOffset = -6.091199;
+    public static final double kRearRightTurningEncoderOffset = 3.9;
 
     /** Distance between right and left wheels on robot. */
     public static final double kTrackWidth = 0.5;
@@ -47,14 +52,6 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     public static final double kMaxSpeedMetersPerSecond = 3.0;
-
-    public static final class AbsoluteEncoderConstants {
-      // Swerve drive encoder offsets (taken from OffSeasonIR2021)
-      public static final double frontLeftOffset = 2.75 - (Math.PI / 5);
-      public static final double frontRightOffset = -6.091199;
-      public static final double rearLeftOffset = 2.573;
-      public static final double rearRightOffset = 3.9;
-    }
 
     public static final double kMaxAngularSpeedRadiansPerSecond = 8.76;
   }

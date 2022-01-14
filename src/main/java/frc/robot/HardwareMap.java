@@ -31,32 +31,32 @@ public class HardwareMap {
     public CANSparkMax frontLeftDriveMotor = new CANSparkMax(
         SwerveConstants.kFrontLeftDriveMotorPort, MotorType.kBrushless);
     public AbsoluteEncoder frontLeftAbsoluteEncoder = new AbsoluteEncoder(
-        SwerveConstants.kFrontLeftEncoderPort,
-        SwerveConstants.AbsoluteEncoderConstants.frontLeftOffset);
+        SwerveConstants.kFrontLeftTurningEncoderPort,
+        SwerveConstants.kFrontLeftTurningEncoderOffset);
 
     public CANSparkMax frontRightTurningMotor = new CANSparkMax(
         SwerveConstants.kFrontRightTurningMotorPort, MotorType.kBrushless);
     public CANSparkMax frontRightDriveMotor = new CANSparkMax(
         SwerveConstants.kFrontRightDriveMotorPort, MotorType.kBrushless);
     public AbsoluteEncoder frontRightAbsoluteEncoder = new AbsoluteEncoder(
-        SwerveConstants.kFrontRightEncoderPort,
-        SwerveConstants.AbsoluteEncoderConstants.frontRightOffset);
+        SwerveConstants.kFrontRightTurningEncoderPort,
+        SwerveConstants.kFrontRightTurningEncoderOffset);
 
     public CANSparkMax rearLeftTurningMotor = new CANSparkMax(
         SwerveConstants.kRearLeftTurningMotorPort, MotorType.kBrushless);
     public CANSparkMax rearLeftDriveMotor = new CANSparkMax(
         SwerveConstants.kRearLeftDriveMotorPort, MotorType.kBrushless);
     public AbsoluteEncoder rearLeftAbsoluteEncoder = new AbsoluteEncoder(
-        SwerveConstants.kRearLeftEncoderPort,
-        SwerveConstants.AbsoluteEncoderConstants.rearLeftOffset);
+        SwerveConstants.kRearLeftTurningEncoderPort,
+        SwerveConstants.kRearLeftTurningEncoderOffset);
 
     public CANSparkMax rearRightTurningMotor = new CANSparkMax(
         SwerveConstants.kRearRightTurningMotorPort, MotorType.kBrushless);
     public CANSparkMax rearRightDriveMotor = new CANSparkMax(
         SwerveConstants.kRearRightDriveMotorPort, MotorType.kBrushless);
     public AbsoluteEncoder rearRightAbsoluteEncoder = new AbsoluteEncoder(
-        SwerveConstants.kRearRightEncoderPort,
-        SwerveConstants.AbsoluteEncoderConstants.rearRightOffset);
+        SwerveConstants.kRearRightTurningEncoderPort,
+        SwerveConstants.kRearRightTurningEncoderOffset);
   }
 
   public SwerveModuleHardware swerveModuleHardware;
