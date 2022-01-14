@@ -5,21 +5,20 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.HardwareMap.SwerveDrivetrainHardware;
 
 /** Controls the drivetrain of the robot using swerve. */
 public class SwerveDriveSubsystem extends SubsystemBase {
   private SwerveModule m_frontLeftWheel;
-  private SwerveModule m_frontRightWheel;
   private SwerveModule m_rearLeftWheel;
+  private SwerveModule m_frontRightWheel;
   private SwerveModule m_rearRightWheel;
 
   private ChassisSpeeds m_chassisSpeeds;
-  private SwerveDriveKinematics m_kinematics;
 
   /**
    * Creates a new {@link SwerveDriveSubsystem}.
@@ -28,12 +27,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    */
   public SwerveDriveSubsystem(SwerveDrivetrainHardware hardware) {
     m_frontLeftWheel = hardware.frontLeft;
-    m_frontRightWheel = hardware.frontRight;
     m_rearLeftWheel = hardware.rearLeft;
+    m_frontRightWheel = hardware.frontRight;
     m_rearRightWheel = hardware.rearRight;
-
-    m_kinematics = new SwerveDriveKinematics(m_frontLeftWheel.getLocation(), m_frontRightWheel.getLocation(),
-        m_rearLeftWheel.getLocation(), m_rearRightWheel.getLocation());
   }
 
   /**
@@ -47,7 +43,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot) {
     m_chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, rot);
-    SwerveModuleState[] swerveModuleArray = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
+    SwerveModuleState[] swerveModuleArray = SwerveConstants.kDriveKinematics.toSwerveModuleStates(m_chassisSpeeds);
     m_frontLeftWheel.setState(swerveModuleArray[0]);
     m_frontRightWheel.setState(swerveModuleArray[1]);
     m_rearLeftWheel.setState(swerveModuleArray[2]);

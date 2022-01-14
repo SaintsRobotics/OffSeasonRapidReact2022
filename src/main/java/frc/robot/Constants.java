@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -31,15 +34,19 @@ public final class Constants {
         public static final int kFrontRightEncoderPort = 1;
         public static final int kRearRightEncoderPort = 2;
 
-
         /** Distance between right and left wheels on robot. */
         public static final double kTrackWidth = 0.5;
 
         /** Distance between centers of front and back wheels on robot. */
         public static final double kWheelBase = 0.67;
 
-        public static final double kMaxSpeedMetersPerSecond = 3.0;
+        public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+                new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+                new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+                new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
+                new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
+        public static final double kMaxSpeedMetersPerSecond = 3.0;
 
         public static final class AbsoluteEncoderConstants {
             // Swerve drive encoder offsets (taken from OffSeasonIR2021)
@@ -48,6 +55,7 @@ public final class Constants {
             public static final double rearLeftOffset = 2.573;
             public static final double rearRightOffset = 3.9;
         }
+
         public static final double kMaxAngularSpeedRadiansPerSecond = 8.76;
     }
 
