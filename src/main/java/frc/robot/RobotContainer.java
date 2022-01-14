@@ -7,7 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.JoystickControllerCommand;
+import frc.robot.Constants.XboxControllerConstants;
+import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -18,12 +19,12 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private XboxController m_driveController = new XboxController(Constants.XboxControllerConstants.idNumber);
+  private XboxController m_driveController = new XboxController(XboxControllerConstants.idNumber);
 
   private SwerveDriveSubsystem m_drivetrainSubsystem = new SwerveDriveSubsystem(
       new HardwareMap().swerveDrivetrainHardware);
 
-  private JoystickControllerCommand m_command = new JoystickControllerCommand(m_drivetrainSubsystem, m_driveController);
+  private SwerveDriveCommand m_command = new SwerveDriveCommand(m_drivetrainSubsystem, m_driveController);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.

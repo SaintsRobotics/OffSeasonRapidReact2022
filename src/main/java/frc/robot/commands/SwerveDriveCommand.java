@@ -11,18 +11,20 @@ import frc.robot.Constants;
 import frc.robot.Utils;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
-/** Controls the {@link SwerveDriveSubsystem} using an {@link XboxController}. */
-public class JoystickControllerCommand extends CommandBase {
+/**
+ * Controls the {@link SwerveDriveSubsystem} using an {@link XboxController}.
+ */
+public class SwerveDriveCommand extends CommandBase {
     private final SwerveDriveSubsystem m_subsystem;
     private final XboxController m_xboxController;
 
     /**
-     * Creates a new {@link JoystickControllerCommand}.
+     * Creates a new {@link SwerveDriveCommand}.
      * 
-     * @param subsystem the required subsystem
+     * @param subsystem      the required subsystem
      * @param xboxController xbox controller for driving the robot
      */
-    public JoystickControllerCommand(SwerveDriveSubsystem subsystem, XboxController xboxController) {
+    public SwerveDriveCommand(SwerveDriveSubsystem subsystem, XboxController xboxController) {
         m_subsystem = subsystem;
         m_xboxController = xboxController;
         addRequirements(subsystem);
@@ -30,9 +32,12 @@ public class JoystickControllerCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double y = Utils.oddSquare(Utils.deadZone(-m_xboxController.getLeftX() * Constants.SwerveConstants.MAX_DRIVE_SPEED_MPS, 0.25));
-        double x = Utils.oddSquare(Utils.deadZone(m_xboxController.getLeftY() * Constants.SwerveConstants.MAX_DRIVE_SPEED_MPS, 0.25));
-        double rot = Utils.oddSquare(Utils.deadZone(-m_xboxController.getRightX() * Constants.SwerveConstants.MAX_TURNING_SPEED_RADIANS_PER_SECOND, 0.25));
+        double y = Utils.oddSquare(
+                Utils.deadZone(-m_xboxController.getLeftX() * Constants.SwerveConstants.MAX_DRIVE_SPEED_MPS, 0.25));
+        double x = Utils.oddSquare(
+                Utils.deadZone(m_xboxController.getLeftY() * Constants.SwerveConstants.MAX_DRIVE_SPEED_MPS, 0.25));
+        double rot = Utils.oddSquare(Utils.deadZone(
+                -m_xboxController.getRightX() * Constants.SwerveConstants.MAX_TURNING_SPEED_RADIANS_PER_SECOND, 0.25));
         m_subsystem.drive(x, y, rot);
 
         SmartDashboard.putNumber("ControllerX", x);
