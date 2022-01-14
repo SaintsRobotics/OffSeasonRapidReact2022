@@ -7,7 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.Utils;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -33,11 +33,11 @@ public class SwerveDriveCommand extends CommandBase {
     @Override
     public void execute() {
         double y = Utils.oddSquare(
-                Utils.deadZone(-m_xboxController.getLeftX() * Constants.SwerveConstants.MAX_DRIVE_SPEED_MPS, 0.25));
+                Utils.deadZone(-m_xboxController.getLeftX() * SwerveConstants.kMaxSpeedMetersPerSecond, 0.25));
         double x = Utils.oddSquare(
-                Utils.deadZone(m_xboxController.getLeftY() * Constants.SwerveConstants.MAX_DRIVE_SPEED_MPS, 0.25));
+                Utils.deadZone(m_xboxController.getLeftY() * SwerveConstants.kMaxSpeedMetersPerSecond, 0.25));
         double rot = Utils.oddSquare(Utils.deadZone(
-                -m_xboxController.getRightX() * Constants.SwerveConstants.MAX_TURNING_SPEED_RADIANS_PER_SECOND, 0.25));
+                -m_xboxController.getRightX() * SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 0.25));
         m_subsystem.drive(x, y, rot);
 
         SmartDashboard.putNumber("ControllerX", x);
