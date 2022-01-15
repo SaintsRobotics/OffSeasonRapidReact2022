@@ -4,7 +4,8 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.SwerveConstants;
@@ -12,32 +13,45 @@ import frc.robot.Utils;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
- * Controls the {@link SwerveDriveSubsystem} using an {@link XboxController}.
+ * Controls the {@link SwerveDriveSubsystem} using a 3 {@link DoubleSupplier}.
  */
 public class SwerveDriveCommand extends CommandBase {
   private final SwerveDriveSubsystem m_subsystem;
-  private final XboxController m_xboxController;
+
+  private final DoubleSupplier m_xSupplier;
+  private final DoubleSupplier m_ySupplier;
+  private final DoubleSupplier m_rotSupplier;
 
   /**
    * Creates a new {@link SwerveDriveCommand}.
    * 
-   * @param subsystem      the required subsystem
-   * @param xboxController xbox controller for driving the robot
+   * @param subsystem    The required subsystem.
+   * @param xSuppllier   Supplier that returns the x speed for the robot. [-1 to
+   *                     1]
+   * @param ySuppllier   Supplier that returns the y speed for the robot. [-1 to
+   *                     1]
+   * @param rotSuppllier Supplier that returns the angular speed for the robot.
+   *                     [-1 to 1]
    */
-  public SwerveDriveCommand(SwerveDriveSubsystem subsystem, XboxController xboxController) {
+  public SwerveDriveCommand(SwerveDriveSubsystem subsystem, DoubleSupplier xSupplier, DoubleSupplier ySupplier,
+      DoubleSupplier rotSupplier) {
     m_subsystem = subsystem;
-    m_xboxController = xboxController;
-    addRequirements(subsystem);
+    addRequirements(m_subsystem);
+
+    m_xSupplier = xSupplier;
+    m_ySupplier = ySupplier;
+    m_rotSupplier = rotSupplier;
   }
 
   @Override
   public void execute() {
     double x = Utils.oddSquare(
-        Utils.deadZone(m_xboxController.getLeftY() * SwerveConstants.kMaxSpeedMetersPerSecond, 0.25)) * 0.2;
+        Utils.deadZone(m_xSupplier.getAsDouble() * SwerveConstants.kMaxSpeedMetersPerSecond, 0.25)) * 0.2;
     double y = Utils.oddSquare(
-        Utils.deadZone(-m_xboxController.getLeftX() * SwerveConstants.kMaxSpeedMetersPerSecond, 0.25)) * 0.2;
+        Utils.deadZone(m_ySupplier.getAsDouble() * SwerveConstants.kMaxSpeedMetersPerSecond, 0.25)) * 0.2;
     double rot = Utils.oddSquare(Utils.deadZone(
-        -m_xboxController.getRightX() * SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 0.25)) * 0.2;
+        m_rotSupplier.getAsDouble() * SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 0.25)) * 0.2;
+
     m_subsystem.drive(x, y, rot);
 
     SmartDashboard.putNumber("ControllerX", x);
