@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.AbsoluteEncoder;
 import frc.robot.HardwareMap.SwerveModuleHardware;
 
@@ -31,7 +32,7 @@ public class SwerveModule {
   public SwerveModule(SwerveModuleHardware hardware, CANSparkMax driveMotor, CANSparkMax turningMotor,
       AbsoluteEncoder absEncoder) {
     m_absoluteEncoder = absEncoder;
-    m_pidController = new PIDController(-0.3, 0, 0);
+    m_pidController = new PIDController(0.3, 0, 0);
     m_pidController.enableContinuousInput(-Math.PI, Math.PI);
     m_driveMotor = driveMotor;
     m_turningMotor = turningMotor;
@@ -46,8 +47,11 @@ public class SwerveModule {
    */
   public void setState(SwerveModuleState desiredState) {
     m_turningMotor
-        .set(m_pidController.calculate(m_absoluteEncoder.getRotation2d().getRadians(), 0));
+        .set(m_pidController.calculate(m_absoluteEncoder.getRotation2d().getRadians(), desiredState.angle.getRadians()));
     m_driveMotor.set(desiredState.speedMetersPerSecond);
+    SmartDashboard.putNumber("pid measurement", m_absoluteEncoder.getRotation2d().getRadians());
+    SmartDashboard.putNumber("pid setpoint", m_absoluteEncoder.getRotation2d().getRadians());
+
   }
 
   /**
