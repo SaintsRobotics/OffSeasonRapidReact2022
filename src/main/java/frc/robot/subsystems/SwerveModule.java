@@ -19,7 +19,7 @@ public class SwerveModule {
   private CANSparkMax m_turningMotor;
   private PIDController m_pidController;
   private double PIDCalculate;
-  
+
   /**
    * Creates a new {@link SwerveModule}.
    * 
@@ -46,7 +46,7 @@ public class SwerveModule {
    */
   public void setState(SwerveModuleState desiredState) {
     m_turningMotor
-        .set(m_pidController.calculate(m_absoluteEncoder.getAngleRadians(), 0));
+        .set(m_pidController.calculate(m_absoluteEncoder.getRotation2d().getRadians(), 0));
     m_driveMotor.set(desiredState.speedMetersPerSecond);
   }
 
@@ -56,10 +56,10 @@ public class SwerveModule {
    * @return the current radian value from the encoder
    */
   public double getRadians() {
-    return m_absoluteEncoder.getAngleRadians();
+    return m_absoluteEncoder.getRotation2d().getRadians();
   }
 
-  public double getPIDCalculate(){
+  public double getPIDCalculate() {
     return PIDCalculate;
   }
 }

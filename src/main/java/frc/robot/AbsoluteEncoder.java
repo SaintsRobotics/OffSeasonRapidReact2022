@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.AnalogInput;
 
@@ -17,22 +18,12 @@ public class AbsoluteEncoder {
   }
 
   /**
-   * Returns the angle in radians.
+   * Returns the angle as a {@link Rotation2d}.
    * 
    * @todo check if this is equal to the 0
-   * @return the angle in radians
+   * @return The angle as a {@link Rotation2d}.
    */
-  public double getAngleRadians() {
-    return ((m_analogEncoder.get() % 5 / 5) * 2 * Math.PI) - m_offset;
-  }
-
-  /**
-   * Returns the angle in degrees.
-   * 
-   * @todo check if this is equal to the 0
-   * @return the angle in degrees
-   */
-  public double getAngleDegrees() {
-    return Math.toDegrees(getAngleRadians());
+  public Rotation2d getRotation2d() {
+    return new Rotation2d(((m_analogEncoder.get() % 5 / 5) * 2 * Math.PI) - m_offset);
   }
 }
