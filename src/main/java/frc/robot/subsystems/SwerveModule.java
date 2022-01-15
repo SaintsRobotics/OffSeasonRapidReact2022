@@ -19,7 +19,6 @@ public class SwerveModule {
   private CANSparkMax m_driveMotor;
   private CANSparkMax m_turningMotor;
   private PIDController m_pidController;
-  private double PIDCalculate;
 
   /**
    * Creates a new {@link SwerveModule}.
@@ -49,8 +48,6 @@ public class SwerveModule {
     m_turningMotor
         .set(m_pidController.calculate(m_absoluteEncoder.getRotation2d().getRadians(), desiredState.angle.getRadians()));
     m_driveMotor.set(desiredState.speedMetersPerSecond);
-    SmartDashboard.putNumber("pid measurement", m_absoluteEncoder.getRotation2d().getRadians());
-    SmartDashboard.putNumber("pid setpoint", m_absoluteEncoder.getRotation2d().getRadians());
 
   }
 
@@ -63,7 +60,7 @@ public class SwerveModule {
     return m_absoluteEncoder.getRotation2d().getRadians();
   }
 
-  public double getPIDCalculate() {
-    return PIDCalculate;
+  public double getPIDError() {
+    return m_pidController.getPositionError();
   }
 }

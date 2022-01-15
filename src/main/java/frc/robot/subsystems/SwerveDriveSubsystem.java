@@ -43,29 +43,22 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot) {
     m_chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, rot);
+
     SwerveModuleState[] swerveModuleArray = SwerveConstants.kDriveKinematics.toSwerveModuleStates(m_chassisSpeeds);
+
     m_frontLeftWheel.setState(swerveModuleArray[0]);
     m_frontRightWheel.setState(swerveModuleArray[1]);
     m_rearLeftWheel.setState(swerveModuleArray[2]);
     m_rearRightWheel.setState(swerveModuleArray[3]);
 
-    for (int i = 0; i < 4; i++) {
-      SmartDashboard.putNumber("state angle " + i, swerveModuleArray[i].angle.getDegrees());
-    }
-
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Front Left Wheel", m_frontLeftWheel.getRadians());
-    SmartDashboard.putNumber("Front Right Wheel", m_frontRightWheel.getRadians());
-    SmartDashboard.putNumber("Rear Left Wheel", m_rearLeftWheel.getRadians());
-    SmartDashboard.putNumber("Rear Right Wheel", m_rearRightWheel.getRadians());
-
-    SmartDashboard.putNumber("PID calculate FL", m_frontLeftWheel.getPIDCalculate());
-    SmartDashboard.putNumber("PID calculate RL", m_rearLeftWheel.getPIDCalculate());
-    SmartDashboard.putNumber("PID calculate FR", m_frontRightWheel.getPIDCalculate());
-    SmartDashboard.putNumber("PID calculate RR", m_rearRightWheel.getPIDCalculate());
+    SmartDashboard.putNumber("PID error FL", m_frontLeftWheel.getPIDError());
+    SmartDashboard.putNumber("PID error RL", m_rearLeftWheel.getPIDError());
+    SmartDashboard.putNumber("PID error FR", m_frontRightWheel.getPIDError());
+    SmartDashboard.putNumber("PID error RR", m_rearRightWheel.getPIDError());
 
   }
 }
