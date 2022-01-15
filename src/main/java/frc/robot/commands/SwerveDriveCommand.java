@@ -32,12 +32,12 @@ public class SwerveDriveCommand extends CommandBase {
 
   @Override
   public void execute() {
-    double y = Utils.oddSquare(
-        Utils.deadZone(-m_xboxController.getLeftX() * SwerveConstants.kMaxSpeedMetersPerSecond, 0.25));
     double x = Utils.oddSquare(
-        Utils.deadZone(m_xboxController.getLeftY() * SwerveConstants.kMaxSpeedMetersPerSecond, 0.25));
+        Utils.deadZone(m_xboxController.getLeftY() * SwerveConstants.kMaxSpeedMetersPerSecond, 0.25)) * 0.2;
+    double y = Utils.oddSquare(
+        Utils.deadZone(-m_xboxController.getLeftX() * SwerveConstants.kMaxSpeedMetersPerSecond, 0.25)) * 0.2;
     double rot = Utils.oddSquare(Utils.deadZone(
-        -m_xboxController.getRightX() * SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 0.25));
+        -m_xboxController.getRightX() * SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 0.25)) * 0.2;
     m_subsystem.drive(x, y, rot);
 
     SmartDashboard.putNumber("ControllerX", x);

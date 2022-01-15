@@ -23,7 +23,7 @@ public class AbsoluteEncoder {
    * @return the angle in radians
    */
   public double getAngleRadians() {
-    return ((m_analogEncoder.get() % 5 / 5) * 2 * Math.PI) + m_offset;
+    return ((m_analogEncoder.get() % 5 / 5) * 2 * Math.PI) - m_offset;
   }
 
   /**
@@ -33,6 +33,6 @@ public class AbsoluteEncoder {
    * @return the angle in degrees
    */
   public double getAngleDegrees() {
-    return getAngleRadians() / (2 * Math.PI) * 360;
+    return Math.toDegrees(getAngleRadians());
   }
 }

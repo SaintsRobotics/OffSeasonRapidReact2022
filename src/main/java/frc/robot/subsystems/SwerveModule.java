@@ -18,7 +18,7 @@ public class SwerveModule {
   private CANSparkMax m_driveMotor;
   private CANSparkMax m_turningMotor;
   private PIDController m_pidController;
-
+  private double PIDCalculate;
   /**
    * Creates a new {@link SwerveModule}.
    * 
@@ -30,12 +30,12 @@ public class SwerveModule {
   public SwerveModule(SwerveModuleHardware hardware, CANSparkMax driveMotor, CANSparkMax turningMotor,
       AbsoluteEncoder absEncoder) {
     m_absoluteEncoder = absEncoder;
-    m_pidController = new PIDController(0.03, 0, 0);
+    m_pidController = new PIDController(-0.3, 0, 0);
     m_pidController.enableContinuousInput(-Math.PI, Math.PI);
     m_driveMotor = driveMotor;
     m_turningMotor = turningMotor;
-    m_driveMotor.setIdleMode(IdleMode.kCoast);
-    m_turningMotor.setIdleMode(IdleMode.kCoast);
+    m_driveMotor.setIdleMode(IdleMode.kBrake);
+    m_turningMotor.setIdleMode(IdleMode.kBrake);
   }
 
   /**
@@ -45,7 +45,7 @@ public class SwerveModule {
    */
   public void setState(SwerveModuleState desiredState) {
     m_turningMotor
-        .set(m_pidController.calculate(m_absoluteEncoder.getAngleRadians(), desiredState.angle.getRadians()));
+        .set(m_pidController.calculate(m_absoluteEncoder.getAngleRadians(), 0));
     m_driveMotor.set(desiredState.speedMetersPerSecond);
   }
 
@@ -56,5 +56,9 @@ public class SwerveModule {
    */
   public double getRadians() {
     return m_absoluteEncoder.getAngleRadians();
+  }
+
+  public double getPIDCalculate(){
+    return PIDCalculate;
   }
 }

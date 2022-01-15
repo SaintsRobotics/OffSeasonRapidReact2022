@@ -61,5 +61,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Front Right Wheel", m_frontRightWheel.getRadians());
     SmartDashboard.putNumber("Rear Left Wheel", m_rearLeftWheel.getRadians());
     SmartDashboard.putNumber("Rear Right Wheel", m_rearRightWheel.getRadians());
+
+    SmartDashboard.putNumber("PID calculate FL", m_frontLeftWheel.getPIDCalculate());
+    SmartDashboard.putNumber("PID calculate RL", m_rearLeftWheel.getPIDCalculate());
+    SmartDashboard.putNumber("PID calculate FR", m_frontRightWheel.getPIDCalculate());
+    SmartDashboard.putNumber("PID calculate RR", m_rearRightWheel.getPIDCalculate());
+
   }
 }
