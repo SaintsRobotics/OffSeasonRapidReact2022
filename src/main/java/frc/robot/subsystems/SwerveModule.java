@@ -19,6 +19,7 @@ public class SwerveModule {
   private CANSparkMax m_turningMotor;
   private PIDController m_pidController;
   private double PIDCalculate;
+  
   /**
    * Creates a new {@link SwerveModule}.
    * 

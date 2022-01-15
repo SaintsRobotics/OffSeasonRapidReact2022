@@ -13,12 +13,12 @@ public class HardwareMap {
     public SwerveModule frontLeft = new SwerveModule(swerveModuleHardware,
         swerveModuleHardware.frontLeftDriveMotor, swerveModuleHardware.frontLeftTurningMotor,
         swerveModuleHardware.frontLeftAbsoluteEncoder);
-    public SwerveModule frontRight = new SwerveModule(swerveModuleHardware,
-        swerveModuleHardware.frontRightDriveMotor, swerveModuleHardware.frontRightTurningMotor,
-        swerveModuleHardware.frontRightAbsoluteEncoder);
     public SwerveModule rearLeft = new SwerveModule(swerveModuleHardware,
         swerveModuleHardware.rearLeftDriveMotor, swerveModuleHardware.rearLeftTurningMotor,
         swerveModuleHardware.rearLeftAbsoluteEncoder);
+    public SwerveModule frontRight = new SwerveModule(swerveModuleHardware,
+        swerveModuleHardware.frontRightDriveMotor, swerveModuleHardware.frontRightTurningMotor,
+        swerveModuleHardware.frontRightAbsoluteEncoder);
     public SwerveModule rearRight = new SwerveModule(swerveModuleHardware,
         swerveModuleHardware.rearRightDriveMotor, swerveModuleHardware.rearRightTurningMotor,
         swerveModuleHardware.rearRightAbsoluteEncoder);
@@ -34,14 +34,6 @@ public class HardwareMap {
         SwerveConstants.kFrontLeftTurningEncoderPort,
         SwerveConstants.kFrontLeftTurningEncoderOffset);
 
-    public CANSparkMax frontRightTurningMotor = new CANSparkMax(
-        SwerveConstants.kFrontRightTurningMotorPort, MotorType.kBrushless);
-    public CANSparkMax frontRightDriveMotor = new CANSparkMax(
-        SwerveConstants.kFrontRightDriveMotorPort, MotorType.kBrushless);
-    public AbsoluteEncoder frontRightAbsoluteEncoder = new AbsoluteEncoder(
-        SwerveConstants.kFrontRightTurningEncoderPort,
-        SwerveConstants.kFrontRightTurningEncoderOffset);
-
     public CANSparkMax rearLeftTurningMotor = new CANSparkMax(
         SwerveConstants.kRearLeftTurningMotorPort, MotorType.kBrushless);
     public CANSparkMax rearLeftDriveMotor = new CANSparkMax(
@@ -49,6 +41,14 @@ public class HardwareMap {
     public AbsoluteEncoder rearLeftAbsoluteEncoder = new AbsoluteEncoder(
         SwerveConstants.kRearLeftTurningEncoderPort,
         SwerveConstants.kRearLeftTurningEncoderOffset);
+
+    public CANSparkMax frontRightTurningMotor = new CANSparkMax(
+        SwerveConstants.kFrontRightTurningMotorPort, MotorType.kBrushless);
+    public CANSparkMax frontRightDriveMotor = new CANSparkMax(
+        SwerveConstants.kFrontRightDriveMotorPort, MotorType.kBrushless);
+    public AbsoluteEncoder frontRightAbsoluteEncoder = new AbsoluteEncoder(
+        SwerveConstants.kFrontRightTurningEncoderPort,
+        SwerveConstants.kFrontRightTurningEncoderOffset);
 
     public CANSparkMax rearRightTurningMotor = new CANSparkMax(
         SwerveConstants.kRearRightTurningMotorPort, MotorType.kBrushless);
@@ -62,7 +62,7 @@ public class HardwareMap {
   public SwerveModuleHardware swerveModuleHardware;
   public SwerveDrivetrainHardware swerveDrivetrainHardware;
 
-  /** Creates a new {@link HardwareMap} */
+  /** Creates a new {@link HardwareMap}. */
   public HardwareMap() {
     swerveModuleHardware = new SwerveModuleHardware();
     swerveDrivetrainHardware = new SwerveDrivetrainHardware();
