@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveConstants;
@@ -18,8 +17,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   private SwerveModule m_rearLeft;
   private SwerveModule m_frontRight;
   private SwerveModule m_rearRight;
-
-  private ChassisSpeeds m_chassisSpeeds;
 
   /**
    * Creates a new {@link SwerveDriveSubsystem}.
@@ -43,14 +40,14 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    *                      field.
    */
   public void drive(double xSpeed, double ySpeed, double rot) {
-    m_chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, rot);
-
-    SwerveModuleState[] swerveModuleArray = SwerveConstants.kDriveKinematics.toSwerveModuleStates(m_chassisSpeeds);
-
-    m_frontLeft.setState(swerveModuleArray[0]);
-    m_frontRight.setState(swerveModuleArray[1]);
-    m_rearLeft.setState(swerveModuleArray[2]);
-    m_rearRight.setState(swerveModuleArray[3]);
+    var swerveModuleStates = SwerveConstants.kDriveKinematics
+        .toSwerveModuleStates(new ChassisSpeeds(xSpeed, ySpeed, rot));
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
+    m_frontLeft.setState(swerveModuleStates[0]);
+    m_frontRight.setState(swerveModuleStates[1]);
+    m_rearLeft.setState(swerveModuleStates[2]);
+    m_rearRight.setState(swerveModuleStates[3]);
   }
 
   @Override
@@ -63,6 +60,5 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("FrontRight", m_frontRight.getRadians());
     SmartDashboard.putNumber("RearLeft", m_rearLeft.getRadians());
     SmartDashboard.putNumber("RearRight", m_rearRight.getRadians());
-
   }
 }
