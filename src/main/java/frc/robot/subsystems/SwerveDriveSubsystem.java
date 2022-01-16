@@ -59,6 +59,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("PID error RL", m_rearLeftWheel.getPIDError());
     SmartDashboard.putNumber("PID error FR", m_frontRightWheel.getPIDError());
     SmartDashboard.putNumber("PID error RR", m_rearRightWheel.getPIDError());
+    SmartDashboard.putNumber("FrontLeftWheel", m_frontLeftWheel.getRadians());
+    SmartDashboard.putNumber("FrontRightWheel", m_frontRightWheel.getRadians());
+    SmartDashboard.putNumber("RearLeftWheel", m_rearLeftWheel.getRadians());
+    SmartDashboard.putNumber("RearRightWheel", m_rearRightWheel.getRadians());
 
   }
 }

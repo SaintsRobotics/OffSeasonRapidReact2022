@@ -39,10 +39,10 @@ public final class Constants {
     public static final boolean kFrontRightTurningEncoderInverted = true;
     public static final boolean kRearRightTurningEncoderInverted = true;
 
-    public static final double kFrontLeftTurningEncoderOffset = 4.05;
-    public static final double kRearLeftTurningEncoderOffset = 0.91 - Math.PI/5; 
-    public static final double kFrontRightTurningEncoderOffset = 3.8269;
-    public static final double kRearRightTurningEncoderOffset = 2.37 - Math.PI/3;
+    public static final double kFrontLeftTurningEncoderOffset = 0.94;
+    public static final double kRearLeftTurningEncoderOffset = -1.02; 
+    public static final double kFrontRightTurningEncoderOffset = 4.52;
+    public static final double kRearRightTurningEncoderOffset = -0.51;
 
     /** Distance between right and left wheels on robot. */
     public static final double kTrackWidth = 0.5;
