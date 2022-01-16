@@ -28,9 +28,9 @@ public class AbsoluteEncoder {
   }
 
   /**
-   * Returns the angle as a {@link Rotation2d}.
+   * Returns the angle as a {@link Rotation2d}.  Zero points toward the front of the robot.
+   * <i>The value INCREASES as the wheel is turned COUNTER-CLOCKWISE</i>
    * 
-   * @todo check if this is equal to the 0
    * @return The angle as a {@link Rotation2d}.
    */
   public Rotation2d getRotation2d() {
