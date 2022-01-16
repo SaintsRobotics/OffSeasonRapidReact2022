@@ -31,7 +31,7 @@ public class HardwareMap {
         public CANSparkMax frontLeftDriveMotor = new CANSparkMax(
                 SwerveConstants.kFrontLeftDriveMotorPort, MotorType.kBrushless);
         public AbsoluteEncoder frontLeftAbsoluteEncoder = new AbsoluteEncoder(
-                SwerveConstants.kFrontLeftTurningEncoderPort, SwerveConstants.kFrontLeftTurningEncoderInverted,
+                SwerveConstants.kFrontLeftTurningEncoderPort, SwerveConstants.kFrontLeftTurningEncoderReversed,
                 SwerveConstants.kFrontLeftTurningEncoderOffset);
 
         public CANSparkMax rearLeftTurningMotor = new CANSparkMax(
@@ -39,7 +39,7 @@ public class HardwareMap {
         public CANSparkMax rearLeftDriveMotor = new CANSparkMax(
                 SwerveConstants.kRearLeftDriveMotorPort, MotorType.kBrushless);
         public AbsoluteEncoder rearLeftAbsoluteEncoder = new AbsoluteEncoder(
-                SwerveConstants.kRearLeftTurningEncoderPort, SwerveConstants.kRearLeftTurningEncoderInverted,
+                SwerveConstants.kRearLeftTurningEncoderPort, SwerveConstants.kRearLeftTurningEncoderReversed,
                 SwerveConstants.kRearLeftTurningEncoderOffset);
 
         public CANSparkMax frontRightTurningMotor = new CANSparkMax(
@@ -47,7 +47,7 @@ public class HardwareMap {
         public CANSparkMax frontRightDriveMotor = new CANSparkMax(
                 SwerveConstants.kFrontRightDriveMotorPort, MotorType.kBrushless);
         public AbsoluteEncoder frontRightAbsoluteEncoder = new AbsoluteEncoder(
-                SwerveConstants.kFrontRightTurningEncoderPort, SwerveConstants.kFrontRightTurningEncoderInverted,
+                SwerveConstants.kFrontRightTurningEncoderPort, SwerveConstants.kFrontRightTurningEncoderReversed,
                 SwerveConstants.kFrontRightTurningEncoderOffset);
 
         public CANSparkMax rearRightTurningMotor = new CANSparkMax(
@@ -55,7 +55,7 @@ public class HardwareMap {
         public CANSparkMax rearRightDriveMotor = new CANSparkMax(
                 SwerveConstants.kRearRightDriveMotorPort, MotorType.kBrushless);
         public AbsoluteEncoder rearRightAbsoluteEncoder = new AbsoluteEncoder(
-                SwerveConstants.kRearRightTurningEncoderPort, SwerveConstants.kRearRightTurningEncoderInverted,
+                SwerveConstants.kRearRightTurningEncoderPort, SwerveConstants.kRearRightTurningEncoderReversed,
                 SwerveConstants.kRearRightTurningEncoderOffset);
     }
 
