@@ -34,10 +34,10 @@ public final class Constants {
     public static final int kFrontRightTurningEncoderPort = 1;
     public static final int kRearRightTurningEncoderPort = 2;
 
-    public static final boolean kFrontLeftTurningEncoderInverted = true;
-    public static final boolean kRearLeftTurningEncoderInverted= true;
-    public static final boolean kFrontRightTurningEncoderInverted = true;
-    public static final boolean kRearRightTurningEncoderInverted = true;
+    public static final boolean kFrontLeftTurningEncoderReversed = true;
+    public static final boolean kRearLeftTurningEncoderReversed= true;
+    public static final boolean kFrontRightTurningEncoderReversed = true;
+    public static final boolean kRearRightTurningEncoderReversed = true;
 
     public static final double kFrontLeftTurningEncoderOffset = 4.05;
     public static final double kRearLeftTurningEncoderOffset = 0.91 - Math.PI/5; 
