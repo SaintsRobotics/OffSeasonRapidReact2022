@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,10 +14,10 @@ import frc.robot.HardwareMap.SwerveDrivetrainHardware;
 
 /** Controls the drivetrain of the robot using swerve. */
 public class SwerveDriveSubsystem extends SubsystemBase {
-  private SwerveModule m_frontLeftWheel;
-  private SwerveModule m_rearLeftWheel;
-  private SwerveModule m_frontRightWheel;
-  private SwerveModule m_rearRightWheel;
+  private SwerveModule m_frontLeft;
+  private SwerveModule m_rearLeft;
+  private SwerveModule m_frontRight;
+  private SwerveModule m_rearRight;
 
   private ChassisSpeeds m_chassisSpeeds;
 
@@ -26,10 +27,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    * @param hardware the hardware for the {@link SwerveDriveSubsystem}
    */
   public SwerveDriveSubsystem(SwerveDrivetrainHardware hardware) {
-    m_frontLeftWheel = hardware.frontLeft;
-    m_rearLeftWheel = hardware.rearLeft;
-    m_frontRightWheel = hardware.frontRight;
-    m_rearRightWheel = hardware.rearRight;
+    m_frontLeft = hardware.frontLeft;
+    m_rearLeft = hardware.rearLeft;
+    m_frontRight = hardware.frontRight;
+    m_rearRight = hardware.rearRight;
   }
 
   /**
@@ -46,19 +47,18 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     SwerveModuleState[] swerveModuleArray = SwerveConstants.kDriveKinematics.toSwerveModuleStates(m_chassisSpeeds);
 
-    m_frontLeftWheel.setState(swerveModuleArray[0]);
-    m_frontRightWheel.setState(swerveModuleArray[1]);
-    m_rearLeftWheel.setState(swerveModuleArray[2]);
-    m_rearRightWheel.setState(swerveModuleArray[3]);
-
+    m_frontLeft.setState(swerveModuleArray[0]);
+    m_frontRight.setState(swerveModuleArray[1]);
+    m_rearLeft.setState(swerveModuleArray[2]);
+    m_rearRight.setState(swerveModuleArray[3]);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("PID error FL", m_frontLeftWheel.getPIDError());
-    SmartDashboard.putNumber("PID error RL", m_rearLeftWheel.getPIDError());
-    SmartDashboard.putNumber("PID error FR", m_frontRightWheel.getPIDError());
-    SmartDashboard.putNumber("PID error RR", m_rearRightWheel.getPIDError());
+    SmartDashboard.putNumber("PID error FL", m_frontLeft.getPIDError());
+    SmartDashboard.putNumber("PID error RL", m_rearLeft.getPIDError());
+    SmartDashboard.putNumber("PID error FR", m_frontRight.getPIDError());
+    SmartDashboard.putNumber("PID error RR", m_rearRight.getPIDError());
 
   }
 }
