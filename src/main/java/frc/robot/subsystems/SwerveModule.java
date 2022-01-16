@@ -14,10 +14,12 @@ import frc.robot.HardwareMap.SwerveModuleHardware;
 
 /** Class that controls the swerve wheel and reads the swerve encoder. */
 public class SwerveModule {
-  private AbsoluteEncoder m_absoluteEncoder;
-  private CANSparkMax m_driveMotor;
-  private CANSparkMax m_turningMotor;
-  private PIDController m_pidController;
+  private final CANSparkMax m_driveMotor;
+  private final CANSparkMax m_turningMotor;
+
+  private final AbsoluteEncoder m_turningEncoder;
+  
+  private final PIDController m_turningPIDController = new PIDController(0.3, 0, 0);
 
   /**
    * Creates a new {@link SwerveModule}.
@@ -25,15 +27,16 @@ public class SwerveModule {
    * @param hardware     the hardware for the swerve module
    * @param driveMotor   motor that drives the wheel
    * @param turningMotor motor that changes the angle of the wheel
-   * @param absEncoder   absolute encoder for the swerve module
+   * @param turningEncoder   absolute encoder for the swerve module
    */
   public SwerveModule(SwerveModuleHardware hardware, CANSparkMax driveMotor, CANSparkMax turningMotor,
-      AbsoluteEncoder absEncoder) {
-    m_absoluteEncoder = absEncoder;
-    m_pidController = new PIDController(0.3, 0, 0);
-    m_pidController.enableContinuousInput(-Math.PI, Math.PI);
+      AbsoluteEncoder turningEncoder) {
     m_driveMotor = driveMotor;
     m_turningMotor = turningMotor;
+
+    m_turningEncoder = turningEncoder;
+
+    m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
     m_driveMotor.setIdleMode(IdleMode.kBrake);
     m_turningMotor.setIdleMode(IdleMode.kBrake);
   }
@@ -43,11 +46,15 @@ public class SwerveModule {
    *
    * @param desiredState Desired state with speed and angle.
    */
-  public void setState(SwerveModuleState desiredState) {
-    m_turningMotor
-        .set(m_pidController.calculate(m_absoluteEncoder.getRotation2d().getRadians(), desiredState.angle.getRadians()));
-    m_driveMotor.set(desiredState.speedMetersPerSecond);
+  public void setDesiredState(SwerveModuleState desiredState) {
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState, m_turningEncoder.getRotation2d());
 
+    final double driveOutput = state.speedMetersPerSecond;
+    final var turnOutput = m_turningPIDController.calculate(m_turningEncoder.getRotation2d().getRadians(),
+        state.angle.getRadians());
+
+    m_driveMotor.set(driveOutput);
+    m_turningMotor.set(turnOutput);
   }
 
   /**
@@ -56,10 +63,10 @@ public class SwerveModule {
    * @return the current radian value from the encoder
    */
   public double getRadians() {
-    return m_absoluteEncoder.getRotation2d().getRadians();
+    return m_turningEncoder.getRotation2d().getRadians();
   }
 
   public double getPIDError() {
-    return m_pidController.getPositionError();
+    return m_turningPIDController.getPositionError();
   }
 }
