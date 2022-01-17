@@ -47,10 +47,14 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Resets the odometry when the start button is pressed.
-    new JoystickButton(m_driveController, Button.kStart.value)
+    // Resets the odometry when the back button is pressed.
+    new JoystickButton(m_driveController, Button.kBack.value)
         .whenPressed(
             new InstantCommand(() -> m_swerveDriveSubsystem.resetOdometry(new Pose2d()), m_swerveDriveSubsystem));
+
+    // Zeroes the heading when the start button is pressed
+    new JoystickButton(m_driveController, Button.kStart.value).whenPressed(() -> m_swerveDriveSubsystem.zeroHeading(),
+        m_swerveDriveSubsystem);
   }
 
   /**
