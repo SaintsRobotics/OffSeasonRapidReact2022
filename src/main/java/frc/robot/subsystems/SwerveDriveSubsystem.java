@@ -4,8 +4,12 @@
 
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveConstants;
@@ -13,10 +17,13 @@ import frc.robot.HardwareMap.SwerveDrivetrainHardware;
 
 /** Controls the drivetrain of the robot using swerve. */
 public class SwerveDriveSubsystem extends SubsystemBase {
+  private SwerveDrivetrainHardware m_swerveDrivetrainHardware;
   private SwerveModule m_frontLeft;
   private SwerveModule m_rearLeft;
   private SwerveModule m_frontRight;
   private SwerveModule m_rearRight;
+  private AHRS m_gyro;
+  private SwerveDriveOdometry m_odometry;
 
   /**
    * Creates a new {@link SwerveDriveSubsystem}.
@@ -28,6 +35,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     m_rearLeft = hardware.rearLeft;
     m_frontRight = hardware.frontRight;
     m_rearRight = hardware.rearRight;
+    
+    m_odometry = new SwerveDriveOdometry(SwerveConstants.kDriveKinematics, m_gyro.getRotation2d());
   }
 
   /**
@@ -52,13 +61,18 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("PID error FL", m_frontLeft.getPIDError());
-    SmartDashboard.putNumber("PID error RL", m_rearLeft.getPIDError());
-    SmartDashboard.putNumber("PID error FR", m_frontRight.getPIDError());
-    SmartDashboard.putNumber("PID error RR", m_rearRight.getPIDError());
+    m_odometry.update(Rotation2d.fromDegrees(m_gyro.getAngle()), m_swerveDrivetrainHardware.frontLeft.getState(),
+      m_swerveDrivetrainHardware.frontRight.getState(), m_swerveDrivetrainHardware.rearLeft.getState(),
+      m_swerveDrivetrainHardware.rearRight.getState());
     SmartDashboard.putNumber("FrontLeft", m_frontLeft.getRadians());
     SmartDashboard.putNumber("FrontRight", m_frontRight.getRadians());
     SmartDashboard.putNumber("RearLeft", m_rearLeft.getRadians());
     SmartDashboard.putNumber("RearRight", m_rearRight.getRadians());
+    SmartDashboard.putNumber("OdometryX", m_odometry.getPoseMeters().getX());
+    SmartDashboard.putNumber("OdometryY", m_odometry.getPoseMeters().getY());
+    SmartDashboard.putNumber("OdometryRot", m_odometry.getPoseMeters().getRotation().getDegrees());
+
+    SmartDashboard.putNumber("FL alsdfj;lkasdjf", m_frontLeft.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("FL alsdfj;angle gangla nleg", m_frontLeft.getState().angle.getDegrees());
   }
 }

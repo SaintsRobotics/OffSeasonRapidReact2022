@@ -50,7 +50,7 @@ public class SwerveDriveCommand extends CommandBase {
     double y = Utils.oddSquare(
         Utils.deadZone(m_ySupplier.getAsDouble() * SwerveConstants.kMaxSpeedMetersPerSecond, 0.25)) * 0.2;
     double rot = Utils.oddSquare(Utils.deadZone(
-        m_rotSupplier.getAsDouble() * SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 0.25)) * 0.2;
+        m_rotSupplier.getAsDouble() * SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 0.3)) * 0.2;
 
     m_subsystem.drive(x, y, rot);
 

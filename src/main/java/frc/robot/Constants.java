@@ -16,6 +16,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  * <p>
  * It is advised to statically import this class (or one of its inner classes)
  * wherever the constants are needed, to reduce verbosity.
+ * 
+ * TODO update these values when the new robot is built
  */
 public final class Constants {
   public static final class SwerveConstants {
@@ -35,12 +37,12 @@ public final class Constants {
     public static final int kRearRightTurningEncoderPort = 2;
 
     public static final boolean kFrontLeftTurningEncoderReversed = true;
-    public static final boolean kRearLeftTurningEncoderReversed= true;
+    public static final boolean kRearLeftTurningEncoderReversed = true;
     public static final boolean kFrontRightTurningEncoderReversed = true;
     public static final boolean kRearRightTurningEncoderReversed = true;
 
     public static final double kFrontLeftTurningEncoderOffset = -0.806096955376373;
-    public static final double kRearLeftTurningEncoderOffset = 0.930369118696029; 
+    public static final double kRearLeftTurningEncoderOffset = 0.930369118696029;
     public static final double kFrontRightTurningEncoderOffset = -1.188058132447069;
     public static final double kRearRightTurningEncoderOffset = -2.548698951971998;
 
@@ -59,6 +61,13 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 3;
 
     public static final double kMaxAngularSpeedRadiansPerSecond = 8.76;
+  }
+
+  public static final class ModuleConstants {
+    public static final double kWheelDiameterMeters = 0.3;
+
+    /** Gear ratio between the motor and the wheel. */
+    public static final double kDrivingGearRatio = 8.33;
   }
 
   public static final class OIConstants {
