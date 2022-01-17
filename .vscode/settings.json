@@ -27,7 +27,9 @@
   ],
   "java.test.defaultConfig": "WPIlibUnitTests",
   "cSpell.words": [
+    "AHRS",
     "deadzone",
+    "Odometry",
     "teleop",
     "teleoperated"
   ]

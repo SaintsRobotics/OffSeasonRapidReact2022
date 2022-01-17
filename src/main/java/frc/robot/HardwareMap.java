@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -22,6 +23,8 @@ public class HardwareMap {
         public SwerveModule rearRight = new SwerveModule(swerveModuleHardware,
                 swerveModuleHardware.rearRightDriveMotor, swerveModuleHardware.rearRightTurningMotor,
                 swerveModuleHardware.rearRightAbsoluteEncoder);
+
+        public AHRS gyro = new AHRS();
     }
 
     /** File for storing the hardware of the swerve module. */

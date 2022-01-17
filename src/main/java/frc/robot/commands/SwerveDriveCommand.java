@@ -25,13 +25,15 @@ public class SwerveDriveCommand extends CommandBase {
   /**
    * Creates a new {@link SwerveDriveCommand}.
    * 
-   * @param subsystem    The required subsystem.
-   * @param xSupplier   Supplier that returns the x (forward / backward) speed for the robot. [-1 to
-   *                     1]
-   * @param ySupplier   Supplier that returns the y (left / right) speed for the robot. [-1 to
-   *                     1]
+   * @param subsystem   The required subsystem.
+   * @param xSupplier   Supplier that returns the x (forward / backward) speed for
+   *                    the robot. [-1 to
+   *                    1]
+   * @param ySupplier   Supplier that returns the y (left / right) speed for the
+   *                    robot. [-1 to
+   *                    1]
    * @param rotSupplier Supplier that returns the angular speed for the robot.
-   *                     [-1 to 1]
+   *                    [-1 to 1]
    */
   public SwerveDriveCommand(SwerveDriveSubsystem subsystem, DoubleSupplier xSupplier, DoubleSupplier ySupplier,
       DoubleSupplier rotSupplier) {

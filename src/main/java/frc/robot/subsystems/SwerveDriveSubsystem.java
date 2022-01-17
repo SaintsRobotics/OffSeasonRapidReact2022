@@ -6,7 +6,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -17,13 +17,13 @@ import frc.robot.HardwareMap.SwerveDrivetrainHardware;
 
 /** Controls the drivetrain of the robot using swerve. */
 public class SwerveDriveSubsystem extends SubsystemBase {
-  private SwerveDrivetrainHardware m_swerveDrivetrainHardware;
-  private SwerveModule m_frontLeft;
-  private SwerveModule m_rearLeft;
-  private SwerveModule m_frontRight;
-  private SwerveModule m_rearRight;
-  private AHRS m_gyro;
-  private SwerveDriveOdometry m_odometry;
+  private final SwerveModule m_frontLeft;
+  private final SwerveModule m_rearLeft;
+  private final SwerveModule m_frontRight;
+  private final SwerveModule m_rearRight;
+
+  private final AHRS m_gyro;
+  private final SwerveDriveOdometry m_odometry;
 
   /**
    * Creates a new {@link SwerveDriveSubsystem}.
@@ -35,7 +35,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     m_rearLeft = hardware.rearLeft;
     m_frontRight = hardware.frontRight;
     m_rearRight = hardware.rearRight;
-    
+
+    m_gyro = hardware.gyro;
+
     m_odometry = new SwerveDriveOdometry(SwerveConstants.kDriveKinematics, m_gyro.getRotation2d());
   }
 
@@ -61,9 +63,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    m_odometry.update(Rotation2d.fromDegrees(m_gyro.getAngle()), m_swerveDrivetrainHardware.frontLeft.getState(),
-      m_swerveDrivetrainHardware.frontRight.getState(), m_swerveDrivetrainHardware.rearLeft.getState(),
-      m_swerveDrivetrainHardware.rearRight.getState());
+    m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(),
+        m_frontRight.getState(), m_rearLeft.getState(),
+        m_rearRight.getState());
     SmartDashboard.putNumber("FrontLeft", m_frontLeft.getRadians());
     SmartDashboard.putNumber("FrontRight", m_frontRight.getRadians());
     SmartDashboard.putNumber("RearLeft", m_rearLeft.getRadians());
@@ -72,7 +74,16 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("OdometryY", m_odometry.getPoseMeters().getY());
     SmartDashboard.putNumber("OdometryRot", m_odometry.getPoseMeters().getRotation().getDegrees());
 
-    SmartDashboard.putNumber("FL alsdfj;lkasdjf", m_frontLeft.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("FL alsdfj;angle gangla nleg", m_frontLeft.getState().angle.getDegrees());
+    SmartDashboard.putNumber("FL speed", m_frontLeft.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("FL angle", m_frontLeft.getState().angle.getDegrees());
+  }
+
+  /**
+   * Returns the currently-estimated pose of the robot.
+   *
+   * @return The pose.
+   */
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
   }
 }
