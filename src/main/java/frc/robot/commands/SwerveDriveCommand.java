@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,6 +22,7 @@ public class SwerveDriveCommand extends CommandBase {
   private final DoubleSupplier m_xSupplier;
   private final DoubleSupplier m_ySupplier;
   private final DoubleSupplier m_rotSupplier;
+  private final BooleanSupplier m_fieldRelativeSupplier;
 
   /**
    * Creates a new {@link SwerveDriveCommand}.
@@ -36,25 +38,27 @@ public class SwerveDriveCommand extends CommandBase {
    *                    [-1 to 1]
    */
   public SwerveDriveCommand(SwerveDriveSubsystem subsystem, DoubleSupplier xSupplier, DoubleSupplier ySupplier,
-      DoubleSupplier rotSupplier) {
+      DoubleSupplier rotSupplier, BooleanSupplier fieldRelativeSupplier) {
     m_subsystem = subsystem;
     addRequirements(m_subsystem);
 
     m_xSupplier = xSupplier;
     m_ySupplier = ySupplier;
     m_rotSupplier = rotSupplier;
+    m_fieldRelativeSupplier = fieldRelativeSupplier;
   }
 
   @Override
   public void execute() {
     double x = Utils.oddSquare(
-        Utils.deadZone(m_xSupplier.getAsDouble() * SwerveConstants.kMaxSpeedMetersPerSecond, 0.25)) * 0.2;
+        Utils.deadZone(m_xSupplier.getAsDouble() * SwerveConstants.kMaxSpeedMetersPerSecond, 0.3)) * 0.2;
     double y = Utils.oddSquare(
-        Utils.deadZone(m_ySupplier.getAsDouble() * SwerveConstants.kMaxSpeedMetersPerSecond, 0.25)) * 0.2;
+        Utils.deadZone(m_ySupplier.getAsDouble() * SwerveConstants.kMaxSpeedMetersPerSecond, 0.3)) * 0.2;
     double rot = Utils.oddSquare(Utils.deadZone(
         m_rotSupplier.getAsDouble() * SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 0.3)) * 0.2;
+    boolean fieldRelative = m_fieldRelativeSupplier.getAsBoolean();
 
-    m_subsystem.drive(x, y, rot);
+    m_subsystem.drive(x, y, rot, fieldRelative);
 
     SmartDashboard.putNumber("ControllerX", x);
     SmartDashboard.putNumber("ControllerY", y);

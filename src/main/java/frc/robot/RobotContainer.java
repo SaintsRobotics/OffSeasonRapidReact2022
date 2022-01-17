@@ -25,7 +25,9 @@ public class RobotContainer {
       new HardwareMap().swerveDrivetrainHardware);
 
   private SwerveDriveCommand m_command = new SwerveDriveCommand(m_drivetrainSubsystem,
-      () -> -m_driveController.getLeftY(), () -> -m_driveController.getLeftX(), () -> -m_driveController.getRightX());
+      () -> -m_driveController.getLeftY(), () -> -m_driveController.getLeftX(), () -> -m_driveController.getRightX(),
+      () -> m_driveController.getRightBumper());
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
