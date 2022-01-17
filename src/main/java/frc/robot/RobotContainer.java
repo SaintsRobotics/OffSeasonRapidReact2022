@@ -21,10 +21,10 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 public class RobotContainer {
   private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
 
-  private SwerveDriveSubsystem m_drivetrainSubsystem = new SwerveDriveSubsystem(
+  private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
       new HardwareMap().swerveDrivetrainHardware);
 
-  private SwerveDriveCommand m_command = new SwerveDriveCommand(m_drivetrainSubsystem,
+  private SwerveDriveCommand m_command = new SwerveDriveCommand(m_swerveDriveSubsystem,
       () -> -m_driveController.getLeftY(), () -> -m_driveController.getLeftX(), () -> -m_driveController.getRightX(),
       () -> m_driveController.getRightBumper());
 
@@ -33,7 +33,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     configureButtonBindings();
-    m_drivetrainSubsystem.setDefaultCommand(m_command);
+    m_swerveDriveSubsystem.setDefaultCommand(m_command);
   }
 
   /**
@@ -41,11 +41,6 @@ public class RobotContainer {
    * created by instantiating a {@link GenericHID} or one of its subclasses
    * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   * 
-   * <p>
-   * Configure buttons such that button A moves motor clockwise and button B moves
-   * motor counterclockwise
-   * </p>
    */
   private void configureButtonBindings() {
 
