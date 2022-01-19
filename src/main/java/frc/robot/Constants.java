@@ -63,7 +63,7 @@ public final class Constants {
   }
 
   public static final class ModuleConstants {
-    public static final double kWheelDiameterMeters = 0.3;
+    public static final double kWheelCircumferenceMeters = 0.3;
 
     /** Gear ratio between the motor and the wheel. */
     public static final double kDrivingGearRatio = 8.33;

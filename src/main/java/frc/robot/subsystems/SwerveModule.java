@@ -48,8 +48,8 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity() * ModuleConstants.kWheelDiameterMeters / 60
-        / ModuleConstants.kDrivingGearRatio, m_turningEncoder.get());
+    return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity() * ModuleConstants.kWheelCircumferenceMeters
+        / 60 / ModuleConstants.kDrivingGearRatio, m_turningEncoder.get());
   }
 
   /**
