@@ -4,10 +4,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.AnalogInput;
 
 public class AbsoluteEncoder {
-  private AnalogInput m_analogIn;
+  private final AnalogInput m_analogIn;
 
-  private boolean m_reversed;
-  private double m_offset;
+  private final boolean m_reversed;
+  private final double m_offset;
 
   /**
    * Construct an absolute encoder, most likely a US Digital MA3 encoder.
