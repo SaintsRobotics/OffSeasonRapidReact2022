@@ -24,10 +24,10 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
-
   private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
       new HardwareMap().swerveDrivetrainHardware);
+
+  private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
