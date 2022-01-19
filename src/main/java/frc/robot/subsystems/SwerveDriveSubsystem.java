@@ -100,13 +100,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
       m_frontRight.setDesiredState();
       m_rearRight.setDesiredState();
     } else {
-      SwerveModuleState[] swerveModuleStates = SwerveConstants.kDriveKinematics
-          .toSwerveModuleStates(fieldRelative
-              ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
+      SwerveModuleState[] swerveModuleStates = SwerveConstants.kDriveKinematics.toSwerveModuleStates(
+          fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
               : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
-      SwerveDriveKinematics.desaturateWheelSpeeds(
-          swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
+      SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
 
       m_frontLeft.setDesiredState(swerveModuleStates[0]);
       m_rearLeft.setDesiredState(swerveModuleStates[1]);

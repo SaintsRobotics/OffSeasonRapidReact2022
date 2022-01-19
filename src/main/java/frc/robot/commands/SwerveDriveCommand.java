@@ -26,13 +26,10 @@ public class SwerveDriveCommand extends CommandBase {
    * 
    * @param subsystem   The required subsystem.
    * @param xSupplier   Supplier that returns the x (forward / backward) speed for
-   *                    the robot. [-1 to
-   *                    1]
+   *                    the robot.
    * @param ySupplier   Supplier that returns the y (left / right) speed for the
-   *                    robot. [-1 to
-   *                    1]
+   *                    robot.
    * @param rotSupplier Supplier that returns the angular speed for the robot.
-   *                    [-1 to 1]
    */
   public SwerveDriveCommand(SwerveDriveSubsystem subsystem, DoubleSupplier xSupplier, DoubleSupplier ySupplier,
       DoubleSupplier rotSupplier, BooleanSupplier fieldRelativeSupplier) {
@@ -47,6 +44,7 @@ public class SwerveDriveCommand extends CommandBase {
 
   @Override
   public void execute() {
-    m_subsystem.drive(m_xSupplier.getAsDouble(), m_ySupplier.getAsDouble(), m_rotSupplier.getAsDouble(), m_fieldRelativeSupplier.getAsBoolean());
+    m_subsystem.drive(m_xSupplier.getAsDouble(), m_ySupplier.getAsDouble(), m_rotSupplier.getAsDouble(),
+        m_fieldRelativeSupplier.getAsBoolean());
   }
 }
