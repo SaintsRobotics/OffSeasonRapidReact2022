@@ -87,6 +87,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    *                      field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    // this check prevents the wheels from resetting to straight when the robot
+    // stops moving
     if (xSpeed == 0 && ySpeed == 0 && rot == 0) {
       m_frontLeft.setDesiredState();
       m_frontRight.setDesiredState();
@@ -100,7 +102,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
       SwerveDriveKinematics.desaturateWheelSpeeds(
           swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
-          
+
       m_frontLeft.setDesiredState(swerveModuleStates[0]);
       m_frontRight.setDesiredState(swerveModuleStates[1]);
       m_rearLeft.setDesiredState(swerveModuleStates[2]);
