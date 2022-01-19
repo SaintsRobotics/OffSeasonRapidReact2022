@@ -44,8 +44,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(),
-        m_frontRight.getState(), m_rearLeft.getState(),
+    m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(), m_rearLeft.getState(), m_frontRight.getState(),
         m_rearRight.getState());
 
     SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
@@ -97,8 +96,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     // stops moving
     if (xSpeed == 0 && ySpeed == 0 && rot == 0) {
       m_frontLeft.setDesiredState();
-      m_frontRight.setDesiredState();
       m_rearLeft.setDesiredState();
+      m_frontRight.setDesiredState();
       m_rearRight.setDesiredState();
     } else {
       SwerveModuleState[] swerveModuleStates = SwerveConstants.kDriveKinematics
@@ -110,11 +109,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
           swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
 
       m_frontLeft.setDesiredState(swerveModuleStates[0]);
-      m_frontRight.setDesiredState(swerveModuleStates[1]);
-      m_rearLeft.setDesiredState(swerveModuleStates[2]);
+      m_rearLeft.setDesiredState(swerveModuleStates[1]);
+      m_frontRight.setDesiredState(swerveModuleStates[2]);
       m_rearRight.setDesiredState(swerveModuleStates[3]);
     }
-    
+
     SmartDashboard.putNumber("Desired X", xSpeed);
     SmartDashboard.putNumber("Desired Y", ySpeed);
     SmartDashboard.putNumber("Desired Rot", rot);
