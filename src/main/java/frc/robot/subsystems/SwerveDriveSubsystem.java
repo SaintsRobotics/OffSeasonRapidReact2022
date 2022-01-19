@@ -87,18 +87,27 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    *                      field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    SwerveModuleState[] swerveModuleStates = SwerveConstants.kDriveKinematics
-        .toSwerveModuleStates(fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
-            : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_rearLeft.setDesiredState(swerveModuleStates[2]);
-    m_rearRight.setDesiredState(swerveModuleStates[3]);
+    if (xSpeed == 0 && ySpeed == 0 && rot == 0) {
+      m_frontLeft.setDesiredState();
+      m_frontRight.setDesiredState();
+      m_rearLeft.setDesiredState();
+      m_rearRight.setDesiredState();
+    } else {
+      SwerveModuleState[] swerveModuleStates = SwerveConstants.kDriveKinematics
+          .toSwerveModuleStates(fieldRelative
+              ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
+              : new ChassisSpeeds(xSpeed, ySpeed, rot));
+
+      SwerveDriveKinematics.desaturateWheelSpeeds(
+          swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
+          
+      m_frontLeft.setDesiredState(swerveModuleStates[0]);
+      m_frontRight.setDesiredState(swerveModuleStates[1]);
+      m_rearLeft.setDesiredState(swerveModuleStates[2]);
+      m_rearRight.setDesiredState(swerveModuleStates[3]);
+    }
   }
-  
+
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     m_gyro.reset();

@@ -51,11 +51,20 @@ public class SwerveModule {
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, m_turningEncoder.getRotation2d());
 
     final double driveOutput = state.speedMetersPerSecond;
-    final var turnOutput = m_turningPIDController.calculate(m_turningEncoder.getRotation2d().getRadians(),
+    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getRotation2d().getRadians(),
         state.angle.getRadians());
 
     m_driveMotor.set(driveOutput);
     m_turningMotor.set(turnOutput);
+  }
+
+  /**
+   * Stops the module from driving and turning. Use this so the wheels don't reset
+   * to straight.
+   */
+  public void setDesiredState() {
+    m_turningMotor.set(0);
+    m_driveMotor.set(0);
   }
 
   /**

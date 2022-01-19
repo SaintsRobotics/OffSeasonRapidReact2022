@@ -52,11 +52,14 @@ public class SwerveDriveCommand extends CommandBase {
   @Override
   public void execute() {
     double x = Utils.oddSquare(
-        Utils.deadZone(m_xSupplier.getAsDouble() * SwerveConstants.kMaxSpeedMetersPerSecond, OIConstants.kJoystickDeadzone)) * 0.2;
+        Utils.deadZone(m_xSupplier.getAsDouble(), OIConstants.kJoystickDeadzone))
+        * SwerveConstants.kMaxSpeedMetersPerSecond * 0.2;
     double y = Utils.oddSquare(
-        Utils.deadZone(m_ySupplier.getAsDouble() * SwerveConstants.kMaxSpeedMetersPerSecond, OIConstants.kJoystickDeadzone)) * 0.2;
+        Utils.deadZone(m_ySupplier.getAsDouble(), OIConstants.kJoystickDeadzone))
+        * SwerveConstants.kMaxSpeedMetersPerSecond * 0.2;
     double rot = Utils.oddSquare(Utils.deadZone(
-        m_rotSupplier.getAsDouble() * SwerveConstants.kMaxAngularSpeedRadiansPerSecond, OIConstants.kJoystickDeadzone)) * 0.2;
+        m_rotSupplier.getAsDouble(), OIConstants.kJoystickDeadzone)) * SwerveConstants.kMaxAngularSpeedRadiansPerSecond
+        * 0.2;
     boolean fieldRelative = m_fieldRelativeSupplier.getAsBoolean();
 
     m_subsystem.drive(x, y, rot, fieldRelative);
