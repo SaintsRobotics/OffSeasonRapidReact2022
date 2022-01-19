@@ -47,16 +47,20 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(),
         m_frontRight.getState(), m_rearLeft.getState(),
         m_rearRight.getState());
-    SmartDashboard.putNumber("FrontLeft", m_frontLeft.getRadians());
-    SmartDashboard.putNumber("FrontRight", m_frontRight.getRadians());
-    SmartDashboard.putNumber("RearLeft", m_rearLeft.getRadians());
-    SmartDashboard.putNumber("RearRight", m_rearRight.getRadians());
-    SmartDashboard.putNumber("OdometryX", m_odometry.getPoseMeters().getX());
-    SmartDashboard.putNumber("OdometryY", m_odometry.getPoseMeters().getY());
-    SmartDashboard.putNumber("OdometryRot", m_odometry.getPoseMeters().getRotation().getDegrees());
 
-    SmartDashboard.putNumber("FL speed", m_frontLeft.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("FL angle", m_frontLeft.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Module Angle Front Right", m_frontRight.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Module Angle Rear Right", m_rearRight.getState().angle.getDegrees());
+
+    SmartDashboard.putNumber("Module Speed Front Left", m_frontLeft.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Module Speed Rear Left", m_rearLeft.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Module Speed Front Right", m_frontRight.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Module Speed Rear Right", m_rearRight.getState().speedMetersPerSecond);
+
+    SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
+    SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
+    SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
   }
 
   /**
@@ -80,9 +84,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   /**
    * Method to drive the robot using joystick info.
    *
-   * @param xSpeed        Speed of the robot in the x direction (forward).
-   * @param ySpeed        Speed of the robot in the y direction (sideways).
-   * @param rot           Angular rate of the robot.
+   * @param xSpeed        Speed of the robot in the x direction in meters per
+   *                      second (forward).
+   * @param ySpeed        Speed of the robot in the y direction in meters per
+   *                      second (sideways).
+   * @param rot           Angular rate of the robot in radians per second.
    * @param fieldRelative Whether the provided x and y speeds are relative to the
    *                      field.
    */
@@ -108,6 +114,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
       m_rearLeft.setDesiredState(swerveModuleStates[2]);
       m_rearRight.setDesiredState(swerveModuleStates[3]);
     }
+    
+    SmartDashboard.putNumber("Desired X", xSpeed);
+    SmartDashboard.putNumber("Desired Y", ySpeed);
+    SmartDashboard.putNumber("Desired Rot", rot);
   }
 
   /** Zeroes the heading of the robot. */

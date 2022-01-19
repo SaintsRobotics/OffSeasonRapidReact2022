@@ -7,11 +7,7 @@ package frc.robot.commands;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.SwerveConstants;
-import frc.robot.Utils;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -51,21 +47,6 @@ public class SwerveDriveCommand extends CommandBase {
 
   @Override
   public void execute() {
-    double x = Utils.oddSquare(
-        Utils.deadZone(m_xSupplier.getAsDouble(), OIConstants.kJoystickDeadzone))
-        * SwerveConstants.kMaxSpeedMetersPerSecond * 0.2;
-    double y = Utils.oddSquare(
-        Utils.deadZone(m_ySupplier.getAsDouble(), OIConstants.kJoystickDeadzone))
-        * SwerveConstants.kMaxSpeedMetersPerSecond * 0.2;
-    double rot = Utils.oddSquare(Utils.deadZone(
-        m_rotSupplier.getAsDouble(), OIConstants.kJoystickDeadzone)) * SwerveConstants.kMaxAngularSpeedRadiansPerSecond
-        * 0.2;
-    boolean fieldRelative = m_fieldRelativeSupplier.getAsBoolean();
-
-    m_subsystem.drive(x, y, rot, fieldRelative);
-
-    SmartDashboard.putNumber("ControllerX", x);
-    SmartDashboard.putNumber("ControllerY", y);
-    SmartDashboard.putNumber("ControllerRot", rot);
+    m_subsystem.drive(m_xSupplier.getAsDouble(), m_ySupplier.getAsDouble(), m_rotSupplier.getAsDouble(), m_fieldRelativeSupplier.getAsBoolean());
   }
 }

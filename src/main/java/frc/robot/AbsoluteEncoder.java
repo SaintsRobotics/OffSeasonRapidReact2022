@@ -32,7 +32,7 @@ public class AbsoluteEncoder {
    * 
    * @return The angle as a {@link Rotation2d}.
    */
-  public Rotation2d getRotation2d() {
+  public Rotation2d get() {
     double angle = (m_analogIn.getVoltage() / 5 * 2 * Math.PI) - m_offset;
 
     return m_reversed ? new Rotation2d(5 - angle) : new Rotation2d(angle);

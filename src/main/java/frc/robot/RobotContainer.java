@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -27,16 +29,19 @@ public class RobotContainer {
   private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
       new HardwareMap().swerveDrivetrainHardware);
 
-  private SwerveDriveCommand m_command = new SwerveDriveCommand(m_swerveDriveSubsystem,
-      () -> -m_driveController.getLeftY(), () -> -m_driveController.getLeftX(), () -> -m_driveController.getRightX(),
-      () -> m_driveController.getRightBumper());
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     configureButtonBindings();
-    m_swerveDriveSubsystem.setDefaultCommand(m_command);
+    DoubleSupplier x = () -> Utils
+        .oddSquare(Utils.deadZone(-m_driveController.getLeftY(), OIConstants.kJoystickDeadzone)) * 0.2;
+    DoubleSupplier y = () -> Utils
+        .oddSquare(Utils.deadZone(-m_driveController.getLeftX(), OIConstants.kJoystickDeadzone)) * 0.2;
+    DoubleSupplier rot = () -> Utils
+        .oddSquare(Utils.deadZone(-m_driveController.getRightX(), OIConstants.kJoystickDeadzone)) * 0.2;
+    m_swerveDriveSubsystem.setDefaultCommand(
+        new SwerveDriveCommand(m_swerveDriveSubsystem, x, y, rot, () -> m_driveController.getRightBumper()));
   }
 
   /**
