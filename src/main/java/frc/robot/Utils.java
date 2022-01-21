@@ -31,4 +31,7 @@ public class Utils {
   public static double oddSquare(double input) {
     return input * Math.abs(input);
   }
+  public static double normalizeAngle(double angle, double max) {
+		return ((angle % max) + max) % max;
+	}
 }

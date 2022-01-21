@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -13,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Utils;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.HardwareMap.SwerveDrivetrainHardware;
 
@@ -25,6 +27,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   private final AHRS m_gyro;
   private final SwerveDriveOdometry m_odometry;
+
+  private boolean m_isTurning;
+  private PIDController m_headPidController;
+  private double m_rotSpeed;
+  private double m_ySpeed;
+  private double m_xSpeed;
 
   /**
    * Creates a new {@link SwerveDriveSubsystem}.
@@ -44,6 +52,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+
+    //Odometry 
     m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(),
         m_frontRight.getState(), m_rearLeft.getState(),
         m_rearRight.getState());
@@ -78,7 +88,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Method to drive the robot using joystick info.
+   * Method to drive the robot using joystick info. (and heading correction)
    *
    * @param xSpeed        Speed of the robot in the x direction (forward).
    * @param ySpeed        Speed of the robot in the y direction (sideways).
@@ -87,7 +97,21 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    *                      field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    if (xSpeed == 0 && ySpeed == 0 && rot == 0) {
+    m_xSpeed=xSpeed;
+    m_ySpeed=ySpeed;
+    m_rotSpeed=rot;
+/*    if (m_isTurning) { // if should be turning
+      m_headPidController.setSetpoint(Math.toRadians(m_gyro.getAngle()));
+      SmartDashboard.putString("heading correction", "setting setpoint");
+    }
+    if (!m_isTurning && (m_xSpeed != 0 || m_ySpeed != 0)) { // if translating only (want heading correction)
+      SmartDashboard.putString("heading correction", "correcting heading");
+      m_rotSpeed = m_headPidController.calculate(Utils.normalizeAngle(Math.toRadians(m_gyro.getAngle()), 2 * Math.PI));
+    }
+    else { 
+      SmartDashboard.putString("heading correction", "not correcting heading, not translating");
+    } */
+    if (m_xSpeed == 0 && m_ySpeed == 0 && m_rotSpeed == 0) {
       m_frontLeft.setDesiredState();
       m_frontRight.setDesiredState();
       m_rearLeft.setDesiredState();
@@ -95,17 +119,18 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     } else {
       SwerveModuleState[] swerveModuleStates = SwerveConstants.kDriveKinematics
           .toSwerveModuleStates(fieldRelative
-              ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
-              : new ChassisSpeeds(xSpeed, ySpeed, rot));
+              ? ChassisSpeeds.fromFieldRelativeSpeeds(m_xSpeed, m_ySpeed, m_rotSpeed, m_gyro.getRotation2d())
+              : new ChassisSpeeds(m_xSpeed, m_ySpeed, m_rotSpeed));
 
       SwerveDriveKinematics.desaturateWheelSpeeds(
           swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
-          
+
       m_frontLeft.setDesiredState(swerveModuleStates[0]);
       m_frontRight.setDesiredState(swerveModuleStates[1]);
       m_rearLeft.setDesiredState(swerveModuleStates[2]);
       m_rearRight.setDesiredState(swerveModuleStates[3]);
     }
+  
   }
 
   /** Zeroes the heading of the robot. */
