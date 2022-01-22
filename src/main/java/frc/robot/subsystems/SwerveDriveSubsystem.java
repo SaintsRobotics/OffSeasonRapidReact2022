@@ -88,12 +88,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    * Method to drive the robot using joystick info. (and heading correction)
    *
    * @param xSpeed        Speed of the robot in the x direction in meters per
-   *                      second (forward).
+   *                      second (forward). Positive is forward.
    * @param ySpeed        Speed of the robot in the y direction in meters per
-   *                      second (sideways).
+   *                      second (sideways). Positive is left.
    * @param rot           Angular rate of the robot in radians per second.
    * @param fieldRelative Whether the provided x and y speeds are relative to the
-   *                      field.
+   *                      field. Positive is counterclockwise.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     // this check prevents the wheels from resetting to straight when the robot
