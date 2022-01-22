@@ -14,4 +14,13 @@ Whenever you commit any code with Git, make sure it follows this format. Contact
 * **"test(tests for what): what you did"**: New tests or correcting existing tests.
 * **chore: what was done**: Miscellaneous changes to the codebase.
 
+#### Examples
+* feat: created swerve functions
+* fix: auton turning bug
+* refactor(swerve): decoupled functions into new file
+* docs: added more info about the cocdebase
+* style: formatted the gradle file
+* test(utils): fixed deadzone test
+* chore: licensing and credits
+
 Remember to add your name at the end of a commit when not using your own account. This will help us know who to talk to about certain changes if they were on a shared account.
