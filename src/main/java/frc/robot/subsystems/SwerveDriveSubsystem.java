@@ -68,6 +68,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
     SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
+
+    SmartDashboard.putNumber("Gyro Angle", Utils.normalizeAngle(m_gyro.getAngle(), 360));
+
+    SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headPidController.getSetpoint()));
   }
 
   /**
@@ -92,12 +96,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    * Method to drive the robot using joystick info. (and heading correction)
    *
    * @param xSpeed        Speed of the robot in the x direction in meters per
-   *                      second (forward).
+   *                      second (forward). Positive is forward.
    * @param ySpeed        Speed of the robot in the y direction in meters per
-   *                      second (sideways).
+   *                      second (sideways). Positive is left.
    * @param rot           Angular rate of the robot in radians per second.
    * @param fieldRelative Whether the provided x and y speeds are relative to the
-   *                      field.
+   *                      field. Positive is counterclockwise.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     double rotation = rot;
@@ -135,7 +139,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Desired X", xSpeed);
     SmartDashboard.putNumber("Desired Y", ySpeed);
-    SmartDashboard.putNumber("Desired Rot", rotation);
+    SmartDashboard.putNumber("Desired Rot", Math.toDegrees(rotation));
   }
 
   /** Zeroes the heading of the robot. */
