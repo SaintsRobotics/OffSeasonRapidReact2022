@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Utils;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.HardwareMap.SwerveDrivetrainHardware;
 
@@ -102,10 +103,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     // corrects the heading of the robot to prevent it from drifting
     if (rotation != 0) { // if rotating
-      m_headPidController.setSetpoint(m_gyro.getRotation2d().getRadians());
+      m_headPidController.setSetpoint(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
       SmartDashboard.putString("Heading Correction", "setting setpoint");
     } else if (xSpeed != 0 || ySpeed != 0) { // else if translating
-      rotation = m_headPidController.calculate(m_gyro.getRotation2d().getRadians());
+      rotation = m_headPidController.calculate(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
       SmartDashboard.putString("Heading Correction", "correcting heading");
     } else {
       SmartDashboard.putString("Heading Correction", "not running");
