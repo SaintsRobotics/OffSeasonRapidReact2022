@@ -4,10 +4,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.AnalogInput;
 
 public class AbsoluteEncoder {
-  private AnalogInput m_analogIn;
+  private final AnalogInput m_analogIn;
 
-  private boolean m_reversed;
-  private double m_offset;
+  private final boolean m_reversed;
+  private final double m_offset;
 
   /**
    * Construct an absolute encoder, most likely a US Digital MA3 encoder.
@@ -32,7 +32,7 @@ public class AbsoluteEncoder {
    * 
    * @return The angle as a {@link Rotation2d}.
    */
-  public Rotation2d getRotation2d() {
+  public Rotation2d get() {
     double angle = (m_analogIn.getVoltage() / 5 * 2 * Math.PI) - m_offset;
 
     return m_reversed ? new Rotation2d(5 - angle) : new Rotation2d(angle);

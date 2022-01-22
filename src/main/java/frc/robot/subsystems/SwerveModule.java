@@ -43,19 +43,13 @@ public class SwerveModule {
   }
 
   /**
-   * Sets the desired state for the module.
+   * Returns the current state of the module.
    *
-   * @param desiredState Desired state with speed and angle.
+   * @return The current state of the module.
    */
-  public void setDesiredState(SwerveModuleState desiredState) {
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, m_turningEncoder.getRotation2d());
-
-    final double driveOutput = state.speedMetersPerSecond;
-    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getRotation2d().getRadians(),
-        state.angle.getRadians());
-
-    m_driveMotor.set(driveOutput);
-    m_turningMotor.set(turnOutput);
+  public SwerveModuleState getState() {
+    return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity() * ModuleConstants.kWheelCircumferenceMeters
+        / 60 / ModuleConstants.kDrivingGearRatio, m_turningEncoder.get());
   }
 
   /**
@@ -68,25 +62,18 @@ public class SwerveModule {
   }
 
   /**
-   * Returns the current radian value from the encoder.
-   * 
-   * @return the current radian value from the encoder
-   */
-  public double getRadians() {
-    return m_turningEncoder.getRotation2d().getRadians();
-  }
-
-  public double getPIDError() {
-    return m_turningPIDController.getPositionError();
-  }
-
-  /**
-   * Returns the current state of the module.
+   * Sets the desired state for the module.
    *
-   * @return The current state of the module.
+   * @param desiredState Desired state with speed and angle.
    */
-  public SwerveModuleState getState() {
-    return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity() * ModuleConstants.kWheelDiameterMeters / 60
-        / ModuleConstants.kDrivingGearRatio, m_turningEncoder.getRotation2d());
+  public void setDesiredState(SwerveModuleState desiredState) {
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState, m_turningEncoder.get());
+
+    final double driveOutput = state.speedMetersPerSecond;
+    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get().getRadians(),
+        state.angle.getRadians());
+
+    m_driveMotor.set(driveOutput);
+    m_turningMotor.set(turnOutput);
   }
 }

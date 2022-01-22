@@ -14,7 +14,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Utils;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.HardwareMap.SwerveDrivetrainHardware;
 
@@ -28,12 +27,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   private final AHRS m_gyro;
   private final SwerveDriveOdometry m_odometry;
 
-  private boolean m_isTurning;
-  private PIDController m_headPidController;
-  private double m_rotSpeed;
-  private double m_ySpeed;
-  private double m_xSpeed;
-
+  private final PIDController m_headPidController = new PIDController(-0.01, 0, 0);
   /**
    * Creates a new {@link SwerveDriveSubsystem}.
    * 
@@ -48,25 +42,28 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     m_gyro = hardware.gyro;
 
     m_odometry = new SwerveDriveOdometry(SwerveConstants.kDriveKinematics, m_gyro.getRotation2d());
+
+    m_headPidController.enableContinuousInput(0, 2 * Math.PI);
   }
 
   @Override
   public void periodic() {
-
-    //Odometry 
-    m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(),
-        m_frontRight.getState(), m_rearLeft.getState(),
+    m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(), m_rearLeft.getState(), m_frontRight.getState(),
         m_rearRight.getState());
-    SmartDashboard.putNumber("FrontLeft", m_frontLeft.getRadians());
-    SmartDashboard.putNumber("FrontRight", m_frontRight.getRadians());
-    SmartDashboard.putNumber("RearLeft", m_rearLeft.getRadians());
-    SmartDashboard.putNumber("RearRight", m_rearRight.getRadians());
-    SmartDashboard.putNumber("OdometryX", m_odometry.getPoseMeters().getX());
-    SmartDashboard.putNumber("OdometryY", m_odometry.getPoseMeters().getY());
-    SmartDashboard.putNumber("OdometryRot", m_odometry.getPoseMeters().getRotation().getDegrees());
 
-    SmartDashboard.putNumber("FL speed", m_frontLeft.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("FL angle", m_frontLeft.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Module Angle Front Right", m_frontRight.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Module Angle Rear Right", m_rearRight.getState().angle.getDegrees());
+
+    SmartDashboard.putNumber("Module Speed Front Left", m_frontLeft.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Module Speed Rear Left", m_rearLeft.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Module Speed Front Right", m_frontRight.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Module Speed Rear Right", m_rearRight.getState().speedMetersPerSecond);
+
+    SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
+    SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
+    SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
   }
 
   /**
@@ -90,47 +87,38 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   /**
    * Method to drive the robot using joystick info. (and heading correction)
    *
-   * @param xSpeed        Speed of the robot in the x direction (forward).
-   * @param ySpeed        Speed of the robot in the y direction (sideways).
-   * @param rot           Angular rate of the robot.
+   * @param xSpeed        Speed of the robot in the x direction in meters per
+   *                      second (forward).
+   * @param ySpeed        Speed of the robot in the y direction in meters per
+   *                      second (sideways).
+   * @param rot           Angular rate of the robot in radians per second.
    * @param fieldRelative Whether the provided x and y speeds are relative to the
    *                      field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    m_xSpeed=xSpeed;
-    m_ySpeed=ySpeed;
-    m_rotSpeed=rot;
-/*    if (m_isTurning) { // if should be turning
-      m_headPidController.setSetpoint(Math.toRadians(m_gyro.getAngle()));
-      SmartDashboard.putString("heading correction", "setting setpoint");
-    }
-    if (!m_isTurning && (m_xSpeed != 0 || m_ySpeed != 0)) { // if translating only (want heading correction)
-      SmartDashboard.putString("heading correction", "correcting heading");
-      m_rotSpeed = m_headPidController.calculate(Utils.normalizeAngle(Math.toRadians(m_gyro.getAngle()), 2 * Math.PI));
-    }
-    else { 
-      SmartDashboard.putString("heading correction", "not correcting heading, not translating");
-    } */
-    if (m_xSpeed == 0 && m_ySpeed == 0 && m_rotSpeed == 0) {
+    // this check prevents the wheels from resetting to straight when the robot
+    // stops moving
+    if (xSpeed == 0 && ySpeed == 0 && rot == 0) {
       m_frontLeft.setDesiredState();
-      m_frontRight.setDesiredState();
       m_rearLeft.setDesiredState();
+      m_frontRight.setDesiredState();
       m_rearRight.setDesiredState();
     } else {
-      SwerveModuleState[] swerveModuleStates = SwerveConstants.kDriveKinematics
-          .toSwerveModuleStates(fieldRelative
-              ? ChassisSpeeds.fromFieldRelativeSpeeds(m_xSpeed, m_ySpeed, m_rotSpeed, m_gyro.getRotation2d())
-              : new ChassisSpeeds(m_xSpeed, m_ySpeed, m_rotSpeed));
+      SwerveModuleState[] swerveModuleStates = SwerveConstants.kDriveKinematics.toSwerveModuleStates(
+          fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
+              : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
-      SwerveDriveKinematics.desaturateWheelSpeeds(
-          swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
+      SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
 
       m_frontLeft.setDesiredState(swerveModuleStates[0]);
-      m_frontRight.setDesiredState(swerveModuleStates[1]);
-      m_rearLeft.setDesiredState(swerveModuleStates[2]);
+      m_rearLeft.setDesiredState(swerveModuleStates[1]);
+      m_frontRight.setDesiredState(swerveModuleStates[2]);
       m_rearRight.setDesiredState(swerveModuleStates[3]);
     }
-  
+
+    SmartDashboard.putNumber("Desired X", xSpeed);
+    SmartDashboard.putNumber("Desired Y", ySpeed);
+    SmartDashboard.putNumber("Desired Rot", rot);
   }
 
   /** Zeroes the heading of the robot. */

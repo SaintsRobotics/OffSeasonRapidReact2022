@@ -4,13 +4,17 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -22,21 +26,31 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
-
   private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
       new HardwareMap().swerveDrivetrainHardware);
 
-  private SwerveDriveCommand m_command = new SwerveDriveCommand(m_swerveDriveSubsystem,
-      () -> -m_driveController.getLeftY(), () -> -m_driveController.getLeftX(), () -> -m_driveController.getRightX(),
-      () -> m_driveController.getRightBumper());
+  private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     configureButtonBindings();
-    m_swerveDriveSubsystem.setDefaultCommand(m_command);
+    DoubleSupplier x = () -> Utils
+        .oddSquare(Utils.deadZone(-m_driveController.getLeftY(), OIConstants.kJoystickDeadzone))
+        * SwerveConstants.kMaxSpeedMetersPerSecond * 0.2;
+    DoubleSupplier y = () -> Utils
+        .oddSquare(Utils.deadZone(-m_driveController.getLeftX(), OIConstants.kJoystickDeadzone))
+        * SwerveConstants.kMaxSpeedMetersPerSecond * 0.2;
+    DoubleSupplier rot = () -> Utils
+        .oddSquare(Utils.deadZone(-m_driveController.getRightX(), OIConstants.kJoystickDeadzone))
+        * SwerveConstants.kMaxAngularSpeedRadiansPerSecond * 0.2;
+    m_swerveDriveSubsystem.setDefaultCommand(
+        new SwerveDriveCommand(m_swerveDriveSubsystem, x, y, rot, () -> m_driveController.getRightBumper()));
+
+    SmartDashboard.putNumber("Controller X", -m_driveController.getLeftY());
+    SmartDashboard.putNumber("Controller Y", -m_driveController.getLeftX());
+    SmartDashboard.putNumber("Controller Rot", -m_driveController.getRightY());
   }
 
   /**
