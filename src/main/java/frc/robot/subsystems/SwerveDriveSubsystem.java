@@ -29,7 +29,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   private final SwerveDriveOdometry m_odometry;
 
   // TODO tune pid
-  private final PIDController m_headPidController = new PIDController(1.5, 0, 0);
+  private final PIDController m_headingCorrectionPID = new PIDController(1.5, 0, 0);
 
   /**
    * Creates a new {@link SwerveDriveSubsystem}.
@@ -46,8 +46,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     m_odometry = new SwerveDriveOdometry(SwerveConstants.kDriveKinematics, m_gyro.getRotation2d());
 
-    m_headPidController.enableContinuousInput(0, 2 * Math.PI);
-    m_headPidController.setSetpoint(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
+    m_headingCorrectionPID.enableContinuousInput(0, 2 * Math.PI);
+    m_headingCorrectionPID.setSetpoint(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
   }
 
   @Override
@@ -71,7 +71,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Gyro Angle", Utils.normalizeAngle(m_gyro.getAngle(), 360));
 
-    SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headPidController.getSetpoint()));
+    SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headingCorrectionPID.getSetpoint()));
   }
 
   /**
@@ -108,10 +108,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     // corrects the heading of the robot to prevent it from drifting
     if (rotation != 0) { // if rotating
-      m_headPidController.setSetpoint(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
+      m_headingCorrectionPID.setSetpoint(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
       SmartDashboard.putString("Heading Correction", "setting setpoint");
     } else if (xSpeed != 0 || ySpeed != 0) { // else if translating
-      rotation = m_headPidController.calculate(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
+      rotation = m_headingCorrectionPID.calculate(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
       SmartDashboard.putString("Heading Correction", "correcting heading");
     } else {
       SmartDashboard.putString("Heading Correction", "not running");
