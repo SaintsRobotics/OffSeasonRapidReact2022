@@ -47,6 +47,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     m_odometry = new SwerveDriveOdometry(SwerveConstants.kDriveKinematics, m_gyro.getRotation2d());
 
     m_headPidController.enableContinuousInput(0, 2 * Math.PI);
+    m_headPidController.setSetpoint(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
   }
 
   @Override
