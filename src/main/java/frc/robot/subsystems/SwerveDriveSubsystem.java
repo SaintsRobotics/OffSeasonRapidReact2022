@@ -27,7 +27,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   private final AHRS m_gyro;
   private final SwerveDriveOdometry m_odometry;
 
+  // TODO tune pid
   private final PIDController m_headPidController = new PIDController(-0.01, 0, 0);
+
   /**
    * Creates a new {@link SwerveDriveSubsystem}.
    * 
@@ -96,17 +98,30 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    *                      field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    double rotation = rot;
+
+    // corrects the heading of the robot to prevent it from drifting
+    if (rotation != 0) { // if rotating
+      m_headPidController.setSetpoint(m_gyro.getRotation2d().getRadians());
+      SmartDashboard.putString("Heading Correction", "setting setpoint");
+    } else if (xSpeed != 0 || ySpeed != 0) { // else if translating
+      rotation = m_headPidController.calculate(m_gyro.getRotation2d().getRadians());
+      SmartDashboard.putString("Heading Correction", "correcting heading");
+    } else {
+      SmartDashboard.putString("Heading Correction", "not running");
+    }
+
     // this check prevents the wheels from resetting to straight when the robot
     // stops moving
-    if (xSpeed == 0 && ySpeed == 0 && rot == 0) {
+    if (xSpeed == 0 && ySpeed == 0 && rotation == 0) {
       m_frontLeft.setDesiredState();
       m_rearLeft.setDesiredState();
       m_frontRight.setDesiredState();
       m_rearRight.setDesiredState();
     } else {
       SwerveModuleState[] swerveModuleStates = SwerveConstants.kDriveKinematics.toSwerveModuleStates(
-          fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
-              : new ChassisSpeeds(xSpeed, ySpeed, rot));
+          fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, m_gyro.getRotation2d())
+              : new ChassisSpeeds(xSpeed, ySpeed, rotation));
 
       SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
 
@@ -118,7 +133,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Desired X", xSpeed);
     SmartDashboard.putNumber("Desired Y", ySpeed);
-    SmartDashboard.putNumber("Desired Rot", rot);
+    SmartDashboard.putNumber("Desired Rot", rotation);
   }
 
   /** Zeroes the heading of the robot. */
