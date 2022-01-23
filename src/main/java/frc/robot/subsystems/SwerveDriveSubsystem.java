@@ -107,16 +107,13 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     double rotation = rot;
 
     // corrects the heading of the robot to prevent it from drifting
-    if (rotation != 0) { // if rotating
-      m_headingCorrectionPID.setSetpoint(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
-      SmartDashboard.putString("Heading Correction", "setting setpoint");
-    } else if (xSpeed != 0 || ySpeed != 0) { // else if translating
+    if (rotation == 0 && (xSpeed != 0 || ySpeed != 0)) { // if translating without rotating
       rotation = m_headingCorrectionPID
           .calculate(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
       SmartDashboard.putString("Heading Correction", "correcting heading");
     } else {
       m_headingCorrectionPID.setSetpoint(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
-      SmartDashboard.putString("Heading Correction", "not running");
+      SmartDashboard.putString("Heading Correction", "setting setpoint");
     }
 
     // this check prevents the wheels from resetting to straight when the robot
