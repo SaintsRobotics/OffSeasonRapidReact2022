@@ -20,7 +20,7 @@ public class Utils {
 	 * @param deadZone The absolute range to apply the deadzone.
 	 * @return The dead zoned value.
 	 */
-	public static double deadZones(double input, double deadZone) {
+	public static double deadZone(double input, double deadZone) {
 		if (Math.abs(input) < deadZone) {
 			return 0;
 		}
