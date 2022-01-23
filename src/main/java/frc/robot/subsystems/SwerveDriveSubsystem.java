@@ -111,9 +111,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
       m_headingCorrectionPID.setSetpoint(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
       SmartDashboard.putString("Heading Correction", "setting setpoint");
     } else if (xSpeed != 0 || ySpeed != 0) { // else if translating
-      rotation = m_headingCorrectionPID.calculate(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
+      rotation = m_headingCorrectionPID
+          .calculate(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
       SmartDashboard.putString("Heading Correction", "correcting heading");
     } else {
+      m_headingCorrectionPID.setSetpoint(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
       SmartDashboard.putString("Heading Correction", "not running");
     }
 
