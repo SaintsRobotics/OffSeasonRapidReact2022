@@ -3,9 +3,10 @@ import frc.robot.Utils;
 
 import org.junit.*;
 
-// Tests for all the utility functions.
+/** Tests for all the utility functions. */
 public class UtilityTest {
     public static final double DELTA = 1e-2; // acceptable deviation range
+
     @Test
     public void deadZonesTest() {
         double deadZonedResultOne = Utils.deadZones(10, 15);
@@ -24,7 +25,6 @@ public class UtilityTest {
         double toleranceResultTwo = Utils.tolerance(15, 10, 0.5);
         double toleranceExpectedTwo = 15;
         assertEquals(toleranceExpectedTwo, toleranceResultTwo, DELTA);
-
     }
 
     @Test
@@ -37,14 +37,13 @@ public class UtilityTest {
         assertEquals(oddSquareExpectedTwo, oddSquareResultTwo, DELTA);
     }
 
-    @Test 
+    @Test
     public void normalizeAngleTest() {
-       double normalizeAngleResultOne = Utils.normalizeAngle(120, 360);
-       double normalizeAngleExpectedOne  = 120;
-       assertEquals(normalizeAngleResultOne, normalizeAngleExpectedOne, DELTA);
-       double normalizeAngleResultTwo = Utils.normalizeAngle(400, 360);
-       double normalizeAngleExpectedTwo = 40;
-       assertEquals(normalizeAngleResultTwo, normalizeAngleExpectedTwo, DELTA); 
+        double normalizeAngleResultOne = Utils.normalizeAngle(120, 360);
+        double normalizeAngleExpectedOne = 120;
+        assertEquals(normalizeAngleResultOne, normalizeAngleExpectedOne, DELTA);
+        double normalizeAngleResultTwo = Utils.normalizeAngle(400, 360);
+        double normalizeAngleExpectedTwo = 40;
+        assertEquals(normalizeAngleResultTwo, normalizeAngleExpectedTwo, DELTA);
     }
-
 }

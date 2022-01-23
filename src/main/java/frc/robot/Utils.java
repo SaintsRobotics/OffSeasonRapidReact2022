@@ -28,15 +28,18 @@ public class Utils {
 	}
 
 	/**
-	 * If "value" is within "tolerance" of "desiredVal," it returns desiredVal.
-	 * </br>
-	 * If "value" is <i>outside</i> the tolerance, then it returns "value."
+	 * If input is within tolerance of desiredVal, it returns desiredVal. If
+	 * input is outside the tolerance, then it returns input.
+	 * 
+	 * @param input      The input number.
+	 * @param desiredVal The desired value.
+	 * @param tolerance  The tolerance.
 	 */
-	public static double tolerance(double value, double desiredVal, double tolerance) {
-		if (Math.abs(value - desiredVal) < tolerance) {
+	public static double tolerance(double input, double desiredVal, double tolerance) {
+		if (Math.abs(input - desiredVal) < tolerance) {
 			return desiredVal;
 		}
-		return value;
+		return input;
 	}
 
 	/**
@@ -60,6 +63,3 @@ public class Utils {
 		return ((angle % max) + max) % max;
 	}
 }
-
-
-
