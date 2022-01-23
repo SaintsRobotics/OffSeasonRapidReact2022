@@ -5,23 +5,14 @@ import org.junit.*;
 
 /** Tests for all the utility functions. */
 public class UtilityTest {
-    public static final double DELTA = 1e-2; // acceptable deviation range
-    @Test
-    public void deadZonesTest() {
-        double deadZonedResultOne = Utils.deadZone(10, 15);
-        double deadZonedExpectedOne = 0;
-        assertEquals(deadZonedExpectedOne, deadZonedResultOne, DELTA);
-        double deadZonedResultTwo = Utils.deadZone(10, 7);
-        double deadZonedExpectedTwo = 10;
-        assertEquals(deadZonedExpectedTwo, deadZonedResultTwo, DELTA);
-    }
+  public static final double DELTA = 1e-2; // acceptable deviation range
 
   @Test
   public void deadZonesTest() {
-    double deadZonedResultOne = Utils.deadZones(10, 15);
+    double deadZonedResultOne = Utils.deadZone(10, 15);
     double deadZonedExpectedOne = 0;
     assertEquals(deadZonedExpectedOne, deadZonedResultOne, DELTA);
-    double deadZonedResultTwo = Utils.deadZones(10, 7);
+    double deadZonedResultTwo = Utils.deadZone(10, 7);
     double deadZonedExpectedTwo = 10;
     assertEquals(deadZonedExpectedTwo, deadZonedResultTwo, DELTA);
   }
