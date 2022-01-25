@@ -28,7 +28,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   private final AHRS m_gyro;
   private final SwerveDriveOdometry m_odometry;
 
-  private final PIDController m_headPidController = new PIDController(-0.01, 0, 0);
+  // TODO tune pid
+  private final PIDController m_headingCorrectionPID = new PIDController(1.5, 0, 0);
 
   /**
    * Creates a new {@link SwerveDriveSubsystem}.
@@ -45,7 +46,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     m_odometry = new SwerveDriveOdometry(SwerveConstants.kDriveKinematics, m_gyro.getRotation2d());
 
-    m_headPidController.enableContinuousInput(0, 2 * Math.PI);
+    m_headingCorrectionPID.enableContinuousInput(0, 2 * Math.PI);
+    m_headingCorrectionPID.setSetpoint(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
   }
 
   @Override
@@ -69,7 +71,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Gyro Angle", Utils.normalizeAngle(m_gyro.getAngle(), 360));
 
-    SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headPidController.getSetpoint()));
+    SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headingCorrectionPID.getSetpoint()));
   }
 
   /**
@@ -102,17 +104,29 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    *                      field. Positive is counterclockwise.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    double rotation = rot;
+
+    // corrects the heading of the robot to prevent it from drifting
+    if (rotation == 0 && (xSpeed != 0 || ySpeed != 0)) { // if translating without rotating
+      rotation = m_headingCorrectionPID
+          .calculate(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
+      SmartDashboard.putString("Heading Correction", "Correcting Heading");
+    } else {
+      m_headingCorrectionPID.setSetpoint(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
+      SmartDashboard.putString("Heading Correction", "Setting Setpoint");
+    }
+
     // this check prevents the wheels from resetting to straight when the robot
     // stops moving
-    if (xSpeed == 0 && ySpeed == 0 && rot == 0) {
+    if (xSpeed == 0 && ySpeed == 0 && rotation == 0) {
       m_frontLeft.setDesiredState();
       m_rearLeft.setDesiredState();
       m_frontRight.setDesiredState();
       m_rearRight.setDesiredState();
     } else {
       SwerveModuleState[] swerveModuleStates = SwerveConstants.kDriveKinematics.toSwerveModuleStates(
-          fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
-              : new ChassisSpeeds(xSpeed, ySpeed, rot));
+          fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, m_gyro.getRotation2d())
+              : new ChassisSpeeds(xSpeed, ySpeed, rotation));
 
       SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
 
@@ -124,7 +138,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Desired X", xSpeed);
     SmartDashboard.putNumber("Desired Y", ySpeed);
-    SmartDashboard.putNumber("Desired Rot", Math.toDegrees(rot));
+    SmartDashboard.putNumber("Desired Rot", Math.toDegrees(rotation));
   }
 
   /** Zeroes the heading of the robot. */
