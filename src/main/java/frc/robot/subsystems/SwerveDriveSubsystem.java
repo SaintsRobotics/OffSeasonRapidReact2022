@@ -93,7 +93,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Method to drive the robot using joystick info. (and heading correction)
+   * Method to drive the robot.
    *
    * @param xSpeed        Speed of the robot in the x direction in meters per
    *                      second (forward). Positive is forward.
@@ -105,15 +105,15 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     double rotation = rot;
+    double currentAngle = Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI);
 
     // corrects the heading of the robot to prevent it from drifting
-    if (rotation == 0 && (xSpeed != 0 || ySpeed != 0)) { // if translating without rotating
-      rotation = m_headingCorrectionPID
-          .calculate(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
-      SmartDashboard.putString("Heading Correction", "Correcting Heading");
-    } else {
-      m_headingCorrectionPID.setSetpoint(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
+    if ((xSpeed == 0 && ySpeed == 0) || rotation != 0) { // if stationary or rotating
+      m_headingCorrectionPID.setSetpoint(currentAngle);
       SmartDashboard.putString("Heading Correction", "Setting Setpoint");
+    } else {
+      rotation = m_headingCorrectionPID.calculate(currentAngle);
+      SmartDashboard.putString("Heading Correction", "Correcting Heading");
     }
 
     // this check prevents the wheels from resetting to straight when the robot
