@@ -5,12 +5,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.SwerveConstants;
-import frc.robot.HardwareMap.SwerveDrivetrainHardware;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class AutonMoveCommand extends CommandBase {
