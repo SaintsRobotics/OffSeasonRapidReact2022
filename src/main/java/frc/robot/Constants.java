@@ -57,7 +57,7 @@ public final class Constants {
         new Translation2d(kWheelBase / 2, kTrackWidth / 2), new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(kWheelBase / 2, -kTrackWidth / 2), new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxSpeedMetersPerSecond = 3.6;
 
     public static final double kMaxAngularSpeedRadiansPerSecond = 8.76;
 
