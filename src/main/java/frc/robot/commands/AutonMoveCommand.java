@@ -78,8 +78,8 @@ public class AutonMoveCommand extends CommandBase {
     return this; 
   }
   public AutonMoveCommand moveSidewaysBy(double y){ // change robot relative Y (left is positive, right is negative)
-    xPID.setSetpoint(Math.cos(currentPose.getRotation().getRadians()) * y);
-    yPID.setSetpoint(Math.sin(currentPose.getRotation().getRadians()) * y);
+    xPID.setSetpoint(Math.sin(currentPose.getRotation().getRadians()) * y);
+    yPID.setSetpoint(Math.cos(currentPose.getRotation().getRadians()) * y);
     return this; 
   }
   public AutonMoveCommand changeXPosBy(double x){ // change field relative X
