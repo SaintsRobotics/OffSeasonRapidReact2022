@@ -39,13 +39,13 @@ public class RobotContainer {
     configureButtonBindings();
     DoubleSupplier x = () -> Utils
         .oddSquare(Utils.deadZone(-m_driveController.getLeftY(), OIConstants.kJoystickDeadzone))
-        * SwerveConstants.kMaxSpeedMetersPerSecond * 0.2;
+        * SwerveConstants.kMaxSpeedMetersPerSecond;
     DoubleSupplier y = () -> Utils
         .oddSquare(Utils.deadZone(-m_driveController.getLeftX(), OIConstants.kJoystickDeadzone))
-        * SwerveConstants.kMaxSpeedMetersPerSecond * 0.2;
+        * SwerveConstants.kMaxSpeedMetersPerSecond;
     DoubleSupplier rot = () -> Utils
         .oddSquare(Utils.deadZone(-m_driveController.getRightX(), OIConstants.kJoystickDeadzone))
-        * SwerveConstants.kMaxAngularSpeedRadiansPerSecond * 0.2;
+        * SwerveConstants.kMaxAngularSpeedRadiansPerSecond;
     m_swerveDriveSubsystem.setDefaultCommand(
         new SwerveDriveCommand(m_swerveDriveSubsystem, x, y, rot, () -> m_driveController.getRightBumper()));
 
