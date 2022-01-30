@@ -68,8 +68,10 @@ public class RobotContainer {
     // Zeroes the heading when the start button is pressed
     new JoystickButton(m_driveController, Button.kStart.value).whenPressed(() -> m_swerveDriveSubsystem.zeroHeading(),
         m_swerveDriveSubsystem);
+
+    
     new JoystickButton(m_driveController, Button.kA.value)
-        .whileHeld(new LimelightAimingCommand(m_swerveDriveSubsystem));
+        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem));
   }
 
   /**
