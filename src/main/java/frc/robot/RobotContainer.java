@@ -69,9 +69,17 @@ public class RobotContainer {
     new JoystickButton(m_driveController, Button.kStart.value).whenPressed(() -> m_swerveDriveSubsystem.zeroHeading(),
         m_swerveDriveSubsystem);
 
-    
+    // Aims at target while the A button is held.
     new JoystickButton(m_driveController, Button.kA.value)
-        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem));
+        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 0));
+
+    // Aims at blue balls while the B button is held.
+    new JoystickButton(m_driveController, Button.kB.value)
+        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 1));
+
+    // Aims at red balls while the X button is held.
+    new JoystickButton(m_driveController, Button.kX.value)
+        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 2));
   }
 
   /**
