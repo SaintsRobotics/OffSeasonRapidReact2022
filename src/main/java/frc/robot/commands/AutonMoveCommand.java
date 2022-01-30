@@ -68,37 +68,37 @@ public class AutonMoveCommand extends CommandBase {
   }
 
 
-  public AutonMoveCommand moveForwardBy(double x){ // change robot relative X
+  public AutonMoveCommand withRobotRelativeX(double x){ // change robot relative X
     xPID.setSetpoint(Math.cos(currentPose.getRotation().getRadians()) * x);
     yPID.setSetpoint(Math.sin(currentPose.getRotation().getRadians()) * x);
     return this; 
   }
-  public AutonMoveCommand moveSidewaysBy(double y){ // change robot relative Y (left is positive, right is negative)
+  public AutonMoveCommand withRobotRelativeY(double y){ // change robot relative Y (left is positive, right is negative)
     xPID.setSetpoint(Math.sin(currentPose.getRotation().getRadians()) * y);
     yPID.setSetpoint(Math.cos(currentPose.getRotation().getRadians()) * y);
     return this; 
   }
-  public AutonMoveCommand changeXPosBy(double x){ // change field relative X
+  public AutonMoveCommand withFieldRelativeX(double x){ // change field relative X
     xPID.setSetpoint(x + m_swerveSubsystem.getPose().getX());
     return this; 
   }
-  public AutonMoveCommand changeYPosBy(double y){ // change field relative Y
+  public AutonMoveCommand withFieldRelativeY(double y){ // change field relative Y
     yPID.setSetpoint(y + m_swerveSubsystem.getPose().getY());
     return this; 
   }
-  public AutonMoveCommand changeHeadingBy(double rot){ // change robot heading
+  public AutonMoveCommand withHeading(double rot){ // change robot heading
     rotPID.setSetpoint(Math.toRadians(rot) + m_swerveSubsystem.getPose().getRotation().getRadians());
     return this; 
   }
-  public AutonMoveCommand setXTo (double x) { // set specific X value
+  public AutonMoveCommand withAbsoluteXPos (double x) { // set specific X value
     xPID.setSetpoint(x);
     return this;
   }
-  public AutonMoveCommand setYTo (double y) { // set specific Y value
+  public AutonMoveCommand withAbsoluteYPos (double y) { // set specific Y value
     yPID.setSetpoint(y);
     return this;
   }
-  public AutonMoveCommand setHeadingTo (double rot) { // set specific heading 
+  public AutonMoveCommand withAbsoluteHeading (double rot) { // set specific heading 
     rotPID.setSetpoint(Math.toRadians(rot));
     return this;
   }
