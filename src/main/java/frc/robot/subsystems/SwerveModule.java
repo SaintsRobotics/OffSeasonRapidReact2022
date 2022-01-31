@@ -34,6 +34,9 @@ public class SwerveModule {
 
     m_turningEncoder = turningEncoder;
 
+    m_driveMotor.getEncoder().setVelocityConversionFactor(ModuleConstants.kWheelCircumferenceMeters
+        / 60 / ModuleConstants.kDrivingGearRatio);
+        
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
     m_driveMotor.setIdleMode(IdleMode.kBrake);
     m_turningMotor.setIdleMode(IdleMode.kBrake);
@@ -45,8 +48,7 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity() * ModuleConstants.kWheelCircumferenceMeters
-        / 60 / ModuleConstants.kDrivingGearRatio, m_turningEncoder.get());
+    return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity(), m_turningEncoder.get());
   }
 
   /**
