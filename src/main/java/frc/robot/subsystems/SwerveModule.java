@@ -28,8 +28,7 @@ public class SwerveModule {
    * @param turningMotor   motor that changes the angle of the wheel
    * @param turningEncoder absolute encoder for the swerve module
    */
-  public SwerveModule(CANSparkMax driveMotor, CANSparkMax turningMotor,
-      AbsoluteEncoder turningEncoder) {
+  public SwerveModule(CANSparkMax driveMotor, CANSparkMax turningMotor, AbsoluteEncoder turningEncoder) {
     m_driveMotor = driveMotor;
     m_turningMotor = turningMotor;
 
