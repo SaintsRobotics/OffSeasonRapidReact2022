@@ -11,7 +11,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.AbsoluteEncoder;
 import frc.robot.Constants.ModuleConstants;
-import frc.robot.HardwareMap.SwerveModuleHardware;
 
 /** Class that controls the swerve wheel and reads the swerve encoder. */
 public class SwerveModule {
@@ -25,12 +24,11 @@ public class SwerveModule {
   /**
    * Creates a new {@link SwerveModule}.
    * 
-   * @param hardware       the hardware for the swerve module
    * @param driveMotor     motor that drives the wheel
    * @param turningMotor   motor that changes the angle of the wheel
    * @param turningEncoder absolute encoder for the swerve module
    */
-  public SwerveModule(SwerveModuleHardware hardware, CANSparkMax driveMotor, CANSparkMax turningMotor,
+  public SwerveModule(CANSparkMax driveMotor, CANSparkMax turningMotor,
       AbsoluteEncoder turningEncoder) {
     m_driveMotor = driveMotor;
     m_turningMotor = turningMotor;
