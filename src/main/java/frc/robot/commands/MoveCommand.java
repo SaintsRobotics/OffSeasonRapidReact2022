@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -16,13 +18,38 @@ public class MoveCommand extends CommandBase {
   private final PIDController yPID = new PIDController(0.3, 0, 0);
   private final PIDController rotPID = new PIDController(0.3, 0, 0);
 
+  private DoubleSupplier xSupplier;
+  private DoubleSupplier ySupplier;
+  private DoubleSupplier rotSupplier;
+
   /** Creates a new {@link MoveCommand}. */
   public MoveCommand(SwerveDriveSubsystem subsystem) {
     m_swerveSubsystem = subsystem;
-    addRequirements(subsystem);
+    addRequirements(m_swerveSubsystem);
+
     xPID.setTolerance(0.1);
     yPID.setTolerance(0.1);
     rotPID.setTolerance(Math.PI / 18);
+
+    // If a position is not set it needs to be set to the current position or it will error.
+    if(xSupplier == null) {
+      xSupplier = () -> m_swerveSubsystem.getPose().getX();
+    }
+
+    if(ySupplier == null) {
+      ySupplier = () -> m_swerveSubsystem.getPose().getY();
+    }
+
+    if(rotSupplier == null) {
+      rotSupplier = () -> m_swerveSubsystem.getPose().getRotation().getRadians();
+    }
+  }
+
+  @Override
+  public void initialize() {
+    xPID.setSetpoint(xSupplier.getAsDouble());
+    yPID.setSetpoint(ySupplier.getAsDouble());
+    rotPID.setSetpoint(rotSupplier.getAsDouble());
   }
 
   @Override
@@ -51,8 +78,8 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withRobotRelativeX(double x) {
-    xPID.setSetpoint(Math.cos(m_swerveSubsystem.getPose().getRotation().getRadians()) * x);
-    yPID.setSetpoint(Math.sin(m_swerveSubsystem.getPose().getRotation().getRadians()) * x);
+    xSupplier = () -> Math.cos(m_swerveSubsystem.getPose().getRotation().getRadians()) * x;
+    ySupplier = () -> Math.sin(m_swerveSubsystem.getPose().getRotation().getRadians()) * x;
     return this;
   }
 
@@ -63,8 +90,8 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withRobotRelativeY(double y) {
-    xPID.setSetpoint(Math.sin(m_swerveSubsystem.getPose().getRotation().getRadians()) * y);
-    yPID.setSetpoint(Math.cos(m_swerveSubsystem.getPose().getRotation().getRadians()) * y);
+    xSupplier = () -> Math.sin(m_swerveSubsystem.getPose().getRotation().getRadians()) * y;
+    ySupplier = () -> Math.cos(m_swerveSubsystem.getPose().getRotation().getRadians()) * y;
     return this;
   }
 
@@ -75,7 +102,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withFieldRelativeX(double x) {
-    xPID.setSetpoint(x + m_swerveSubsystem.getPose().getX());
+    xSupplier = () -> x + m_swerveSubsystem.getPose().getX();
     return this;
   }
 
@@ -86,7 +113,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withFieldRelativeY(double y) {
-    yPID.setSetpoint(y + m_swerveSubsystem.getPose().getY());
+    ySupplier = () -> y + m_swerveSubsystem.getPose().getY();
     return this;
   }
 
@@ -97,7 +124,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteX(double x) {
-    xPID.setSetpoint(x);
+    xSupplier = () -> x;
     return this;
   }
 
@@ -108,7 +135,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteY(double y) {
-    yPID.setSetpoint(y);
+    ySupplier = () -> y;
     return this;
   }
 
@@ -119,7 +146,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withRelativeHeading(double rot) {
-    rotPID.setSetpoint(Math.toRadians(rot) + m_swerveSubsystem.getPose().getRotation().getRadians());
+    rotSupplier = () -> Math.toRadians(rot) + m_swerveSubsystem.getPose().getRotation().getRadians();
     return this;
   }
 
@@ -130,7 +157,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteHeading(double rot) {
-    rotPID.setSetpoint(Math.toRadians(rot));
+    rotSupplier = () -> Math.toRadians(rot);
     return this;
   }
 }
