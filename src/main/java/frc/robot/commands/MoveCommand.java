@@ -9,7 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
-public class AutonMoveCommand extends CommandBase {
+public class MoveCommand extends CommandBase {
 
   SwerveDriveSubsystem m_swerveSubsystem;
   double xSpeed;
@@ -22,8 +22,8 @@ public class AutonMoveCommand extends CommandBase {
 
   Pose2d currentPose = new Pose2d();
 
-  /** Creates a new AutonCommand. */
-  public AutonMoveCommand(SwerveDriveSubsystem subsystem) {
+  /** Creates a new {@link MoveCommand}. */
+  public MoveCommand(SwerveDriveSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_swerveSubsystem = subsystem;
     addRequirements(subsystem);
@@ -68,37 +68,37 @@ public class AutonMoveCommand extends CommandBase {
   }
 
 
-  public AutonMoveCommand withRobotRelativeX(double x){ // change robot relative X
+  public MoveCommand withRobotRelativeX(double x){ // change robot relative X
     xPID.setSetpoint(Math.cos(currentPose.getRotation().getRadians()) * x);
     yPID.setSetpoint(Math.sin(currentPose.getRotation().getRadians()) * x);
     return this; 
   }
-  public AutonMoveCommand withRobotRelativeY(double y){ // change robot relative Y (left is positive, right is negative)
+  public MoveCommand withRobotRelativeY(double y){ // change robot relative Y (left is positive, right is negative)
     xPID.setSetpoint(Math.sin(currentPose.getRotation().getRadians()) * y);
     yPID.setSetpoint(Math.cos(currentPose.getRotation().getRadians()) * y);
     return this; 
   }
-  public AutonMoveCommand withFieldRelativeX(double x){ // change field relative X
+  public MoveCommand withFieldRelativeX(double x){ // change field relative X
     xPID.setSetpoint(x + m_swerveSubsystem.getPose().getX());
     return this; 
   }
-  public AutonMoveCommand withFieldRelativeY(double y){ // change field relative Y
+  public MoveCommand withFieldRelativeY(double y){ // change field relative Y
     yPID.setSetpoint(y + m_swerveSubsystem.getPose().getY());
     return this; 
   }
-  public AutonMoveCommand withHeading(double rot){ // change robot heading
+  public MoveCommand withHeading(double rot){ // change robot heading
     rotPID.setSetpoint(Math.toRadians(rot) + m_swerveSubsystem.getPose().getRotation().getRadians());
     return this; 
   }
-  public AutonMoveCommand withAbsoluteXPos (double x) { // set specific X value
+  public MoveCommand withAbsoluteXPos (double x) { // set specific X value
     xPID.setSetpoint(x);
     return this;
   }
-  public AutonMoveCommand withAbsoluteYPos (double y) { // set specific Y value
+  public MoveCommand withAbsoluteYPos (double y) { // set specific Y value
     yPID.setSetpoint(y);
     return this;
   }
-  public AutonMoveCommand withAbsoluteHeading (double rot) { // set specific heading 
+  public MoveCommand withAbsoluteHeading (double rot) { // set specific heading 
     rotPID.setSetpoint(Math.toRadians(rot));
     return this;
   }
