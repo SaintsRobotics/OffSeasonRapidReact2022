@@ -11,11 +11,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /** Moves the robot using robot relative, field relative, or absolute values. */
 public class MoveCommand extends CommandBase {
-
   SwerveDriveSubsystem m_swerveSubsystem;
-  double xSpeed;
-  double ySpeed;
-  double rotSpeed;
 
   PIDController xPID = new PIDController(0.3, 0, 0);
   PIDController yPID = new PIDController(0.3, 0, 0);
@@ -25,47 +21,36 @@ public class MoveCommand extends CommandBase {
 
   /** Creates a new {@link MoveCommand}. */
   public MoveCommand(SwerveDriveSubsystem subsystem) {
-    // Use addRequirements() here to declare subsystem dependencies.
     m_swerveSubsystem = subsystem;
     addRequirements(subsystem);
     xPID.setTolerance(0.1);
     yPID.setTolerance(0.1);
-    rotPID.setTolerance(Math.PI/18);
+    rotPID.setTolerance(Math.PI / 18);
   }
 
-
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     currentPose = m_swerveSubsystem.getPose();
-    xPID.setSetpoint(currentPose.getX());
-    yPID.setSetpoint(currentPose.getY());
-    rotPID.setSetpoint(currentPose.getRotation().getRadians());
-
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     currentPose = m_swerveSubsystem.getPose();
-    xSpeed = xPID.calculate(currentPose.getX());
-    ySpeed = yPID.calculate(currentPose.getY());
-    rotSpeed = rotPID.calculate(currentPose.getRotation().getRadians());
-
-    m_swerveSubsystem.drive(xSpeed, ySpeed, rotSpeed, true);
+    m_swerveSubsystem.drive(
+        xPID.calculate(currentPose.getX()),
+        yPID.calculate(currentPose.getY()),
+        rotPID.calculate(currentPose.getRotation().getRadians()),
+        true);
   }
 
-  
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_swerveSubsystem.drive(0, 0, 0, false);
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (xPID.atSetpoint() && yPID.atSetpoint() && rotPID.atSetpoint());
+    return xPID.atSetpoint() && yPID.atSetpoint() && rotPID.atSetpoint();
   }
 
   /**
@@ -77,7 +62,7 @@ public class MoveCommand extends CommandBase {
   public MoveCommand withRobotRelativeX(double x) {
     xPID.setSetpoint(Math.cos(currentPose.getRotation().getRadians()) * x);
     yPID.setSetpoint(Math.sin(currentPose.getRotation().getRadians()) * x);
-    return this; 
+    return this;
   }
 
   /**
@@ -89,7 +74,7 @@ public class MoveCommand extends CommandBase {
   public MoveCommand withRobotRelativeY(double y) {
     xPID.setSetpoint(Math.sin(currentPose.getRotation().getRadians()) * y);
     yPID.setSetpoint(Math.cos(currentPose.getRotation().getRadians()) * y);
-    return this; 
+    return this;
   }
 
   /**
@@ -100,7 +85,7 @@ public class MoveCommand extends CommandBase {
    */
   public MoveCommand withFieldRelativeX(double x) {
     xPID.setSetpoint(x + m_swerveSubsystem.getPose().getX());
-    return this; 
+    return this;
   }
 
   /**
@@ -111,7 +96,7 @@ public class MoveCommand extends CommandBase {
    */
   public MoveCommand withFieldRelativeY(double y) {
     yPID.setSetpoint(y + m_swerveSubsystem.getPose().getY());
-    return this; 
+    return this;
   }
 
   /**
