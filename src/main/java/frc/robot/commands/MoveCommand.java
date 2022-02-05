@@ -74,7 +74,7 @@ public class MoveCommand extends CommandBase {
   /**
    * Sets the robot relative X position to drive to.
    * 
-   * @param x Robot relative X position.
+   * @param x Robot relative X position in meters.
    * @return This, for method chaining.
    */
   public MoveCommand withRobotRelativeX(double x) {
@@ -86,7 +86,7 @@ public class MoveCommand extends CommandBase {
   /**
    * Sets the robot relative Y position to drive to.
    * 
-   * @param y Robot relative Y position.
+   * @param y Robot relative Y position in meters.
    * @return This, for method chaining.
    */
   public MoveCommand withRobotRelativeY(double y) {
@@ -98,7 +98,7 @@ public class MoveCommand extends CommandBase {
   /**
    * Sets the field relative X position to drive to.
    * 
-   * @param x Field relative X position.
+   * @param x Field relative X position in meters.
    * @return This, for method chaining.
    */
   public MoveCommand withFieldRelativeX(double x) {
@@ -109,7 +109,7 @@ public class MoveCommand extends CommandBase {
   /**
    * Sets the field relative Y position to drive to.
    * 
-   * @param y Field relative Y position.
+   * @param y Field relative Y position in meters.
    * @return This, for method chaining.
    */
   public MoveCommand withFieldRelativeY(double y) {
@@ -120,7 +120,7 @@ public class MoveCommand extends CommandBase {
   /**
    * Sets the absolute X position to drive to.
    * 
-   * @param y Absolute X position.
+   * @param y Absolute X position in meters.
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteX(double x) {
@@ -131,7 +131,7 @@ public class MoveCommand extends CommandBase {
   /**
    * Sets the absolute Y position to drive to.
    * 
-   * @param y Absolute Y position.
+   * @param y Absolute Y position in meters.
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteY(double y) {
@@ -142,22 +142,22 @@ public class MoveCommand extends CommandBase {
   /**
    * Sets the robot relative heading to turn to.
    * 
-   * @param rot Robot relative heading.
+   * @param rot Robot relative heading in radians.
    * @return This, for method chaining.
    */
   public MoveCommand withRelativeHeading(double rot) {
-    rotSupplier = () -> Math.toRadians(rot) + m_swerveSubsystem.getPose().getRotation().getRadians();
+    rotSupplier = () -> m_swerveSubsystem.getPose().getRotation().getRadians() + rot;
     return this;
   }
 
   /**
    * Sets the absolute heading to turn to.
    * 
-   * @param rot Absolute heading.
+   * @param rot Absolute heading in radians.
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteHeading(double rot) {
-    rotSupplier = () -> Math.toRadians(rot);
+    rotSupplier = () -> rot;
     return this;
   }
 }
