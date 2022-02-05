@@ -33,8 +33,8 @@ public class MoveCommand extends CommandBase {
     m_driveSubsystem = subsystem;
     addRequirements(m_driveSubsystem);
 
-    m_xPID.setTolerance(0.1);
-    m_yPID.setTolerance(0.1);
+    m_xPID.setTolerance(0.05);
+    m_yPID.setTolerance(0.05);
     m_rotPID.setTolerance(0.1);
 
     // If a position is not set it needs to be set to the current position or it
