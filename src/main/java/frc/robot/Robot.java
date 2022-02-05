@@ -27,6 +27,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
+    Limelight.setLed(1);
     m_robotContainer.m_hardwareMap.swerveDrivetrainHardware.gyro.calibrate();
   }
 
