@@ -12,7 +12,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.AbsoluteEncoder;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.HardwareMap.SwerveModuleHardware;
 
 /** Class that controls the swerve wheel and reads the swerve encoder. */
 public class SwerveModule {
@@ -26,18 +25,19 @@ public class SwerveModule {
   /**
    * Creates a new {@link SwerveModule}.
    * 
-   * @param hardware       the hardware for the swerve module
    * @param driveMotor     motor that drives the wheel
    * @param turningMotor   motor that changes the angle of the wheel
    * @param turningEncoder absolute encoder for the swerve module
    */
-  public SwerveModule(SwerveModuleHardware hardware, CANSparkMax driveMotor, CANSparkMax turningMotor,
-      AbsoluteEncoder turningEncoder) {
+  public SwerveModule(CANSparkMax driveMotor, CANSparkMax turningMotor, AbsoluteEncoder turningEncoder) {
     m_driveMotor = driveMotor;
     m_turningMotor = turningMotor;
 
     m_turningEncoder = turningEncoder;
 
+    m_driveMotor.getEncoder().setVelocityConversionFactor(ModuleConstants.kWheelCircumferenceMeters
+        / 60 / ModuleConstants.kDrivingGearRatio);
+        
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
     m_driveMotor.setIdleMode(IdleMode.kBrake);
     m_turningMotor.setIdleMode(IdleMode.kBrake);
@@ -49,8 +49,7 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity() * ModuleConstants.kWheelCircumferenceMeters
-        / 60 / ModuleConstants.kDrivingGearRatio, m_turningEncoder.get());
+    return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity(), m_turningEncoder.get());
   }
 
   /**
