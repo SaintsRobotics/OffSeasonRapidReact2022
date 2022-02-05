@@ -54,12 +54,17 @@ public final class Constants {
     public static final double kWheelBase = 0.67;
 
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-        new Translation2d(kWheelBase / 2, kTrackWidth / 2), new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-        new Translation2d(kWheelBase / 2, -kTrackWidth / 2), new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+        new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+        new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
+        new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     public static final double kMaxSpeedMetersPerSecond = 3;
 
     public static final double kMaxAngularSpeedRadiansPerSecond = 8.76;
+
+    /** Time in seconds for the robot to stop turning from max speed. */
+    public static final double kTurningStopTime = 0.2;
   }
 
   public static final class ModuleConstants {
