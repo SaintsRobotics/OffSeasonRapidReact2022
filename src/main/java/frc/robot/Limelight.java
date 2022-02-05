@@ -6,8 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-/** Add your docs here. */
-public class Limelight {
+/** Class to access the limelight through network tables. */
+public final class Limelight {
 
     /**
      * Vertical Offset From Crosshair To Target
@@ -64,10 +64,17 @@ public class Limelight {
     }
 
     /**
-     * Sets limelight’s LED state
+     * Sets limelight’s LED state.
+     * <p>
+     * 0: use LED Mode set in the current pipeline.
+     * <p>
+     * 1: force off.
+     * <p>
+     * 2: force blink.
+     * <p>
+     * 3: force on.
      * 
-     * @param state 0: use LED Mode set in the current pipeline. 1: force off. 2:
-     *              force blink. 3: force on.
+     * @param state Limelight LED state.
      */
     public static void setLed(double state) {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(state);
