@@ -53,11 +53,18 @@ public class MoveCommand extends CommandBase {
   }
 
   @Override
+  public void initialize() {
+    m_xPID.setSetpoint(m_xSupplier.getAsDouble());
+    m_yPID.setSetpoint(m_ySupplier.getAsDouble());
+    m_rotPID.setSetpoint(m_rotSupplier.getAsDouble());
+  }
+
+  @Override
   public void execute() {
     m_driveSubsystem.drive(
-        m_xPID.calculate(m_driveSubsystem.getPose().getX(), m_xSupplier.getAsDouble()),
-        m_yPID.calculate(m_driveSubsystem.getPose().getY(), m_ySupplier.getAsDouble()),
-        m_rotPID.calculate(m_driveSubsystem.getPose().getRotation().getRadians(), m_rotSupplier.getAsDouble()),
+        m_xPID.calculate(m_driveSubsystem.getPose().getX()),
+        m_yPID.calculate(m_driveSubsystem.getPose().getY()),
+        m_rotPID.calculate(m_driveSubsystem.getPose().getRotation().getRadians()),
         true);
   }
 
