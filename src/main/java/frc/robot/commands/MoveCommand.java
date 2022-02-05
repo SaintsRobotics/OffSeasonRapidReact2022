@@ -102,7 +102,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withFieldRelativeX(double x) {
-    m_xSupplier = () -> x + m_driveSubsystem.getPose().getX();
+    m_xSupplier = () -> m_driveSubsystem.getPose().getX() + x;
     return this;
   }
 
@@ -113,7 +113,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withFieldRelativeY(double y) {
-    m_ySupplier = () -> y + m_driveSubsystem.getPose().getY();
+    m_ySupplier = () -> m_driveSubsystem.getPose().getY() + y;
     return this;
   }
 
