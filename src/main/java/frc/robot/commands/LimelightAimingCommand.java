@@ -11,8 +11,9 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /** Accesses limelight values to aim the robot at a target. */
 public class LimelightAimingCommand extends CommandBase {
+  private final SwerveDriveSubsystem m_swerveSubsystem;
+
   private final PIDController m_pid = new PIDController(0.03, 0, 0);
-  private SwerveDriveSubsystem m_swerveSubsystem;
 
   private final int m_pipeline;
 
