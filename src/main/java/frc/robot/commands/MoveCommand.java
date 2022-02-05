@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
+/** Moves the robot using robot relative, field relative, or absolute values. */
 public class MoveCommand extends CommandBase {
 
   SwerveDriveSubsystem m_swerveSubsystem;
@@ -67,38 +68,92 @@ public class MoveCommand extends CommandBase {
     return (xPID.atSetpoint() && yPID.atSetpoint() && rotPID.atSetpoint());
   }
 
-
-  public MoveCommand withRobotRelativeX(double x){ // change robot relative X
+  /**
+   * Sets the robot relative X position to drive to.
+   * 
+   * @param x Robot relative X position.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withRobotRelativeX(double x) {
     xPID.setSetpoint(Math.cos(currentPose.getRotation().getRadians()) * x);
     yPID.setSetpoint(Math.sin(currentPose.getRotation().getRadians()) * x);
     return this; 
   }
-  public MoveCommand withRobotRelativeY(double y){ // change robot relative Y (left is positive, right is negative)
+
+  /**
+   * Sets the robot relative Y position to drive to.
+   * 
+   * @param y Robot relative Y position.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withRobotRelativeY(double y) {
     xPID.setSetpoint(Math.sin(currentPose.getRotation().getRadians()) * y);
     yPID.setSetpoint(Math.cos(currentPose.getRotation().getRadians()) * y);
     return this; 
   }
-  public MoveCommand withFieldRelativeX(double x){ // change field relative X
+
+  /**
+   * Sets the field relative X position to drive to.
+   * 
+   * @param x Field relative X position.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withFieldRelativeX(double x) {
     xPID.setSetpoint(x + m_swerveSubsystem.getPose().getX());
     return this; 
   }
-  public MoveCommand withFieldRelativeY(double y){ // change field relative Y
+
+  /**
+   * Sets the field relative Y position to drive to.
+   * 
+   * @param y Field relative Y position.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withFieldRelativeY(double y) {
     yPID.setSetpoint(y + m_swerveSubsystem.getPose().getY());
     return this; 
   }
-  public MoveCommand withHeading(double rot){ // change robot heading
-    rotPID.setSetpoint(Math.toRadians(rot) + m_swerveSubsystem.getPose().getRotation().getRadians());
-    return this; 
-  }
-  public MoveCommand withAbsoluteXPos (double x) { // set specific X value
+
+  /**
+   * Sets the absolute X position to drive to.
+   * 
+   * @param y Absolute X position.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withAbsoluteX(double x) {
     xPID.setSetpoint(x);
     return this;
   }
-  public MoveCommand withAbsoluteYPos (double y) { // set specific Y value
+
+  /**
+   * Sets the absolute Y position to drive to.
+   * 
+   * @param y Absolute Y position.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withAbsoluteY(double y) {
     yPID.setSetpoint(y);
     return this;
   }
-  public MoveCommand withAbsoluteHeading (double rot) { // set specific heading 
+
+  /**
+   * Sets the robot relative heading to turn to.
+   * 
+   * @param rot Robot relative heading.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withRelativeHeading(double rot) {
+    rotPID.setSetpoint(Math.toRadians(rot) + m_swerveSubsystem.getPose().getRotation().getRadians());
+    return this;
+  }
+
+  /**
+   * Sets the absolute heading to turn to.
+   * 
+   * @param rot Absolute heading.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withAbsoluteHeading(double rot) {
     rotPID.setSetpoint(Math.toRadians(rot));
     return this;
   }
