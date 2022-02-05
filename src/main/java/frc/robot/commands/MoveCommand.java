@@ -12,63 +12,63 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /** Moves the robot using robot relative, field relative, or absolute values. */
 public class MoveCommand extends CommandBase {
-  private final SwerveDriveSubsystem m_swerveSubsystem;
+  private final SwerveDriveSubsystem m_driveSubsystem;
 
-  private final PIDController xPID = new PIDController(0.3, 0, 0);
-  private final PIDController yPID = new PIDController(0.3, 0, 0);
-  private final PIDController rotPID = new PIDController(0.3, 0, 0);
+  private final PIDController m_xPID = new PIDController(0.3, 0, 0);
+  private final PIDController m_yPID = new PIDController(0.3, 0, 0);
+  private final PIDController m_rotPID = new PIDController(0.3, 0, 0);
 
-  private DoubleSupplier xSupplier;
-  private DoubleSupplier ySupplier;
-  private DoubleSupplier rotSupplier;
+  private DoubleSupplier m_xSupplier;
+  private DoubleSupplier m_ySupplier;
+  private DoubleSupplier m_rotSupplier;
 
   /** Creates a new {@link MoveCommand}. */
   public MoveCommand(SwerveDriveSubsystem subsystem) {
-    m_swerveSubsystem = subsystem;
-    addRequirements(m_swerveSubsystem);
+    m_driveSubsystem = subsystem;
+    addRequirements(m_driveSubsystem);
 
-    xPID.setTolerance(0.1);
-    yPID.setTolerance(0.1);
-    rotPID.setTolerance(Math.PI / 18);
+    m_xPID.setTolerance(0.1);
+    m_yPID.setTolerance(0.1);
+    m_rotPID.setTolerance(Math.PI / 18);
 
     // If a position is not set it needs to be set to the current position or it will error.
-    if(xSupplier == null) {
-      xSupplier = () -> m_swerveSubsystem.getPose().getX();
+    if(m_xSupplier == null) {
+      m_xSupplier = () -> m_driveSubsystem.getPose().getX();
     }
 
-    if(ySupplier == null) {
-      ySupplier = () -> m_swerveSubsystem.getPose().getY();
+    if(m_ySupplier == null) {
+      m_ySupplier = () -> m_driveSubsystem.getPose().getY();
     }
 
-    if(rotSupplier == null) {
-      rotSupplier = () -> m_swerveSubsystem.getPose().getRotation().getRadians();
+    if(m_rotSupplier == null) {
+      m_rotSupplier = () -> m_driveSubsystem.getPose().getRotation().getRadians();
     }
   }
 
   @Override
   public void initialize() {
-    xPID.setSetpoint(xSupplier.getAsDouble());
-    yPID.setSetpoint(ySupplier.getAsDouble());
-    rotPID.setSetpoint(rotSupplier.getAsDouble());
+    m_xPID.setSetpoint(m_xSupplier.getAsDouble());
+    m_yPID.setSetpoint(m_ySupplier.getAsDouble());
+    m_rotPID.setSetpoint(m_rotSupplier.getAsDouble());
   }
 
   @Override
   public void execute() {
-    m_swerveSubsystem.drive(
-        xPID.calculate(m_swerveSubsystem.getPose().getX()),
-        yPID.calculate(m_swerveSubsystem.getPose().getY()),
-        rotPID.calculate(m_swerveSubsystem.getPose().getRotation().getRadians()),
+    m_driveSubsystem.drive(
+        m_xPID.calculate(m_driveSubsystem.getPose().getX()),
+        m_yPID.calculate(m_driveSubsystem.getPose().getY()),
+        m_rotPID.calculate(m_driveSubsystem.getPose().getRotation().getRadians()),
         true);
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_swerveSubsystem.drive(0, 0, 0, false);
+    m_driveSubsystem.drive(0, 0, 0, false);
   }
 
   @Override
   public boolean isFinished() {
-    return xPID.atSetpoint() && yPID.atSetpoint() && rotPID.atSetpoint();
+    return m_xPID.atSetpoint() && m_yPID.atSetpoint() && m_rotPID.atSetpoint();
   }
 
   /**
@@ -78,8 +78,8 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withRobotRelativeX(double x) {
-    xSupplier = () -> Math.cos(m_swerveSubsystem.getPose().getRotation().getRadians()) * x;
-    ySupplier = () -> Math.sin(m_swerveSubsystem.getPose().getRotation().getRadians()) * x;
+    m_xSupplier = () -> Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
+    m_ySupplier = () -> Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
     return this;
   }
 
@@ -90,8 +90,8 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withRobotRelativeY(double y) {
-    xSupplier = () -> Math.sin(m_swerveSubsystem.getPose().getRotation().getRadians()) * y;
-    ySupplier = () -> Math.cos(m_swerveSubsystem.getPose().getRotation().getRadians()) * y;
+    m_xSupplier = () -> Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) * y;
+    m_ySupplier = () -> Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) * y;
     return this;
   }
 
@@ -102,7 +102,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withFieldRelativeX(double x) {
-    xSupplier = () -> x + m_swerveSubsystem.getPose().getX();
+    m_xSupplier = () -> x + m_driveSubsystem.getPose().getX();
     return this;
   }
 
@@ -113,7 +113,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withFieldRelativeY(double y) {
-    ySupplier = () -> y + m_swerveSubsystem.getPose().getY();
+    m_ySupplier = () -> y + m_driveSubsystem.getPose().getY();
     return this;
   }
 
@@ -124,7 +124,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteX(double x) {
-    xSupplier = () -> x;
+    m_xSupplier = () -> x;
     return this;
   }
 
@@ -135,7 +135,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteY(double y) {
-    ySupplier = () -> y;
+    m_ySupplier = () -> y;
     return this;
   }
 
@@ -146,7 +146,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withRelativeHeading(double rot) {
-    rotSupplier = () -> m_swerveSubsystem.getPose().getRotation().getRadians() + rot;
+    m_rotSupplier = () -> m_driveSubsystem.getPose().getRotation().getRadians() + rot;
     return this;
   }
 
@@ -157,7 +157,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteHeading(double rot) {
-    rotSupplier = () -> rot;
+    m_rotSupplier = () -> rot;
     return this;
   }
 }
