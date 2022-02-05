@@ -27,15 +27,13 @@ public class LimelightAimingCommand extends CommandBase {
 
   @Override
   public void initialize() {
-    m_pid.reset();
     Limelight.setPipeline(m_pipeline);
     Limelight.setLed(0);
-    m_pid.setSetpoint(0);
   }
 
   @Override
   public void execute() {
-    m_swerveSubsystem.drive(0, 0, m_pid.calculate(Limelight.getX()), false);
+    m_swerveSubsystem.drive(0, 0, m_pid.calculate(Limelight.getX(), 0), false);
   }
 
   @Override
