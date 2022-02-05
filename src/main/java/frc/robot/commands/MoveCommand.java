@@ -35,7 +35,7 @@ public class MoveCommand extends CommandBase {
 
     m_xPID.setTolerance(0.1);
     m_yPID.setTolerance(0.1);
-    m_rotPID.setTolerance(Math.PI / 18);
+    m_rotPID.setTolerance(0.1);
 
     // If a position is not set it needs to be set to the current position or it
     // will error.
