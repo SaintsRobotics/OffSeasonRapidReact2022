@@ -18,11 +18,17 @@ public class MoveCommand extends CommandBase {
   private final PIDController m_yPID = new PIDController(0.3, 0, 0);
   private final PIDController m_rotPID = new PIDController(0.3, 0, 0);
 
+  // Double suppliers are necessary because we want to use the position of the
+  // robot when the command is run and not when the command is constructed.
   private DoubleSupplier m_xSupplier;
   private DoubleSupplier m_ySupplier;
   private DoubleSupplier m_rotSupplier;
 
-  /** Creates a new {@link MoveCommand}. */
+  /**
+   * Creates a new {@link MoveCommand}.
+   * 
+   * @param subsystem The required subsystem.
+   */
   public MoveCommand(SwerveDriveSubsystem subsystem) {
     m_driveSubsystem = subsystem;
     addRequirements(m_driveSubsystem);
@@ -31,16 +37,17 @@ public class MoveCommand extends CommandBase {
     m_yPID.setTolerance(0.1);
     m_rotPID.setTolerance(Math.PI / 18);
 
-    // If a position is not set it needs to be set to the current position or it will error.
-    if(m_xSupplier == null) {
+    // If a position is not set it needs to be set to the current position or it
+    // will error.
+    if (m_xSupplier == null) {
       m_xSupplier = () -> m_driveSubsystem.getPose().getX();
     }
 
-    if(m_ySupplier == null) {
+    if (m_ySupplier == null) {
       m_ySupplier = () -> m_driveSubsystem.getPose().getY();
     }
 
-    if(m_rotSupplier == null) {
+    if (m_rotSupplier == null) {
       m_rotSupplier = () -> m_driveSubsystem.getPose().getRotation().getRadians();
     }
   }
