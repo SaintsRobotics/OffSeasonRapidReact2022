@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Limelight;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
-/** Accesses limelight values to aim the robot at a target. */
+/** Accesses {@link Limelight} values to aim the robot at a target. */
 public class LimelightAimingCommand extends CommandBase {
   private final SwerveDriveSubsystem m_swerveSubsystem;
 
@@ -17,9 +17,14 @@ public class LimelightAimingCommand extends CommandBase {
 
   private final int m_pipeline;
 
-  /** Creates a new {@link LimelightAimingCommand}. */
-  public LimelightAimingCommand(SwerveDriveSubsystem swerveSubsystem, int pipeline) {
-    m_swerveSubsystem = swerveSubsystem;
+  /**
+   * Creates a new {@link LimelightAimingCommand}.
+   * 
+   * @param subsystem The required subsystem.
+   * @param pipeline  Index of the pipeline to use.
+   */
+  public LimelightAimingCommand(SwerveDriveSubsystem subsystem, int pipeline) {
+    m_swerveSubsystem = subsystem;
     addRequirements(m_swerveSubsystem);
 
     m_pipeline = pipeline;
