@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -27,6 +28,7 @@ public class MoveCommand extends CommandBase {
   private DoubleSupplier m_xSpeedSupplier;
   private DoubleSupplier m_ySpeedSupplier;
   private DoubleSupplier m_rotSpeedSupplier;
+  private BooleanSupplier m_fieldRelativeSupplier;
 
   /**
    * Creates a new {@link MoveCommand}.
@@ -51,6 +53,7 @@ public class MoveCommand extends CommandBase {
     m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX());
     m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY());
     m_rotSpeedSupplier = () -> m_rotPID.calculate(m_driveSubsystem.getPose().getRotation().getRadians());
+    m_fieldRelativeSupplier = () -> true;
   }
 
   @Override
@@ -62,11 +65,12 @@ public class MoveCommand extends CommandBase {
 
   @Override
   public void execute() {
+    // TODO Add math to support driving in robot relative mode.
     m_driveSubsystem.drive(
         m_xSpeedSupplier.getAsDouble(),
         m_ySpeedSupplier.getAsDouble(),
         m_rotSpeedSupplier.getAsDouble(),
-        true);
+        m_fieldRelativeSupplier.getAsBoolean());
   }
 
   @Override
@@ -109,6 +113,19 @@ public class MoveCommand extends CommandBase {
    */
   public MoveCommand withRotSpeedSupplier(DoubleSupplier rot) {
     m_ySpeedSupplier = rot;
+    return this;
+  }
+
+  /**
+   * Sets whether the robot drives in field relative mode using a
+   * {@link BooleanSupplier}.
+   * 
+   * @param fieldRelative {@link BooleanSupplier} that returns the whether the
+   *                      robot is in field relative mode.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withFieldRelativeSupplier(BooleanSupplier fieldRelative) {
+    m_fieldRelativeSupplier = fieldRelative;
     return this;
   }
 

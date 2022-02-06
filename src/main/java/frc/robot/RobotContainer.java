@@ -51,7 +51,8 @@ public class RobotContainer {
         new MoveCommand(m_swerveDriveSubsystem)
             .withXSpeedSupplier(x)
             .withYSpeedSupplier(y)
-            .withRotSpeedSupplier(rot));
+            .withRotSpeedSupplier(rot)
+            .withFieldRelativeSupplier(() -> m_driveController.getRightBumper()));
 
     SmartDashboard.putNumber("Controller X", -m_driveController.getLeftY());
     SmartDashboard.putNumber("Controller Y", -m_driveController.getLeftX());
