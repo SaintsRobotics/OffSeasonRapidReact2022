@@ -25,7 +25,7 @@ public class MoveCommand extends CommandBase {
   private DoubleSupplier m_rotSupplier;
 
   /**
-   * Creates a new {@link MoveCommand}.
+   * Creates a new {@link MoveCommand}. Call methods to make the robot move.
    * 
    * @param subsystem The required subsystem.
    */
