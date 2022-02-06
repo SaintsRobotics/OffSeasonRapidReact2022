@@ -84,6 +84,7 @@ public class MoveCommand extends CommandBase {
    * @param x Robot relative X position in meters.
    * @return This, for method chaining.
    */
+
   public MoveCommand withRobotRelativeX(double x) {
     m_xSupplier = () -> Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
     m_ySupplier = () -> Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
@@ -103,9 +104,9 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Sets the field relative X position to drive to.
+   * Changes the bot's field relative X position.
    * 
-   * @param x Field relative X position in meters.
+   * @param x change in field relative X position in meters.
    * @return This, for method chaining.
    */
   public MoveCommand withFieldRelativeX(double x) {
@@ -114,9 +115,9 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Sets the field relative Y position to drive to.
+   * Changes the bot's field relative Y position.
    * 
-   * @param y Field relative Y position in meters.
+   * @param y change in field relative Y position in meters.
    * @return This, for method chaining.
    */
   public MoveCommand withFieldRelativeY(double y) {
@@ -147,24 +148,24 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Sets the robot relative heading to turn to.
+   *  changes the robot's heading to turn to.
    * 
-   * @param rot Robot relative heading in radians.
+   * @param rot Robot relative heading in degrees.
    * @return This, for method chaining.
    */
-  public MoveCommand withRelativeHeading(double rot) {
-    m_rotSupplier = () -> m_driveSubsystem.getPose().getRotation().getRadians() + rot;
+  public MoveCommand withChangeInHeading(double rot) {
+    m_rotSupplier = () -> m_driveSubsystem.getPose().getRotation().getRadians() + Math.toRadians(rot);
     return this;
   }
 
   /**
    * Sets the absolute heading to turn to.
    * 
-   * @param rot Absolute heading in radians.
+   * @param rot Absolute heading in degrees.
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteHeading(double rot) {
-    m_rotSupplier = () -> rot;
+    m_rotSupplier = () -> Math.toRadians(rot);
     return this;
   }
 }
