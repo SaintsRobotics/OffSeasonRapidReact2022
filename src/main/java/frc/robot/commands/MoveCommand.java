@@ -77,8 +77,8 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withRobotRelativeX(double x) {
-    m_xSupplier = () -> Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
-    m_ySupplier = () -> Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
+    m_xSupplier = () -> x * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians());
+    m_ySupplier = () -> x * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians());
     return this;
   }
 
@@ -89,8 +89,8 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withRobotRelativeY(double y) {
-    m_xSupplier = () -> Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) * y;
-    m_ySupplier = () -> Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) * y;
+    m_xSupplier = () -> y * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians());
+    m_ySupplier = () -> y * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians());
     return this;
   }
 
