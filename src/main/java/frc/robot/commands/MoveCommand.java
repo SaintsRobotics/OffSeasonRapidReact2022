@@ -170,6 +170,19 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
+   * Sets the absolute position to drive to.
+   * 
+   * @param x Absolute X position in meters.
+   * @param y Absolute Y position in meters.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withAbsolutePos(double x, double y) {
+    withAbsoluteX(x);
+    withAbsoluteY(y);
+    return this;
+  }
+
+  /**
    * changes the robot's heading to turn to.
    * 
    * @param rot Robot relative heading in degrees.
