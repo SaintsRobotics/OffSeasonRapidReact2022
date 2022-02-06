@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.AbsoluteEncoder;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.SwerveConstants;
 
 /** Class that controls the swerve wheel and reads the swerve encoder. */
 public class SwerveModule {
@@ -68,7 +69,7 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, m_turningEncoder.get());
 
-    final double driveOutput = state.speedMetersPerSecond;
+    final double driveOutput = state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
     final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get().getRadians(),
         state.angle.getRadians());
 
