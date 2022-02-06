@@ -41,22 +41,13 @@ public class MoveCommand extends CommandBase {
     m_yPID.setTolerance(0.05);
     m_rotPID.setTolerance(0.1);
 
-    // If a position is not set it needs to be set to the current position or it
-    // will error.
-    if (m_desiredXPosSupplier == null) {
-      m_desiredXPosSupplier = () -> m_driveSubsystem.getPose().getX();
-    }
+    // Sets the default position for the desired position suppliers to the current
+    // position and the default speed for the speed suppliers to PID.calculate().
+    // Can be overridden by calling methods.
+    m_desiredXPosSupplier = () -> m_driveSubsystem.getPose().getX();
+    m_desiredYPosSupplier = () -> m_driveSubsystem.getPose().getY();
+    m_desiredRotSupplier = () -> m_driveSubsystem.getPose().getRotation().getRadians();
 
-    if (m_desiredYPosSupplier == null) {
-      m_desiredYPosSupplier = () -> m_driveSubsystem.getPose().getY();
-    }
-
-    if (m_desiredRotSupplier == null) {
-      m_desiredRotSupplier = () -> m_driveSubsystem.getPose().getRotation().getRadians();
-    }
-
-    // Sets the what the speed suppliers are equal to by default. This can be
-    // overridden by calling any of the methods.
     m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX());
     m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY());
     m_rotSpeedSupplier = () -> m_rotPID.calculate(m_driveSubsystem.getPose().getRotation().getRadians());
@@ -127,7 +118,6 @@ public class MoveCommand extends CommandBase {
    * @param x Robot relative X position in meters.
    * @return This, for method chaining.
    */
-
   public MoveCommand withRobotRelativeX(double x) {
     m_desiredXPosSupplier = () -> Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
     m_desiredYPosSupplier = () -> Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
@@ -199,7 +189,7 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   *  changes the robot's heading to turn to.
+   * changes the robot's heading to turn to.
    * 
    * @param rot Robot relative heading in degrees.
    * @return This, for method chaining.
