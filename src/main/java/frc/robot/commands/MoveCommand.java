@@ -77,8 +77,10 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withRobotRelativeX(double x) {
-    m_xSupplier = () -> m_driveSubsystem.getPose().getX() + (x * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()));
-    m_ySupplier = () -> m_driveSubsystem.getPose().getY() + (x * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()));
+    m_xSupplier = () -> m_driveSubsystem.getPose().getX()
+        + (x * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()));
+    m_ySupplier = () -> m_driveSubsystem.getPose().getY()
+        + (x * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()));
     return this;
   }
 
@@ -89,8 +91,24 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withRobotRelativeY(double y) {
-    m_xSupplier = () -> m_driveSubsystem.getPose().getX() + (y * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()));
-    m_ySupplier = () -> m_driveSubsystem.getPose().getY() + (y * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()));
+    m_xSupplier = () -> m_driveSubsystem.getPose().getX()
+        + (y * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()));
+    m_ySupplier = () -> m_driveSubsystem.getPose().getY()
+        + (y * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()));
+    return this;
+  }
+
+  /**
+   * // TODO y value will override the x value
+   * Sets the robot relative position to drive to.
+   * 
+   * @param x Robot relative X position in meters.
+   * @param y Robot relative Y position in meters.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withRobotRelativePos(double x, double y) {
+    withRobotRelativeX(x);
+    withRobotRelativeY(y);
     return this;
   }
 
@@ -113,6 +131,19 @@ public class MoveCommand extends CommandBase {
    */
   public MoveCommand withFieldRelativeY(double y) {
     m_ySupplier = () -> m_driveSubsystem.getPose().getY() + y;
+    return this;
+  }
+
+  /**
+   * Changes the bot's field relative position.
+   * 
+   * @param x change in field relative X position in meters.
+   * @param y change in field relative Y position in meters.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withFieldRelativePos(double x, double y) {
+    withFieldRelativeX(x);
+    withFieldRelativeY(y);
     return this;
   }
 
