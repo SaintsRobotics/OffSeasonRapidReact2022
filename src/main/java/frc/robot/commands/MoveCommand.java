@@ -38,7 +38,8 @@ public class MoveCommand extends CommandBase {
 
     m_xPID.setTolerance(0.05);
     m_yPID.setTolerance(0.05);
-    m_rotPID.setTolerance(0.1);
+    m_rotPID.setTolerance(0.05);
+    m_rotPID.enableContinuousInput(-Math.PI, Math.PI);
 
     // Sets the default position for the desired position suppliers to the current
     // position. Can be overridden by calling methods.
