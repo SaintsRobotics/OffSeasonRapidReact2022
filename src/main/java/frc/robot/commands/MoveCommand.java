@@ -150,7 +150,7 @@ public class MoveCommand extends CommandBase {
   /**
    * Sets the absolute X position to drive to.
    * 
-   * @param y Absolute X position in meters.
+   * @param x Absolute X position in meters.
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteX(double x) {
