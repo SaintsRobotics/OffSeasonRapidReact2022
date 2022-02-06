@@ -10,7 +10,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
-/** Moves the robot using robot relative, field relative, or absolute values. */
+/**
+ * Moves the robot using robot relative, field relative, or absolute values.
+ * Note that calling methods will override previous method calls.
+ */
 public class MoveCommand extends CommandBase {
   private final SwerveDriveSubsystem m_driveSubsystem;
 
