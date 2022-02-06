@@ -99,7 +99,6 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * // TODO y value will override the x value
    * Sets the robot relative position to drive to.
    * 
    * @param x Robot relative X position in meters.
@@ -107,8 +106,12 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withRobotRelativePos(double x, double y) {
-    withRobotRelativeX(x);
-    withRobotRelativeY(y);
+    m_xSupplier = () -> m_driveSubsystem.getPose().getX()
+        + (x * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()))
+        + (y * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()));
+    m_ySupplier = () -> m_driveSubsystem.getPose().getY()
+        + (x * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()))
+        + (y * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()));
     return this;
   }
 
