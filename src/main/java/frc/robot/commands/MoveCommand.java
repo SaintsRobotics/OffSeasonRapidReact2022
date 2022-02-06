@@ -37,19 +37,11 @@ public class MoveCommand extends CommandBase {
     m_yPID.setTolerance(0.05);
     m_rotPID.setTolerance(0.1);
 
-    // If a position is not set it needs to be set to the current position or it
-    // will error.
-    if (m_xSupplier == null) {
-      m_xSupplier = () -> m_driveSubsystem.getPose().getX();
-    }
-
-    if (m_ySupplier == null) {
-      m_ySupplier = () -> m_driveSubsystem.getPose().getY();
-    }
-
-    if (m_rotSupplier == null) {
-      m_rotSupplier = () -> m_driveSubsystem.getPose().getRotation().getRadians();
-    }
+    // Sets the default position for the desired position suppliers to the current
+    // position. Can be overridden by calling methods.
+    m_xSupplier = () -> m_driveSubsystem.getPose().getX();
+    m_ySupplier = () -> m_driveSubsystem.getPose().getY();
+    m_rotSupplier = () -> m_driveSubsystem.getPose().getRotation().getRadians();
   }
 
   @Override
