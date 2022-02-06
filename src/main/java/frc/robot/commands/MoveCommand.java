@@ -84,7 +84,6 @@ public class MoveCommand extends CommandBase {
    * @param x Robot relative X position in meters.
    * @return This, for method chaining.
    */
-
   public MoveCommand withRobotRelativeX(double x) {
     m_xSupplier = () -> Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
     m_ySupplier = () -> Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
@@ -148,7 +147,7 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   *  changes the robot's heading to turn to.
+   * changes the robot's heading to turn to.
    * 
    * @param rot Robot relative heading in degrees.
    * @return This, for method chaining.
