@@ -74,7 +74,8 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Sets the robot relative X position to drive to.
+   * Sets the robot relative X position to drive to. To set both an X and Y
+   * position call {@link #withFieldRelativePos(double, double)}.
    * 
    * @param x Robot relative X position in meters.
    * @return This, for method chaining.
@@ -88,7 +89,8 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Sets the robot relative Y position to drive to.
+   * Sets the robot relative Y position to drive to. To set both an X and Y
+   * position call {@link #withFieldRelativePos(double, double)}.
    * 
    * @param y Robot relative Y position in meters.
    * @return This, for method chaining.

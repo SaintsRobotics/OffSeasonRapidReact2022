@@ -90,6 +90,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new MoveCommand(m_swerveDriveSubsystem).withFieldRelativeX(-5).withFieldRelativeY(5).withAbsoluteHeading(30);
+    return new MoveCommand(m_swerveDriveSubsystem).withChangeInHeading(180);
   }
 }
