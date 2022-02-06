@@ -20,9 +20,13 @@ public class MoveCommand extends CommandBase {
 
   // Double suppliers are necessary because we want to use the position of the
   // robot when the command is run and not when the command is constructed.
-  private DoubleSupplier m_xSupplier;
-  private DoubleSupplier m_ySupplier;
-  private DoubleSupplier m_rotSupplier;
+  private DoubleSupplier m_desiredXPosSupplier;
+  private DoubleSupplier m_desiredYPosSupplier;
+  private DoubleSupplier m_desiredRotSupplier;
+
+  private DoubleSupplier m_xSpeedSupplier;
+  private DoubleSupplier m_ySpeedSupplier;
+  private DoubleSupplier m_rotSpeedSupplier;
 
   /**
    * Creates a new {@link MoveCommand}.
@@ -39,32 +43,38 @@ public class MoveCommand extends CommandBase {
 
     // If a position is not set it needs to be set to the current position or it
     // will error.
-    if (m_xSupplier == null) {
-      m_xSupplier = () -> m_driveSubsystem.getPose().getX();
+    if (m_desiredXPosSupplier == null) {
+      m_desiredXPosSupplier = () -> m_driveSubsystem.getPose().getX();
     }
 
-    if (m_ySupplier == null) {
-      m_ySupplier = () -> m_driveSubsystem.getPose().getY();
+    if (m_desiredYPosSupplier == null) {
+      m_desiredYPosSupplier = () -> m_driveSubsystem.getPose().getY();
     }
 
-    if (m_rotSupplier == null) {
-      m_rotSupplier = () -> m_driveSubsystem.getPose().getRotation().getRadians();
+    if (m_desiredRotSupplier == null) {
+      m_desiredRotSupplier = () -> m_driveSubsystem.getPose().getRotation().getRadians();
     }
+
+    // Sets the what the speed suppliers are equal to by default. This can be
+    // overridden by calling any of the methods.
+    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX());
+    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY());
+    m_rotSpeedSupplier = () -> m_rotPID.calculate(m_driveSubsystem.getPose().getRotation().getRadians());
   }
 
   @Override
   public void initialize() {
-    m_xPID.setSetpoint(m_xSupplier.getAsDouble());
-    m_yPID.setSetpoint(m_ySupplier.getAsDouble());
-    m_rotPID.setSetpoint(m_rotSupplier.getAsDouble());
+    m_xPID.setSetpoint(m_desiredXPosSupplier.getAsDouble());
+    m_yPID.setSetpoint(m_desiredYPosSupplier.getAsDouble());
+    m_rotPID.setSetpoint(m_desiredRotSupplier.getAsDouble());
   }
 
   @Override
   public void execute() {
     m_driveSubsystem.drive(
-        m_xPID.calculate(m_driveSubsystem.getPose().getX()),
-        m_yPID.calculate(m_driveSubsystem.getPose().getY()),
-        m_rotPID.calculate(m_driveSubsystem.getPose().getRotation().getRadians()),
+        m_xSpeedSupplier.getAsDouble(),
+        m_ySpeedSupplier.getAsDouble(),
+        m_rotSpeedSupplier.getAsDouble(),
         true);
   }
 
@@ -79,6 +89,39 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
+   * Sets the X speed of the robot using a {@link DoubleSupplier}.
+   * 
+   * @param x {@link DoubleSupplier} that returns the X speed.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withXSpeedSupplier(DoubleSupplier x) {
+    m_xSpeedSupplier = x;
+    return this;
+  }
+
+  /**
+   * Sets the Y speed of the robot using a {@link DoubleSupplier}.
+   * 
+   * @param y {@link DoubleSupplier} that returns the Y speed.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withYSpeedSupplier(DoubleSupplier y) {
+    m_ySpeedSupplier = y;
+    return this;
+  }
+
+  /**
+   * Sets the rotational speed of the robot using a {@link DoubleSupplier}.
+   * 
+   * @param rot {@link DoubleSupplier} that returns the rotational speed.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withRotSpeedSupplier(DoubleSupplier rot) {
+    m_ySpeedSupplier = rot;
+    return this;
+  }
+
+  /**
    * Sets the robot relative X position to drive to.
    * 
    * @param x Robot relative X position in meters.
@@ -86,8 +129,10 @@ public class MoveCommand extends CommandBase {
    */
 
   public MoveCommand withRobotRelativeX(double x) {
-    m_xSupplier = () -> Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
-    m_ySupplier = () -> Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
+    m_desiredXPosSupplier = () -> Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
+    m_desiredYPosSupplier = () -> Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
+    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX());
+    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY());
     return this;
   }
 
@@ -98,8 +143,10 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withRobotRelativeY(double y) {
-    m_xSupplier = () -> Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) * y;
-    m_ySupplier = () -> Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) * y;
+    m_desiredXPosSupplier = () -> Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) * y;
+    m_desiredYPosSupplier = () -> Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) * y;
+    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX());
+    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY());
     return this;
   }
 
@@ -110,7 +157,8 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withFieldRelativeX(double x) {
-    m_xSupplier = () -> m_driveSubsystem.getPose().getX() + x;
+    m_desiredXPosSupplier = () -> m_driveSubsystem.getPose().getX() + x;
+    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX());
     return this;
   }
 
@@ -121,7 +169,8 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withFieldRelativeY(double y) {
-    m_ySupplier = () -> m_driveSubsystem.getPose().getY() + y;
+    m_desiredYPosSupplier = () -> m_driveSubsystem.getPose().getY() + y;
+    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY());
     return this;
   }
 
@@ -132,7 +181,8 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteX(double x) {
-    m_xSupplier = () -> x;
+    m_desiredXPosSupplier = () -> x;
+    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX());
     return this;
   }
 
@@ -143,7 +193,8 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteY(double y) {
-    m_ySupplier = () -> y;
+    m_desiredYPosSupplier = () -> y;
+    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY());
     return this;
   }
 
@@ -154,7 +205,8 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withChangeInHeading(double rot) {
-    m_rotSupplier = () -> m_driveSubsystem.getPose().getRotation().getRadians() + Math.toRadians(rot);
+    m_desiredRotSupplier = () -> m_driveSubsystem.getPose().getRotation().getRadians() + Math.toRadians(rot);
+    m_rotSpeedSupplier = () -> m_rotPID.calculate(m_driveSubsystem.getPose().getRotation().getRadians());
     return this;
   }
 
@@ -165,7 +217,8 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteHeading(double rot) {
-    m_rotSupplier = () -> Math.toRadians(rot);
+    m_desiredRotSupplier = () -> Math.toRadians(rot);
+    m_rotSpeedSupplier = () -> m_rotPID.calculate(m_driveSubsystem.getPose().getRotation().getRadians());
     return this;
   }
 }
