@@ -117,6 +117,8 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
+   * TODO Driving in robot relative while moving autonomously causes errors.
+   * <p>
    * Sets whether the robot drives in field relative mode using a
    * {@link BooleanSupplier}.
    * 
