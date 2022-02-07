@@ -83,9 +83,9 @@ public class MoveCommand extends CommandBase {
    */
   public MoveCommand withRobotRelativeX(double x) {
     m_xSupplier = () -> m_driveSubsystem.getPose().getX()
-        + (x * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()));
+        + x * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians());
     m_ySupplier = () -> m_driveSubsystem.getPose().getY()
-        + (x * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()));
+        + x * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians());
     return this;
   }
 
@@ -98,9 +98,9 @@ public class MoveCommand extends CommandBase {
    */
   public MoveCommand withRobotRelativeY(double y) {
     m_xSupplier = () -> m_driveSubsystem.getPose().getX()
-        + (y * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()));
+        + y * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians());
     m_ySupplier = () -> m_driveSubsystem.getPose().getY()
-        + (y * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()));
+        + y * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians());
     return this;
   }
 
@@ -113,11 +113,11 @@ public class MoveCommand extends CommandBase {
    */
   public MoveCommand withRobotRelativePos(double x, double y) {
     m_xSupplier = () -> m_driveSubsystem.getPose().getX()
-        + (x * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()))
-        + (y * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()));
+        + x * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians())
+        + y * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians());
     m_ySupplier = () -> m_driveSubsystem.getPose().getY()
-        + (x * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()))
-        + (y * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()));
+        + x * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians())
+        + y * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians());
     return this;
   }
 
