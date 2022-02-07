@@ -45,6 +45,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     m_rearRight = hardware.rearRight;
 
     m_gyro = hardware.gyro;
+    m_gyro.calibrate();
 
     m_odometry = new SwerveDriveOdometry(SwerveConstants.kDriveKinematics, m_gyro.getRotation2d());
 
