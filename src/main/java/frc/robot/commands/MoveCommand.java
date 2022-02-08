@@ -117,7 +117,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withRotSpeedSupplier(DoubleSupplier rot) {
-    m_ySpeedSupplier = rot;
+    m_rotSpeedSupplier = rot;
     return this;
   }
 
