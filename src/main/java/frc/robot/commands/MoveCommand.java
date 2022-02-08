@@ -75,7 +75,7 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Sets the robot relative X position to drive to. To set both an X and Y
+   * Changes the robot relative X position to drive to. To set both an X and Y
    * position call {@link #withFieldRelativePos(double, double)}.
    * 
    * @param x Robot relative X position in meters.
@@ -90,7 +90,7 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Sets the robot relative Y position to drive to. To set both an X and Y
+   * Changes the robot relative Y position to drive to. To set both an X and Y
    * position call {@link #withFieldRelativePos(double, double)}.
    * 
    * @param y Robot relative Y position in meters.
@@ -105,7 +105,7 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Sets the robot relative position to drive to.
+   * Changes the robot relative position to drive to.
    * 
    * @param x Robot relative X position in meters.
    * @param y Robot relative Y position in meters.
@@ -122,7 +122,7 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Changes the bot's field relative X position.
+   * Changes the field relative X position to drive to.
    * 
    * @param x change in field relative X position in meters.
    * @return This, for method chaining.
@@ -133,7 +133,7 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Changes the bot's field relative Y position.
+   * Changes the field relative Y position to drive to.
    * 
    * @param y change in field relative Y position in meters.
    * @return This, for method chaining.
@@ -144,7 +144,7 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Changes the bot's field relative position.
+   * Changes the field relative position to drive to.
    * 
    * @param x change in field relative X position in meters.
    * @param y change in field relative Y position in meters.
@@ -192,7 +192,8 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * changes the robot's heading to turn to.
+   * Sets the relative heading to turn to based on the starting position of the
+   * robot.
    * 
    * @param rot Robot relative heading in degrees.
    * @return This, for method chaining.
