@@ -11,13 +11,16 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
-/** Moves the robot using robot relative, field relative, or absolute values. */
+/**
+ * Moves the robot using robot relative, field relative, or absolute values.
+ * Note that calling methods will override previous method calls.
+ */
 public class MoveCommand extends CommandBase {
   private final SwerveDriveSubsystem m_driveSubsystem;
 
-  private final PIDController m_xPID = new PIDController(0.3, 0, 0);
-  private final PIDController m_yPID = new PIDController(0.3, 0, 0);
-  private final PIDController m_rotPID = new PIDController(0.3, 0, 0);
+  private final PIDController m_xPID = new PIDController(4, 0, 0);
+  private final PIDController m_yPID = new PIDController(4, 0, 0);
+  private final PIDController m_rotPID = new PIDController(3, 0, 0);
 
   // Double suppliers are necessary because we want to use the position of the
   // robot when the command is run and not when the command is constructed.
@@ -31,7 +34,7 @@ public class MoveCommand extends CommandBase {
   private BooleanSupplier m_fieldRelativeSupplier;
 
   /**
-   * Creates a new {@link MoveCommand}.
+   * Creates a new {@link MoveCommand}. Call methods to make the robot move.
    * 
    * @param subsystem The required subsystem.
    */
@@ -41,7 +44,8 @@ public class MoveCommand extends CommandBase {
 
     m_xPID.setTolerance(0.05);
     m_yPID.setTolerance(0.05);
-    m_rotPID.setTolerance(0.1);
+    m_rotPID.setTolerance(0.05);
+    m_rotPID.enableContinuousInput(-Math.PI, Math.PI);
 
     // Sets the default position for the desired position suppliers to the current
     // position and the default speed for the speed suppliers to PID.calculate().
@@ -80,7 +84,8 @@ public class MoveCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return m_xPID.atSetpoint() && m_yPID.atSetpoint() && m_rotPID.atSetpoint();
+    // TODO add logic to determine when to finish
+    return false;
   }
 
   /**
@@ -132,35 +137,56 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Sets the robot relative X position to drive to.
+   * Changes the robot relative X position to drive to. To set both an X and Y
+   * position call {@link #withFieldRelativePos(double, double)}.
    * 
    * @param x Robot relative X position in meters.
    * @return This, for method chaining.
    */
   public MoveCommand withRobotRelativeX(double x) {
-    m_desiredXPosSupplier = () -> Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
-    m_desiredYPosSupplier = () -> Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
+    m_desiredXPosSupplier = () -> m_driveSubsystem.getPose().getX() + Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
+    m_desiredYPosSupplier = () -> m_driveSubsystem.getPose().getY() + Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) * x;
     m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX());
     m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY());
     return this;
   }
 
   /**
-   * Sets the robot relative Y position to drive to.
+   * Changes the robot relative Y position to drive to. To set both an X and Y
+   * position call {@link #withFieldRelativePos(double, double)}.
    * 
    * @param y Robot relative Y position in meters.
    * @return This, for method chaining.
    */
   public MoveCommand withRobotRelativeY(double y) {
-    m_desiredXPosSupplier = () -> Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) * y;
-    m_desiredYPosSupplier = () -> Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) * y;
+    m_desiredXPosSupplier = () -> m_driveSubsystem.getPose().getX() + Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) * y;
+    m_desiredYPosSupplier = () -> m_driveSubsystem.getPose().getY() + Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) * y;
     m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX());
     m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY());
     return this;
   }
 
   /**
-   * Changes the bot's field relative X position.
+   * Changes the robot relative position to drive to.
+   * 
+   * @param x Robot relative X position in meters.
+   * @param y Robot relative Y position in meters.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withRobotRelativePos(double x, double y) {
+    m_desiredXPosSupplier = () -> m_driveSubsystem.getPose().getX()
+        + x * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians())
+        + y * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians());
+    m_desiredYPosSupplier = () -> m_driveSubsystem.getPose().getY()
+        + x * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians())
+        + y * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians());
+    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX());
+    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY());
+    return this;
+  }
+
+  /**
+   * Changes the field relative X position to drive to.
    * 
    * @param x change in field relative X position in meters.
    * @return This, for method chaining.
@@ -172,7 +198,7 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Changes the bot's field relative Y position.
+   * Changes the field relative Y position to drive to.
    * 
    * @param y change in field relative Y position in meters.
    * @return This, for method chaining.
@@ -184,9 +210,22 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
+   * Changes the field relative position to drive to.
+   * 
+   * @param x change in field relative X position in meters.
+   * @param y change in field relative Y position in meters.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withFieldRelativePos(double x, double y) {
+    withFieldRelativeX(x);
+    withFieldRelativeY(y);
+    return this;
+  }
+
+  /**
    * Sets the absolute X position to drive to.
    * 
-   * @param y Absolute X position in meters.
+   * @param x Absolute X position in meters.
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteX(double x) {
@@ -208,7 +247,21 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * changes the robot's heading to turn to.
+   * Sets the absolute position to drive to.
+   * 
+   * @param x Absolute X position in meters.
+   * @param y Absolute Y position in meters.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withAbsolutePos(double x, double y) {
+    withAbsoluteX(x);
+    withAbsoluteY(y);
+    return this;
+  }
+
+  /**
+   * Sets the relative heading to turn to based on the starting position of the
+   * robot.
    * 
    * @param rot Robot relative heading in degrees.
    * @return This, for method chaining.
