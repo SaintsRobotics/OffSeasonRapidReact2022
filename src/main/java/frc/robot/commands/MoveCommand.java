@@ -19,7 +19,7 @@ public class MoveCommand extends CommandBase {
 
   private final PIDController m_xPID = new PIDController(4, 0, 0);
   private final PIDController m_yPID = new PIDController(4, 0, 0);
-  private final PIDController m_rotPID = new PIDController(4, 0, 0);
+  private final PIDController m_rotPID = new PIDController(3, 0, 0);
 
   // Double suppliers are necessary because we want to use the position of the
   // robot when the command is run and not when the command is constructed.
