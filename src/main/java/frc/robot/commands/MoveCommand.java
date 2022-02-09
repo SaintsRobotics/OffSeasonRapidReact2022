@@ -149,8 +149,8 @@ public class MoveCommand extends CommandBase {
         + Math.cos(m_startPos.getRotation().getRadians()) * x;
     m_desiredYPosSupplier = () -> m_startPos.getY()
         + Math.sin(m_startPos.getRotation().getRadians()) * x;
-    m_xSpeedSupplier = () -> m_xPID.calculate(m_startPos.getX(), m_desiredXPosSupplier.getAsDouble());
-    m_ySpeedSupplier = () -> m_yPID.calculate(m_startPos.getY(), m_desiredYPosSupplier.getAsDouble());
+    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX(), m_desiredXPosSupplier.getAsDouble());
+    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY(), m_desiredYPosSupplier.getAsDouble());
     return this;
   }
 
@@ -166,8 +166,8 @@ public class MoveCommand extends CommandBase {
         + Math.sin(m_startPos.getRotation().getRadians()) * y;
     m_desiredYPosSupplier = () -> m_startPos.getY()
         + Math.cos(m_startPos.getRotation().getRadians()) * y;
-    m_xSpeedSupplier = () -> m_xPID.calculate(m_startPos.getX(), m_desiredXPosSupplier.getAsDouble());
-    m_ySpeedSupplier = () -> m_yPID.calculate(m_startPos.getY(), m_desiredYPosSupplier.getAsDouble());
+    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX(), m_desiredXPosSupplier.getAsDouble());
+    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY(), m_desiredYPosSupplier.getAsDouble());
     return this;
   }
 
@@ -185,8 +185,8 @@ public class MoveCommand extends CommandBase {
     m_desiredYPosSupplier = () -> m_startPos.getY()
         + x * Math.sin(m_startPos.getRotation().getRadians())
         + y * Math.cos(m_startPos.getRotation().getRadians());
-    m_xSpeedSupplier = () -> m_xPID.calculate(m_startPos.getX(), m_desiredXPosSupplier.getAsDouble());
-    m_ySpeedSupplier = () -> m_yPID.calculate(m_startPos.getY(), m_desiredYPosSupplier.getAsDouble());
+    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX(), m_desiredXPosSupplier.getAsDouble());
+    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY(), m_desiredYPosSupplier.getAsDouble());
     return this;
   }
 
@@ -198,7 +198,7 @@ public class MoveCommand extends CommandBase {
    */
   public MoveCommand withFieldRelativeX(double x) {
     m_desiredXPosSupplier = () -> m_startPos.getX() + x;
-    m_xSpeedSupplier = () -> m_xPID.calculate(m_startPos.getX(), m_desiredXPosSupplier.getAsDouble());
+    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX(), m_desiredXPosSupplier.getAsDouble());
     return this;
   }
 
@@ -210,7 +210,7 @@ public class MoveCommand extends CommandBase {
    */
   public MoveCommand withFieldRelativeY(double y) {
     m_desiredYPosSupplier = () -> m_startPos.getY() + y;
-    m_ySpeedSupplier = () -> m_yPID.calculate(m_startPos.getY(), m_desiredYPosSupplier.getAsDouble());
+    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY(), m_desiredYPosSupplier.getAsDouble());
     return this;
   }
 
@@ -235,7 +235,7 @@ public class MoveCommand extends CommandBase {
    */
   public MoveCommand withAbsoluteX(double x) {
     m_desiredXPosSupplier = () -> x;
-    m_xSpeedSupplier = () -> m_xPID.calculate(m_startPos.getX(), m_desiredXPosSupplier.getAsDouble());
+    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX(), m_desiredXPosSupplier.getAsDouble());
     return this;
   }
 
@@ -247,7 +247,7 @@ public class MoveCommand extends CommandBase {
    */
   public MoveCommand withAbsoluteY(double y) {
     m_desiredYPosSupplier = () -> y;
-    m_ySpeedSupplier = () -> m_yPID.calculate(m_startPos.getY(), m_desiredYPosSupplier.getAsDouble());
+    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY(), m_desiredYPosSupplier.getAsDouble());
     return this;
   }
 
@@ -273,7 +273,8 @@ public class MoveCommand extends CommandBase {
    */
   public MoveCommand withChangeInHeading(double rot) {
     m_desiredRotSupplier = () -> m_startPos.getRotation().getRadians() + Math.toRadians(rot);
-    m_rotSpeedSupplier = () -> m_rotPID.calculate(m_startPos.getRotation().getRadians(), m_desiredRotSupplier.getAsDouble());
+    m_rotSpeedSupplier = () -> m_rotPID.calculate(
+        m_driveSubsystem.getPose().getRotation().getRadians(), m_desiredRotSupplier.getAsDouble());
     return this;
   }
 
@@ -285,7 +286,8 @@ public class MoveCommand extends CommandBase {
    */
   public MoveCommand withAbsoluteHeading(double rot) {
     m_desiredRotSupplier = () -> Math.toRadians(rot);
-    m_rotSpeedSupplier = () -> m_rotPID.calculate(m_startPos.getRotation().getRadians(), m_desiredRotSupplier.getAsDouble());
+    m_rotSpeedSupplier = () -> m_rotPID.calculate(
+        m_driveSubsystem.getPose().getRotation().getRadians(), m_desiredRotSupplier.getAsDouble());
     return this;
   }
 }
