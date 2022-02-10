@@ -43,8 +43,6 @@ public class MoveCommand extends CommandBase {
    */
   private double m_deltaRot = 0;
 
-  // Double suppliers are necessary because we want to use the position of the
-  // robot when the command is run and not when the command is constructed.
   private DoubleSupplier m_xSpeedSupplier;
   private DoubleSupplier m_ySpeedSupplier;
   private DoubleSupplier m_rotSpeedSupplier;
@@ -63,9 +61,6 @@ public class MoveCommand extends CommandBase {
     m_yPID.setTolerance(0.05);
     m_rotPID.setTolerance(0.05);
     m_rotPID.enableContinuousInput(-Math.PI, Math.PI);
-
-    // TODO use position when initialized
-    m_startPos = m_driveSubsystem.getPose();
 
     // Sets the default to drive to the starting position. Can be overridden by
     // calling methods.
@@ -154,7 +149,7 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Changes the robot relative X position to drive to.
+   * Changes the robot relative X position to drive to based on the current position.
    * 
    * @param x Robot relative X position in meters.
    * @return This, for method chaining.
@@ -164,7 +159,8 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Changes the robot relative Y position to drive to.
+   * Changes the robot relative Y position to drive to based on the current
+   * position.
    * 
    * @param y Robot relative Y position in meters.
    * @return This, for method chaining.
@@ -174,23 +170,24 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Changes the robot relative position to drive to.
+   * Changes the robot relative position to drive to based on the current
+   * position.
    * 
    * @param x Robot relative X position in meters.
    * @param y Robot relative Y position in meters.
    * @return This, for method chaining.
    */
   public MoveCommand withRobotRelativePos(double x, double y) {
-    // TODO uses position when the command is constructed rather than run.
     return withFieldRelativePos(
-        x * Math.cos(m_startPos.getRotation().getRadians()) +
-            y * Math.sin(m_startPos.getRotation().getRadians()),
-        x * Math.sin(m_startPos.getRotation().getRadians()) +
-            y * Math.cos(m_startPos.getRotation().getRadians()));
+        x * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) +
+            y * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()),
+        x * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) +
+            y * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()));
   }
 
   /**
-   * Changes the field relative X position to drive to.
+   * Changes the field relative X position to drive to based on the current
+   * position.
    * 
    * @param x change in field relative X position in meters.
    * @return This, for method chaining.
@@ -200,7 +197,8 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Changes the field relative Y position to drive to.
+   * Changes the field relative Y position to drive to based on the current
+   * position.
    * 
    * @param y change in field relative Y position in meters.
    * @return This, for method chaining.
@@ -210,7 +208,8 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Changes the field relative position to drive to.
+   * Changes the field relative position to drive to based on the current
+   * position.
    * 
    * @param x change in field relative X position in meters.
    * @param y change in field relative Y position in meters.
@@ -225,29 +224,27 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Sets the absolute X position to drive to.
+   * Sets the absolute X position to drive to based on the current position.
    * 
    * @param x Absolute X position in meters.
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteX(double x) {
-    // TODO use initialize position instead of constructed position
-    return withFieldRelativeX(x - m_startPos.getX());
+    return withFieldRelativeX(x - m_driveSubsystem.getPose().getX());
   }
 
   /**
-   * Sets the absolute Y position to drive to.
+   * Sets the absolute Y position to drive to based on the current position.
    * 
    * @param y Absolute Y position in meters.
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteY(double y) {
-    // TODO use initialize position instead of constructed position
-    return withFieldRelativeY(y - m_startPos.getY());
+    return withFieldRelativeY(y - m_driveSubsystem.getPose().getY());
   }
 
   /**
-   * Sets the absolute position to drive to.
+   * Sets the absolute position to drive to based on the current position.
    * 
    * @param x Absolute X position in meters.
    * @param y Absolute Y position in meters.
@@ -260,8 +257,7 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Sets the relative heading to turn to based on the starting position of the
-   * robot.
+   * Sets the relative heading to turn to based on the current position.
    * 
    * @param rot Robot relative heading in degrees.
    * @return This, for method chaining.
@@ -274,13 +270,12 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Sets the absolute heading to turn to.
+   * Sets the absolute heading to turn to based on the current position.
    * 
    * @param rot Absolute heading in degrees.
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteHeading(double rot) {
-    // TODO use initialize position instead of constructed position
-    return withChangeInHeading(m_startPos.getRotation().getRadians() - rot);
+    return withChangeInHeading(rot - m_driveSubsystem.getPose().getRotation().getDegrees());
   }
 }
