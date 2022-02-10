@@ -23,22 +23,22 @@ public class MoveCommand extends CommandBase {
   private final PIDController m_yPID = new PIDController(4, 0, 0);
   private final PIDController m_rotPID = new PIDController(3, 0, 0);
 
-  private Pose2d m_startPos;
+  private Pose2d m_startPose;
 
   /**
    * Change in the field relative X position of the robot based on the
-   * {@link #m_startPos starting position}. Equal to 0 by default.
+   * {@link #m_startPose starting position}. Equal to 0 by default.
    */
   private double m_deltaX = 0;
 
   /**
    * Change in the field relative Y position of the robot based on the
-   * {@link #m_startPos starting position}. Equal to 0 by default.
+   * {@link #m_startPose starting position}. Equal to 0 by default.
    */
   private double m_deltaY = 0;
 
   /**
-   * Change in the angle of the robot based on the {@link #m_startPos starting
+   * Change in the angle of the robot based on the {@link #m_startPose starting
    * position}. Equal to 0 by default.
    */
   private double m_deltaRot = 0;
@@ -64,15 +64,15 @@ public class MoveCommand extends CommandBase {
 
     // Sets the default to drive to the starting position. Can be overridden by
     // calling methods.
-    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX(), m_startPos.getX());
-    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY(), m_startPos.getY());
+    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX(), m_startPose.getX());
+    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY(), m_startPose.getY());
     m_rotSpeedSupplier = () -> m_rotPID.calculate(
-        m_driveSubsystem.getPose().getRotation().getRadians(), m_startPos.getRotation().getRadians());
+        m_driveSubsystem.getPose().getRotation().getRadians(), m_startPose.getRotation().getRadians());
   }
 
   @Override
   public void initialize() {
-    m_startPos = m_driveSubsystem.getPose();
+    m_startPose = m_driveSubsystem.getPose();
   }
 
   @Override
@@ -217,8 +217,8 @@ public class MoveCommand extends CommandBase {
   public MoveCommand withFieldRelativePos(double x, double y) {
     m_deltaX += x;
     m_deltaY += y;
-    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX(), m_startPos.getX() + m_deltaX);
-    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY(), m_startPos.getY() + m_deltaY);
+    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX(), m_startPose.getX() + m_deltaX);
+    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY(), m_startPose.getY() + m_deltaY);
     return this;
   }
 
@@ -264,7 +264,7 @@ public class MoveCommand extends CommandBase {
   public MoveCommand withChangeInHeading(double rot) {
     m_deltaRot += Math.toRadians(rot);
     m_rotSpeedSupplier = () -> m_rotPID.calculate(
-        m_driveSubsystem.getPose().getRotation().getRadians(), m_startPos.getRotation().getRadians() + m_deltaRot);
+        m_driveSubsystem.getPose().getRotation().getRadians(), m_startPose.getRotation().getRadians() + m_deltaRot);
     return this;
   }
 
