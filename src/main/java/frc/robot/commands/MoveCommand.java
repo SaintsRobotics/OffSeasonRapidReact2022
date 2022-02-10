@@ -146,42 +146,21 @@ public class MoveCommand extends CommandBase {
     m_fieldRelativeSupplier = fieldRelative;
     return this;
   }
-
+  
   /**
-   * Changes the robot relative X position to drive to based on the current position.
-   * 
-   * @param x Robot relative X position in meters.
-   * @return This, for method chaining.
-   */
-  public MoveCommand withRobotRelativeX(double x) {
-    return withRobotRelativePos(x, 0);
-  }
-
-  /**
-   * Changes the robot relative Y position to drive to based on the current
+   * Changes the field relative position to drive to based on the current
    * position.
    * 
-   * @param y Robot relative Y position in meters.
+   * @param x change in field relative X position in meters.
+   * @param y change in field relative Y position in meters.
    * @return This, for method chaining.
    */
-  public MoveCommand withRobotRelativeY(double y) {
-    return withRobotRelativePos(0, y);
-  }
-
-  /**
-   * Changes the robot relative position to drive to based on the current
-   * position.
-   * 
-   * @param x Robot relative X position in meters.
-   * @param y Robot relative Y position in meters.
-   * @return This, for method chaining.
-   */
-  public MoveCommand withRobotRelativePos(double x, double y) {
-    return withFieldRelativePos(
-        x * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) +
-            y * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()),
-        x * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) +
-            y * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()));
+  public MoveCommand withFieldRelativePos(double x, double y) {
+    m_deltaX += x;
+    m_deltaY += y;
+    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX(), m_startPose.getX() + m_deltaX);
+    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY(), m_startPose.getY() + m_deltaY);
+    return this;
   }
 
   /**
@@ -207,18 +186,52 @@ public class MoveCommand extends CommandBase {
   }
 
   /**
-   * Changes the field relative position to drive to based on the current
+   * Changes the robot relative position to drive to based on the current
    * position.
    * 
-   * @param x change in field relative X position in meters.
-   * @param y change in field relative Y position in meters.
+   * @param x Robot relative X position in meters.
+   * @param y Robot relative Y position in meters.
    * @return This, for method chaining.
    */
-  public MoveCommand withFieldRelativePos(double x, double y) {
-    m_deltaX += x;
-    m_deltaY += y;
-    m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX(), m_startPose.getX() + m_deltaX);
-    m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY(), m_startPose.getY() + m_deltaY);
+  public MoveCommand withRobotRelativePos(double x, double y) {
+    return withFieldRelativePos(
+        x * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()) +
+            y * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()),
+        x * Math.sin(m_driveSubsystem.getPose().getRotation().getRadians()) +
+            y * Math.cos(m_driveSubsystem.getPose().getRotation().getRadians()));
+  }
+
+  /**
+   * Changes the robot relative X position to drive to based on the current position.
+   * 
+   * @param x Robot relative X position in meters.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withRobotRelativeX(double x) {
+    return withRobotRelativePos(x, 0);
+  }
+
+  /**
+   * Changes the robot relative Y position to drive to based on the current
+   * position.
+   * 
+   * @param y Robot relative Y position in meters.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withRobotRelativeY(double y) {
+    return withRobotRelativePos(0, y);
+  }
+
+  /**
+   * Sets the absolute position to drive to based on the current position.
+   * 
+   * @param x Absolute X position in meters.
+   * @param y Absolute Y position in meters.
+   * @return This, for method chaining.
+   */
+  public MoveCommand withAbsolutePos(double x, double y) {
+    withAbsoluteX(x);
+    withAbsoluteY(y);
     return this;
   }
 
@@ -240,19 +253,6 @@ public class MoveCommand extends CommandBase {
    */
   public MoveCommand withAbsoluteY(double y) {
     return withFieldRelativeY(y - m_driveSubsystem.getPose().getY());
-  }
-
-  /**
-   * Sets the absolute position to drive to based on the current position.
-   * 
-   * @param x Absolute X position in meters.
-   * @param y Absolute Y position in meters.
-   * @return This, for method chaining.
-   */
-  public MoveCommand withAbsolutePos(double x, double y) {
-    withAbsoluteX(x);
-    withAbsoluteY(y);
-    return this;
   }
 
   /**
