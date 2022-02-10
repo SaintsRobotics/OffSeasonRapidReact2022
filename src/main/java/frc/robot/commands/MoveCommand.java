@@ -46,7 +46,7 @@ public class MoveCommand extends CommandBase {
   private DoubleSupplier m_xSpeedSupplier;
   private DoubleSupplier m_ySpeedSupplier;
   private DoubleSupplier m_rotSpeedSupplier;
-  private BooleanSupplier m_fieldRelativeSupplier;
+  private BooleanSupplier m_fieldRelativeSupplier = () -> true;
 
   /**
    * Creates a new {@link MoveCommand}. Call methods to make the robot move.
@@ -68,7 +68,6 @@ public class MoveCommand extends CommandBase {
     m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY(), m_startPos.getY());
     m_rotSpeedSupplier = () -> m_rotPID.calculate(
         m_driveSubsystem.getPose().getRotation().getRadians(), m_startPos.getRotation().getRadians());
-    m_fieldRelativeSupplier = () -> true;
   }
 
   @Override
