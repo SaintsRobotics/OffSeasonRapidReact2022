@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.LimelightAimingCommand;
-import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.commands.MoveCommand;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -48,7 +48,11 @@ public class RobotContainer {
         .oddSquare(Utils.deadZone(-m_driveController.getRightX(), OIConstants.kJoystickDeadzone))
         * SwerveConstants.kMaxAngularSpeedRadiansPerSecond;
     m_swerveDriveSubsystem.setDefaultCommand(
-        new SwerveDriveCommand(m_swerveDriveSubsystem, x, y, rot, () -> m_driveController.getRightBumper()));
+        new MoveCommand(m_swerveDriveSubsystem)
+            .withXSpeedSupplier(x)
+            .withYSpeedSupplier(y)
+            .withRotSpeedSupplier(rot)
+            .withFieldRelativeSupplier(() -> m_driveController.getRightBumper()));
 
     SmartDashboard.putNumber("Controller X", -m_driveController.getLeftY());
     SmartDashboard.putNumber("Controller Y", -m_driveController.getLeftX());
