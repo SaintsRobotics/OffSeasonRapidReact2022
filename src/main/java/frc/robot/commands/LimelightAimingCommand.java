@@ -33,7 +33,7 @@ public class LimelightAimingCommand extends CommandBase {
   @Override
   public void initialize() {
     Limelight.setPipeline(m_pipeline);
-    Limelight.setLed(0);
+    Limelight.setLED(0);
   }
 
   @Override
@@ -44,6 +44,6 @@ public class LimelightAimingCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_swerveSubsystem.drive(0, 0, 0, false);
-    Limelight.setLed(1);
+    Limelight.setLED(1);
   }
 }

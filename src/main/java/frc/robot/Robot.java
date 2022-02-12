@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    Limelight.setLed(1);
+    Limelight.setLED(1);
   }
 
   /**
