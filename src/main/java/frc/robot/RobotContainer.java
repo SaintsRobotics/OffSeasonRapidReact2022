@@ -9,6 +9,8 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -85,20 +87,18 @@ public class RobotContainer {
         .whenPressed(() -> m_swerveDriveSubsystem.resetOdometry(new Pose2d()), m_swerveDriveSubsystem);
 
     // Zeroes the heading when the start button is pressed
-    new JoystickButton(m_driveController, Button.kStart.value).whenPressed(() -> m_swerveDriveSubsystem.zeroHeading(),
-        m_swerveDriveSubsystem);
+    new JoystickButton(m_driveController, Button.kStart.value)
+        .whenPressed(() -> m_swerveDriveSubsystem.zeroHeading(), m_swerveDriveSubsystem);
 
     // Aims at target while the A button is held.
     new JoystickButton(m_driveController, Button.kA.value)
         .whenHeld(new LimelightAimingCommand(m_aimingMoveCommand, 0));
 
-    // Aims at blue balls while the B button is held.
+    // Aims at the color of ball that matches the alliance color while the B button
+    // is held.
     new JoystickButton(m_driveController, Button.kB.value)
-        .whenHeld(new LimelightAimingCommand(m_aimingMoveCommand, 1));
-
-    // Aims at red balls while the X button is held.
-    new JoystickButton(m_driveController, Button.kX.value)
-        .whenHeld(new LimelightAimingCommand(m_aimingMoveCommand, 2));
+        .whenHeld(new LimelightAimingCommand(m_aimingMoveCommand,
+            DriverStation.getAlliance() == Alliance.Blue ? 1 : 2));
   }
 
   /**
