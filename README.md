@@ -2,6 +2,15 @@
 
 Saints Robotics 1899's code for the 2022 season.
 
+## Status
+
+Here is a list of all the things the code can do.
+
+* Swerve drive with heading correction.
+* Autonomous driving to absolute or relative positions.
+* Aiming at the shooting target and balls using the Limelight.
+* Unit tests for utility methods.
+
 ## Commit Message Prefixes
 
 All commit messages must start with one of the following prefixes.
@@ -14,7 +23,7 @@ All commit messages must start with one of the following prefixes.
 * **"test:"** - New tests or correcting existing tests
 * **"chore:"** - Miscellaneous changes
 
-## Examples
+### Examples
 
 * feat: created swerve functions
 * fix: autonomous turning bug
