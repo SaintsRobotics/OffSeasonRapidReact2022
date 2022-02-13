@@ -30,6 +30,7 @@
   "java.test.defaultConfig": "WPIlibUnitTests",
   "cSpell.words": [
     "AHRS",
+    "Deadband",
     "deadzone",
     "kauailabs",
     "linuxaarch",

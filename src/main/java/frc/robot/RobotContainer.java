@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -39,13 +40,13 @@ public class RobotContainer {
   public RobotContainer() {
     configureButtonBindings();
     DoubleSupplier x = () -> Utils
-        .oddSquare(Utils.deadZone(-m_driveController.getLeftY(), OIConstants.kJoystickDeadzone))
+        .oddSquare(MathUtil.applyDeadband(-m_driveController.getLeftY(), OIConstants.kControllerDeadband))
         * SwerveConstants.kMaxSpeedMetersPerSecond;
     DoubleSupplier y = () -> Utils
-        .oddSquare(Utils.deadZone(-m_driveController.getLeftX(), OIConstants.kJoystickDeadzone))
+        .oddSquare(MathUtil.applyDeadband(-m_driveController.getLeftX(), OIConstants.kControllerDeadband))
         * SwerveConstants.kMaxSpeedMetersPerSecond;
     DoubleSupplier rot = () -> Utils
-        .oddSquare(Utils.deadZone(-m_driveController.getRightX(), OIConstants.kJoystickDeadzone))
+        .oddSquare(MathUtil.applyDeadband(-m_driveController.getRightX(), OIConstants.kControllerDeadband))
         * SwerveConstants.kMaxAngularSpeedRadiansPerSecond;
     m_swerveDriveSubsystem.setDefaultCommand(
         new MoveCommand(m_swerveDriveSubsystem)

@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -15,7 +16,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Utils;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.HardwareMap.SwerveDrivetrainHardware;
 
@@ -51,8 +51,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     m_gyro.reset();
     m_odometry.resetPosition(new Pose2d(), m_gyro.getRotation2d());
 
-    m_headingCorrectionPID.enableContinuousInput(0, 2 * Math.PI);
-    m_headingCorrectionPID.setSetpoint(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
+    m_headingCorrectionPID.enableContinuousInput(-Math.PI, Math.PI);
+    m_headingCorrectionPID.setSetpoint(MathUtil.angleModulus(m_gyro.getRotation2d().getRadians()));
     m_headingCorrectionTimer = new Timer();
     m_headingCorrectionTimer.start();
   }
@@ -76,7 +76,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
     SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
 
-    SmartDashboard.putNumber("Gyro Angle", Utils.normalizeAngle(m_gyro.getAngle(), 360));
+    SmartDashboard.putNumber("Gyro Angle", MathUtil.inputModulus(m_gyro.getAngle(), 0, 360));
 
     SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headingCorrectionPID.getSetpoint()));
     SmartDashboard.putNumber("Heading Correction Timer", m_headingCorrectionTimer.get());
@@ -120,7 +120,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     // corrects the heading of the robot to prevent it from drifting
-    double currentAngle = Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI);
+    double currentAngle = MathUtil.angleModulus(m_gyro.getRotation2d().getRadians());
 
     if ((xSpeed == 0 && ySpeed == 0) || m_headingCorrectionTimer.get() < SwerveConstants.kTurningStopTime) {
       m_headingCorrectionPID.setSetpoint(currentAngle);
