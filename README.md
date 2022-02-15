@@ -10,6 +10,7 @@ Here is a list of all the things the code can do.
 * Autonomous driving to absolute or relative positions.
 * Aiming at the shooting target and balls using the Limelight.
 * Unit tests for utility methods.
+* Controlling shooter speed with a bang bang controller
 
 ## Commit Message Prefixes
 

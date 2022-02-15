@@ -74,6 +74,12 @@ public final class Constants {
     public static final double kDrivingGearRatio = 8.33;
   }
 
+  public static final class ShooterConstants {
+    public static final int kShooterMotorPort = 9;
+
+    public static final double kShooterSpeedTicksPerDecisecond = 12000;
+  }
+
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kControllerDeadband = 0.11;
