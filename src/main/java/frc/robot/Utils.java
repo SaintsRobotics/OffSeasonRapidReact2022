@@ -9,13 +9,13 @@ package frc.robot;
  * or subsystem.
  */
 public class Utils {
-  /**
-   * Makes lower inputs smaller which allows for finer joystick control.
-   * 
-   * @param input The number to apply odd square to.
-   * @return The odd squared number.
-   */
-  public static double oddSquare(double input) {
-    return input * Math.abs(input);
-  }
+	/**
+	 * Makes lower inputs smaller which allows for finer joystick control.
+	 * 
+	 * @param input The number to apply odd square to.
+	 * @return The odd squared number.
+	 */
+	public static double oddSquare(double input) {
+		return input * Math.abs(input);
+	}
 }
