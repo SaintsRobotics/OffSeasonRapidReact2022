@@ -1,6 +1,6 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.AnalogInput;
 
 public class AbsoluteEncoder {
@@ -17,8 +17,8 @@ public class AbsoluteEncoder {
 	 * @param reversed set this to <i>TRUE</i> if physically turning the swerve
 	 *                 wheel <i>CLOCKWISE</i> (looking down from the top of the bot)
 	 *                 <i>INCREASES</i> the raw voltage that the encoder provides.
-	 * @param offset   swerve offset in <i>RADIANS</i>. This value is
-	 *                 <i>SUBTRACTED</i> from the encoder output.
+	 * @param offset   Offset of the analog input in volts. Set this to the voltage
+	 *                 the analog input returns when the wheel is pointed forward.
 	 */
 	public AbsoluteEncoder(int channel, boolean reversed, double offset) {
 		m_analogIn = new AnalogInput(channel);
@@ -27,15 +27,13 @@ public class AbsoluteEncoder {
 	}
 
 	/**
-	 * Returns the angle as a {@link Rotation2d}. Zero points toward the front of
-	 * the robot.
-	 * <i>The value INCREASES as the wheel is turned COUNTER-CLOCKWISE</i>
+	 * Returns the angle of the encoder. Zero points toward the front of the robot.
+	 * The value increases as the wheel is turned counterclockwise.
 	 * 
-	 * @return The angle as a {@link Rotation2d}.
+	 * @return The angle between -pi and pi.
 	 */
-	public Rotation2d get() {
-		double angle = (m_analogIn.getVoltage() / 5 * 2 * Math.PI) - m_offset;
-
-		return m_reversed ? new Rotation2d(5 - angle) : new Rotation2d(angle);
+	public double get() {
+		// Takes the voltage of the analog input (0 to 5) and converts it to an angle.
+		return MathUtil.angleModulus((m_analogIn.getVoltage() - m_offset) / 5 * 2 * Math.PI * (m_reversed ? -1 : 1));
 	}
 }

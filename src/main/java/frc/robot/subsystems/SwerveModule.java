@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.AbsoluteEncoder;
 import frc.robot.Constants.ModuleConstants;
@@ -23,35 +24,32 @@ public class SwerveModule {
 
 	private final PIDController m_turningPIDController = new PIDController(0.3, 0, 0);
 
-  /**
-   * Creates a new {@link SwerveModule}.
-   * 
-   * @param driveMotorChannel      ID for the drive motor.
-   * @param turningMotorChannel    ID for the turning motor.
-   * @param turningEncoderChannel  ID for the turning encoder.
-   * @param turningEncoderReversed Whether the turning encoder is reversed.
-   * @param turningEncoderOffset   Offset of the turning encoder.
-   */
-  public SwerveModule(
-      int driveMotorChannel,
-      int turningMotorChannel,
-      int turningEncoderChannel,
-      Boolean turningEncoderReversed,
-      double turningEncoderOffset) {
-    m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
-    m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
+	/**
+	 * Creates a new {@link SwerveModule}.
+	 * 
+	 * @param driveMotorChannel      ID for the drive motor.
+	 * @param turningMotorChannel    ID for the turning motor.
+	 * @param turningEncoderChannel  ID for the turning encoder.
+	 * @param turningEncoderReversed Whether the turning encoder is reversed.
+	 * @param turningEncoderOffset   Offset of the turning encoder.
+	 */
+	public SwerveModule(
+			int driveMotorChannel,
+			int turningMotorChannel,
+			int turningEncoderChannel,
+			Boolean turningEncoderReversed,
+			double turningEncoderOffset) {
+		m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
+		m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
-    m_turningEncoder = new AbsoluteEncoder(turningEncoderChannel, turningEncoderReversed, turningEncoderOffset);
+		m_turningEncoder = new AbsoluteEncoder(turningEncoderChannel, turningEncoderReversed, turningEncoderOffset);
 
-    m_driveMotor.getEncoder().setVelocityConversionFactor(ModuleConstants.kWheelCircumferenceMeters
-        / 60 / ModuleConstants.kDrivingGearRatio);
+		m_driveMotor.getEncoder().setVelocityConversionFactor(
+				ModuleConstants.kWheelCircumferenceMeters / 60 / ModuleConstants.kDrivingGearRatio);
 
-    m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
-    m_driveMotor.setIdleMode(IdleMode.kBrake);
-    m_turningMotor.setIdleMode(IdleMode.kBrake);
-	m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
-	m_driveMotor.setIdleMode(IdleMode.kBrake);
-	m_turningMotor.setIdleMode(IdleMode.kBrake);
+		m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+		m_driveMotor.setIdleMode(IdleMode.kBrake);
+		m_turningMotor.setIdleMode(IdleMode.kBrake);
 	}
 
 	/**
@@ -60,7 +58,7 @@ public class SwerveModule {
 	 * @return The current state of the module.
 	 */
 	public SwerveModuleState getState() {
-		return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity(), m_turningEncoder.get());
+		return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity(), new Rotation2d(m_turningEncoder.get()));
 	}
 
 	/**
@@ -78,11 +76,10 @@ public class SwerveModule {
 	 * @param desiredState Desired state with speed and angle.
 	 */
 	public void setDesiredState(SwerveModuleState desiredState) {
-		SwerveModuleState state = SwerveModuleState.optimize(desiredState, m_turningEncoder.get());
+		SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.get()));
 
 		final double driveOutput = state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
-		final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get().getRadians(),
-				state.angle.getRadians());
+		final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get(), state.angle.getRadians());
 
 		m_driveMotor.set(driveOutput);
 		m_turningMotor.set(turnOutput);

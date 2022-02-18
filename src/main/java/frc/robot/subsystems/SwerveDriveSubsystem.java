@@ -59,7 +59,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(), m_rearLeft.getState(), m_frontRight.getState(),
+		m_odometry.update(
+				m_gyro.getRotation2d(),
+				m_frontLeft.getState(),
+				m_rearLeft.getState(),
+				m_frontRight.getState(),
 				m_rearRight.getState());
 
 		SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
@@ -140,7 +144,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 			m_rearRight.setDesiredState();
 		} else {
 			SwerveModuleState[] swerveModuleStates = SwerveConstants.kDriveKinematics.toSwerveModuleStates(
-					fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, m_gyro.getRotation2d())
+					fieldRelative
+							? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, m_gyro.getRotation2d())
 							: new ChassisSpeeds(xSpeed, ySpeed, rotation));
 
 			SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
