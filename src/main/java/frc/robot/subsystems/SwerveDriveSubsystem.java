@@ -17,39 +17,47 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.HardwareMap.SwerveDrivetrainHardware;
 
 /** Controls the drivetrain of the robot using swerve. */
 public class SwerveDriveSubsystem extends SubsystemBase {
-	private final SwerveModule m_frontLeft;
-	private final SwerveModule m_rearLeft;
-	private final SwerveModule m_frontRight;
-	private final SwerveModule m_rearRight;
+	private final SwerveModule m_frontLeft = new SwerveModule(
+			SwerveConstants.kFrontLeftDriveMotorPort,
+			SwerveConstants.kFrontLeftTurningMotorPort,
+			SwerveConstants.kFrontLeftTurningEncoderPort,
+			SwerveConstants.kFrontLeftTurningEncoderReversed,
+			SwerveConstants.kFrontLeftTurningEncoderOffset);
+	private final SwerveModule m_rearLeft = new SwerveModule(
+			SwerveConstants.kRearLeftDriveMotorPort,
+			SwerveConstants.kRearLeftTurningMotorPort,
+			SwerveConstants.kRearLeftTurningEncoderPort,
+			SwerveConstants.kRearLeftTurningEncoderReversed,
+			SwerveConstants.kRearLeftTurningEncoderOffset);
+	private final SwerveModule m_frontRight = new SwerveModule(
+			SwerveConstants.kFrontRightDriveMotorPort,
+			SwerveConstants.kFrontRightTurningMotorPort,
+			SwerveConstants.kFrontRightTurningEncoderPort,
+			SwerveConstants.kFrontRightTurningEncoderReversed,
+			SwerveConstants.kFrontRightTurningEncoderOffset);
+	private final SwerveModule m_rearRight = new SwerveModule(
+			SwerveConstants.kRearRightDriveMotorPort,
+			SwerveConstants.kRearRightTurningMotorPort,
+			SwerveConstants.kRearRightTurningEncoderPort,
+			SwerveConstants.kRearRightTurningEncoderReversed,
+			SwerveConstants.kRearRightTurningEncoderOffset);
 
-	private final AHRS m_gyro;
+	private final AHRS m_gyro = new AHRS();
 	private final SwerveDriveOdometry m_odometry;
 
 	// TODO tune pid
 	private final PIDController m_headingCorrectionPID = new PIDController(1.5, 0, 0);
 	private final Timer m_headingCorrectionTimer;
 
-	/**
-	 * Creates a new {@link SwerveDriveSubsystem}.
-	 * 
-	 * @param hardware the hardware for the {@link SwerveDriveSubsystem}
-	 */
-	public SwerveDriveSubsystem(SwerveDrivetrainHardware hardware) {
-		m_frontLeft = hardware.frontLeft;
-		m_rearLeft = hardware.rearLeft;
-		m_frontRight = hardware.frontRight;
-		m_rearRight = hardware.rearRight;
-
-		m_gyro = hardware.gyro;
+	/** Creates a new {@link SwerveDriveSubsystem}. */
+	public SwerveDriveSubsystem() {
+		m_gyro.reset();
 		m_gyro.calibrate();
 
 		m_odometry = new SwerveDriveOdometry(SwerveConstants.kDriveKinematics, m_gyro.getRotation2d());
-		m_gyro.reset();
-		m_odometry.resetPosition(new Pose2d(), m_gyro.getRotation2d());
 
 		m_headingCorrectionPID.enableContinuousInput(-Math.PI, Math.PI);
 		m_headingCorrectionPID.setSetpoint(MathUtil.angleModulus(m_gyro.getRotation2d().getRadians()));
