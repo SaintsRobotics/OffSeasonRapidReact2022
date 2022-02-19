@@ -111,6 +111,10 @@ public class RobotContainer {
 		// Toggles the shooter when Y button is pressed.
 		new JoystickButton(m_driveController, Button.kY.value)
 				.toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
+		// Allows the bot to drift while left bumper is held
+		new JoystickButton(m_driveController, Button.kLeftBumper.value)
+				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())
+				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
 	}
 
 	/**
