@@ -11,6 +11,7 @@ Here is a list of all the things the code can do.
 * Aiming at the shooting target and balls using the Limelight.
 * Unit tests for utility methods.
 * Controlling shooter speed with a bang bang controller.
+* Following paths using PathWeaver.
 
 ## Commit Message Prefixes
 

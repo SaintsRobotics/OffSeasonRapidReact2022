@@ -169,6 +169,19 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Desired Rot", Math.toDegrees(rotation));
 	}
 
+	/**
+	 * Sets the {@link SwerveModuleState SwerveModuleStates}.
+	 *
+	 * @param desiredStates The desired {@link SwerveModuleState SwerveModuleStates}.
+	 */
+	public void setModuleStates(SwerveModuleState[] desiredStates) {
+		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.kMaxSpeedMetersPerSecond);
+		m_frontLeft.setDesiredState(desiredStates[0]);
+		m_rearLeft.setDesiredState(desiredStates[1]);
+		m_frontRight.setDesiredState(desiredStates[2]);
+		m_rearRight.setDesiredState(desiredStates[3]);
+	}
+
 	/** Zeroes the heading of the robot. */
 	public void zeroHeading() {
 		m_gyro.reset();
