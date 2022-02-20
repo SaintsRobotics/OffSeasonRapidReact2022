@@ -80,6 +80,18 @@ public final class Constants {
 		public static final double kShooterSpeedTicksPerDecisecond = 12000;
 	}
 
+	public static final class IntakeConstants {
+		// TODO update angles with intake
+		public static final double kRaisedArmAngle = 0;
+		public static final double kLoweredArmAngle = 0;
+
+		public static final double kIntakeSpeed = 0.45;
+		public static final double kFeederSpeed = 0;
+
+		public static final int kWheelsPort = 25;
+		public static final int kArmPort = 24;
+	}
+
 	public static final class OIConstants {
 		public static final int kDriverControllerPort = 0;
 		public static final double kControllerDeadband = 0.11;

@@ -41,7 +41,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-	private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
+	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
 
 	private final MoveCommand m_defaultMoveCommand;
 	private final MoveCommand m_aimingMoveCommand;
@@ -111,6 +111,7 @@ public class RobotContainer {
 		// Toggles the shooter when Y button is pressed.
 		new JoystickButton(m_driveController, Button.kY.value)
 				.toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
+
 		// Allows the bot to drift while left bumper is held
 		new JoystickButton(m_driveController, Button.kLeftBumper.value)
 				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())
