@@ -1,14 +1,17 @@
 # Our Auton Plan 
 
 ## Two Ball
-* Preload the first ball.
-* Drop the second ball.
-* Have the robot back up and pick up the second ball.
-* Align with the shooter using vision.
+* The first ball will be preloaded.
+* Align the robot so that it starts right in front of the second ball.
+* Have the robot move forward and pick up the second ball.
+* Ram up against the hub to shoot the 2 balls.
 * Shoot the two balls!
+### Possible Adjustments to Two Ball Auton
+* Move left or right a little after picking up the second ball to avoind running into other robots or the hub legs.
+* Where we go after shooting the balls.
 
 ## Four Ball
-* Complete all the steps in two ball.
-* Drive to the human players - have them feed two more balls.
-* Then align with the shooter again (vision).
+* Complete all the steps in two ball auton.
+* Drive to the human player station, pick up the ball in front of it and have the human players feed another ball.
+* Then go back to the hub and ram up against it to align.
 * Shoot the balls again!
