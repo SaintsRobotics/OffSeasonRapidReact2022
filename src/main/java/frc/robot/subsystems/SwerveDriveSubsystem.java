@@ -45,7 +45,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	private final SwerveDriveOdometry m_odometry;
 
 	// TODO tune pid
-	private final PIDController m_headingCorrectionPID = new PIDController(1.5, 0, 0);
+	private final PIDController m_headingCorrectionPID = new PIDController(5, 0, 0);
 	private final Timer m_headingCorrectionTimer;
 
 	/** Creates a new {@link SwerveDriveSubsystem}. */
