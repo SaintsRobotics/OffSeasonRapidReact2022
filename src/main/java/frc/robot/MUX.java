@@ -3,7 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.I2C;
 
 /**
- * Wrapper for multiplexer plugged into the {@link I2C} port on the roboRIO.
+ * Wrapper for the multiplexer plugged into the {@link I2C} port on the roboRIO.
  * There should only be one instance
  */
 public class MUX {
