@@ -25,11 +25,13 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -42,11 +44,13 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  */
 public class RobotContainer {
 	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
+	private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 
 	private final MoveCommand m_defaultMoveCommand;
 	private final MoveCommand m_aimingMoveCommand;
 
 	private final XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
+	private final XboxController m_operatorController = new XboxController(OIConstants.kDriverControllerPort);
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -116,6 +120,24 @@ public class RobotContainer {
 		new JoystickButton(m_driveController, Button.kLeftBumper.value)
 				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())
 				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
+
+		// Runs the intake while left trigger is held.
+		new Trigger(() -> m_operatorController.getLeftTriggerAxis() > 0.5)
+				.whenActive(m_intakeSubsystem::intake, m_intakeSubsystem)
+				.whenInactive(m_intakeSubsystem::intakeOff, m_intakeSubsystem);
+
+		// Runs the intake in reverse while left trigger is held.
+		new Trigger(() -> m_operatorController.getRightTriggerAxis() > 0.5)
+				.whenActive(m_intakeSubsystem::intakeReverse, m_intakeSubsystem)
+				.whenInactive(m_intakeSubsystem::intakeOff, m_intakeSubsystem);
+
+		// Raises arm when A is pressed.
+		new JoystickButton(m_operatorController, Button.kA.value)
+				.whenPressed(m_intakeSubsystem::raiseArm, m_intakeSubsystem);
+
+		// Lowers arm when B is pressed.
+		new JoystickButton(m_operatorController, Button.kB.value)
+				.whenPressed(m_intakeSubsystem::lowerArm, m_intakeSubsystem);
 	}
 
 	/**
