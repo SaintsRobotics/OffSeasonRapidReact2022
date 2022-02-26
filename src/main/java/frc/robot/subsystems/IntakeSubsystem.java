@@ -38,7 +38,7 @@ public class IntakeSubsystem extends SubsystemBase {
 	/** Raises the arm and turns off the intake. */
 	public void raiseArm() {
 		m_armPID.setSetpoint(IntakeConstants.kRaisedArmAngle);
-		IntakeOff();
+		intakeOff();
 	}
 
 	/** Lowers the arm. */
@@ -61,7 +61,7 @@ public class IntakeSubsystem extends SubsystemBase {
 	}
 
 	/** Turns off the intake. */
-	public void IntakeOff() {
+	public void intakeOff() {
 		m_intakeMotor.set(0);
 	}
 
