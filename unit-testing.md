@@ -1,6 +1,6 @@
 # Tests
 
-All of the unit test are stored in ```/src/test/java/~```
+All of the unit test are stored in ```/src/test/java/```
 
 ## Coverage
 
