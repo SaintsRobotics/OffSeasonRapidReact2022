@@ -36,11 +36,3 @@ All commit messages must start with one of the following prefixes.
 * chore: licensing and credits
 
 Remember to add your name at the end of a commit when not using your own account. This will help us know who to talk to about commits.
-
-## Setting Swerve Module Offsets
-
-Instructions for how to set the offsets of the turning encoders of the swerve modules.
-
-1. Point all the wheels straight forward.
-2. Find the voltage values of the absolute encoders in shuffleboard (Open the left hand window and it's under LiveWindow > Ungrouped > AnalogInput[] > Value)
-3. Save the values from shuffleboard into the turning encoder offset constants. Be sure to match up the value with the correct wheel.
