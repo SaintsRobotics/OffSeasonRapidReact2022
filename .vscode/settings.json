@@ -52,5 +52,6 @@
     "Ungrouped",
     "windowsx",
     "wpilib"
-  ]
+  ],
+  "wpilib.selectDefaultSimulateExtension": true
 }
