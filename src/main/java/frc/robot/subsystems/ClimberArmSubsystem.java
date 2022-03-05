@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -76,12 +75,11 @@ public class ClimberArmSubsystem extends SubsystemBase {
 		if (!m_isLocked || m_climbSpeed < 0) {
 			m_leftClimberArm.set(m_climbSpeed);
 			m_rightClimberArm.set(m_climbSpeed);
-		}
-		else {
+		} else {
 			m_leftClimberArm.set(0);
 			m_rightClimberArm.set(0);
 			m_climbSpeed = 0;
-		} 
+		}
 
 		SmartDashboard.putBoolean("should_lock", m_isLocked);
 		SmartDashboard.putNumber("Desired Climber Speed", m_climbSpeed);
