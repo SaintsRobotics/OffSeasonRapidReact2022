@@ -129,9 +129,9 @@ public class RobotContainer {
 				.whileHeld(() -> m_shooterSubsystem.lowerArm())
 				.whenReleased(() -> m_shooterSubsystem.stopArm());
 
-		// Toggles the shooter when Y button is pressed.
+		// Turns on shooter when Y button is held.
 		new JoystickButton(m_operatorController, Button.kY.value)
-				.toggleWhenPressed(new ShooterCommand(m_shooterSubsystem));
+				.whenHeld(new ShooterCommand(m_shooterSubsystem));
 
 		// runs intake forward while left trigger is held
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kLeftTrigger.value) > 0.5)
