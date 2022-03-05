@@ -186,7 +186,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Desired Rot", Math.toDegrees(rotation));
 
 		// Adds the change in angle to the current angle.
-		m_simulatedYaw.set(m_gyro.getAngle() + Math.toDegrees(rotation) * Robot.kDefaultPeriod);
+		m_simulatedYaw.set(m_simulatedYaw.get() - Math.toDegrees(rotation) * Robot.kDefaultPeriod);
 	}
 
 	/** Zeroes the heading of the robot. */

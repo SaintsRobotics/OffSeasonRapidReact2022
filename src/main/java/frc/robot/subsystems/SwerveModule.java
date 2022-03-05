@@ -14,6 +14,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.Robot;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.SwerveConstants;
 
@@ -25,6 +26,9 @@ public class SwerveModule {
 	private final CANCoder m_turningEncoder;
 
 	private final PIDController m_turningPIDController = new PIDController(0.3, 0, 0);
+
+	// Defaults to zeroed state.
+	private SwerveModuleState m_desiredState = new SwerveModuleState();
 
 	/**
 	 * Creates a new {@link SwerveModule}.
@@ -66,9 +70,11 @@ public class SwerveModule {
 	 * @return The current state of the module.
 	 */
 	public SwerveModuleState getState() {
-		return new SwerveModuleState(
+		// Returns the desired state if the robot is simulated.
+		return Robot.isReal() ? new SwerveModuleState(
 				m_driveMotor.getEncoder().getVelocity(),
-				new Rotation2d(m_turningEncoder.getAbsolutePosition()));
+				new Rotation2d(m_turningEncoder.getAbsolutePosition()))
+				: m_desiredState;
 	}
 
 	/**
@@ -98,12 +104,12 @@ public class SwerveModule {
 	 * @param desiredState Desired state with speed and angle.
 	 */
 	public void setDesiredState(SwerveModuleState desiredState) {
-		SwerveModuleState state = SwerveModuleState.optimize(desiredState,
+		m_desiredState = SwerveModuleState.optimize(desiredState,
 				new Rotation2d(m_turningEncoder.getAbsolutePosition()));
 
-		final double driveOutput = state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
+		final double driveOutput = m_desiredState.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
 		final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getAbsolutePosition(),
-				state.angle.getRadians());
+				m_desiredState.angle.getRadians());
 
 		m_driveMotor.set(driveOutput);
 		m_turningMotor.set(turnOutput);
