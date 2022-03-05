@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -33,6 +34,7 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.ClimberArmCommand;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
+import frc.robot.commands.PathWeaverCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ClimberArmSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -159,8 +161,8 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
-		// To use a PathWeaver path return pathFollowCommand instead of null
-		return null;
+		return new SequentialCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall1", true),
+				new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall2", false));
 	}
 
 	/**
