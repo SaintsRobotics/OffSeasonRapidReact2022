@@ -115,8 +115,4 @@ public final class Constants {
 		public static final int kOperatorControllerPort = 1;
 		public static final double kControllerDeadband = 0.11;
 	}
-
-	public static final class ConversionConstants {
-		public static final int kDegreesInARotation = 360;
-	}
 }

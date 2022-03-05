@@ -34,7 +34,7 @@ public class DutyCycleAbsoluteEncoder {
      * @return the absolute position
      */
     public double getAbsolutePosition() {
-        return m_dutyCycle.getOutput() * ConversionConstants.kDegreesInARotation;
+        return m_dutyCycle.getOutput() * 360;
     }
 
 }
