@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -26,12 +27,11 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.AutonArm;
 import frc.robot.commands.AutonIntake;
 import frc.robot.commands.AutonShoot;
-import frc.robot.commands.ClimberArmCommand;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.PathWeaverCommand;
 import frc.robot.commands.ShooterCommand;
-import frc.robot.subsystems.ClimberArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -45,7 +45,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 public class RobotContainer {
 	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
 	private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
-	private final ClimberArmSubsystem m_climberSubsystem = new ClimberArmSubsystem();
+	private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
 	private final MoveCommand m_defaultMoveCommand;
 	private final MoveCommand m_aimingMoveCommand;
@@ -85,7 +85,9 @@ public class RobotContainer {
 		Limelight.setCameraMode(1);
 
 		m_swerveDriveSubsystem.setDefaultCommand(m_defaultMoveCommand);
-		m_climberSubsystem.setDefaultCommand(new ClimberArmCommand(m_climberSubsystem, m_operatorController));
+		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> m_climberSubsystem.setSpeed(
+				-MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband) * 0.5),
+				m_climberSubsystem));
 	}
 
 	/**
@@ -145,8 +147,8 @@ public class RobotContainer {
 
 		// releases servos when held and locks servos when released
 		new JoystickButton(m_operatorController, Button.kB.value)
-				.whenPressed(() -> m_climberSubsystem.releaseServos())
-				.whenReleased(() -> m_climberSubsystem.lockServos());
+				.whenPressed(m_climberSubsystem::unlock, m_climberSubsystem)
+				.whenReleased(m_climberSubsystem::lock, m_climberSubsystem);
 	}
 
 	/**

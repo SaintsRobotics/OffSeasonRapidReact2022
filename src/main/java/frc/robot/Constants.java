@@ -94,21 +94,20 @@ public final class Constants {
 		public static final boolean kRightFeederReversed = false;
 	}
 
-	
+	/** Constants for the climber. */
 	public static final class ClimberConstants {
-		// TODO update with real ports
 		public static final int kLeftArmPort = 15;
 		public static final int kRightArmPort = 3;
-		public static final int kLeftServoPort = 1; 
+		public static final int kLeftServoPort = 1;
 		public static final int kRightServoPort = 0;
+
+		public static final boolean kLeftArmReversed = true;
+		public static final boolean kRightArmReversed = false;
 
 		public static final double kLeftServoLockedPos = 1;
 		public static final double kLeftServoReleasedPos = 0.4;
 		public static final double kRightServoLockedPos = 0.6;
 		public static final double kRightServoReleasedPos = 1;
-
-		// public static final int kLeftEncoderPort = 4;
-		// public static final int kRightEncoderPort = 6;
 	}
 
 	public static final class OIConstants {
@@ -116,6 +115,7 @@ public final class Constants {
 		public static final int kOperatorControllerPort = 1;
 		public static final double kControllerDeadband = 0.11;
 	}
+
 	public static final class ConversionConstants {
 		public static final int kDegreesInARotation = 360;
 	}
