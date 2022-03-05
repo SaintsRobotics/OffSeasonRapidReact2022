@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycle;
-import frc.robot.Constants.ConversionConstants;
 
 public class DutyCycleAbsoluteEncoder {
     private final DutyCycle m_dutyCycle;
