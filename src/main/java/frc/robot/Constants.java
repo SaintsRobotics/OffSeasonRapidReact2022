@@ -104,7 +104,7 @@ public final class Constants {
 
 		public static final double kLeftServoLockedPos = 1;
 		public static final double kLeftServoReleasedPos = 0.4;
-		public static final double kRightServoLockedPos = 0;
+		public static final double kRightServoLockedPos = 0.6;
 		public static final double kRightServoReleasedPos = 1;
 
 		// public static final int kLeftEncoderPort = 4;
