@@ -28,21 +28,25 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 			SwerveConstants.kFrontLeftDriveMotorPort,
 			SwerveConstants.kFrontLeftTurningMotorPort,
 			SwerveConstants.kFrontLeftTurningEncoderPort,
+			SwerveConstants.kFrontLeftDriveMotorReversed,
 			SwerveConstants.kFrontLeftTurningEncoderOffset);
 	private final SwerveModule m_rearLeft = new SwerveModule(
 			SwerveConstants.kRearLeftDriveMotorPort,
 			SwerveConstants.kRearLeftTurningMotorPort,
 			SwerveConstants.kRearLeftTurningEncoderPort,
+			SwerveConstants.kRearLeftDriveMotorReversed,
 			SwerveConstants.kRearLeftTurningEncoderOffset);
 	private final SwerveModule m_frontRight = new SwerveModule(
 			SwerveConstants.kFrontRightDriveMotorPort,
 			SwerveConstants.kFrontRightTurningMotorPort,
 			SwerveConstants.kFrontRightTurningEncoderPort,
+			SwerveConstants.kFrontRightDriveMotorReversed,
 			SwerveConstants.kFrontRightTurningEncoderOffset);
 	private final SwerveModule m_rearRight = new SwerveModule(
 			SwerveConstants.kRearRightDriveMotorPort,
 			SwerveConstants.kRearRightTurningMotorPort,
 			SwerveConstants.kRearRightTurningEncoderPort,
+			SwerveConstants.kRearRightDriveMotorReversed,
 			SwerveConstants.kRearRightTurningEncoderOffset);
 
 	private final AHRS m_gyro = new AHRS();
