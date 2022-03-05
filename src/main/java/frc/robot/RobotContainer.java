@@ -30,7 +30,11 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.commands.AutonArm;
+import frc.robot.commands.AutonIntake;
+import frc.robot.commands.AutonShoot;
 import frc.robot.commands.ClimberArmCommand;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
@@ -52,7 +56,6 @@ public class RobotContainer {
 	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
 	private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 	private final ClimberArmSubsystem m_climberSubsystem = new ClimberArmSubsystem();
-
 
 	private final MoveCommand m_defaultMoveCommand;
 	private final MoveCommand m_aimingMoveCommand;
@@ -144,7 +147,7 @@ public class RobotContainer {
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kLeftTrigger.value) > 0.5)
 				.whenActive(new InstantCommand(() -> m_shooterSubsystem.intake()))
 				.whenInactive(new InstantCommand(() -> m_shooterSubsystem.intakeOff()));
-				
+
 		// runs intake backwards while right trigger is held
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kRightTrigger.value) > 0.5)
 				.whenActive(new InstantCommand(() -> m_shooterSubsystem.intakeReverse()))
@@ -162,7 +165,11 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand() {
 		return new SequentialCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall1", true),
-				new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall2", false));
+				new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+				new AutonIntake(m_shooterSubsystem),
+				new AutonArm(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
+				new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall2", false),
+				new AutonShoot(m_shooterSubsystem));
 	}
 
 	/**
