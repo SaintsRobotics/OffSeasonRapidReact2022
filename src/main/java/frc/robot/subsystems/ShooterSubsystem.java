@@ -40,7 +40,7 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final REVColorSensorV3 m_proximitySensor = new REVColorSensorV3(m_MUX, Port.kTwo);
 
 	// TODO tune
-	private final PIDController m_armPID = new PIDController(0.004, 0, 0);
+	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
 	private final PIDController m_shooterPID = new PIDController(0.0005, 0, 0);
 	private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.65, 0);
 
@@ -110,7 +110,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		if (m_armPID.atSetpoint())
 			m_arm.set(0);
 		else
-			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getAbsolutePosition()), -0.2, -0.05));
+			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getAbsolutePosition()), -0.25, -0.1));
 	}
 
 	/** Lowers the arm. */
@@ -119,7 +119,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		if (m_armPID.atSetpoint())
 			m_arm.set(0);
 		else
-			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getAbsolutePosition()), 0.05, 0.2));
+			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getAbsolutePosition()), 0.1, 0.25));
 	}
 
 	public void stopArm() {
