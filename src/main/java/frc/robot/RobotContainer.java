@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -158,9 +159,10 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand() {
 		return new SequentialCommandGroup(
-				new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall1", true),
 				new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-				new AutonIntake(m_shooterSubsystem),
+				new ParallelCommandGroup(
+						new AutonIntake(m_shooterSubsystem),
+						new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall1", true)),
 				new AutonArm(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
 				new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall2", false),
 				new AutonShoot(m_shooterSubsystem));
