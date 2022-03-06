@@ -76,7 +76,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 		if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_shooterPID.getSetpoint() > 0
-				&& Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 4150) {
+				&& Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 0.95 * ShooterConstants.kShooterSpeedRPM) {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
 			if (isShooterPrimed()) {
 				m_shootingTimer.reset();
