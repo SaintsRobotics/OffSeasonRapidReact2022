@@ -34,14 +34,16 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final MotorControllerGroup m_sideFeeders;
 	private final CANSparkMax m_topFeeder = new CANSparkMax(ShooterConstants.kTopFeederPort, MotorType.kBrushless);
 
-	private final WPI_TalonFX m_flywheel = new WPI_TalonFX(ShooterConstants.kFlywheelPort);
+	private final WPI_TalonFX m_blackFlywheel = new WPI_TalonFX(ShooterConstants.kBlackFlywheelPort);
+	private final WPI_TalonFX m_greenFlywheel = new WPI_TalonFX(ShooterConstants.kGreenFlywheelPort);
 
 	private final MUX m_MUX = new MUX();
 	private final REVColorSensorV3 m_proximitySensor = new REVColorSensorV3(m_MUX, Port.kTwo);
 
 	// TODO tune
 	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
-	private final PIDController m_shooterPID = new PIDController(0.0005, 0, 0);
+	private final PIDController m_blackShooterPID = new PIDController(ShooterConstants.kShooterP, 0, 0);
+	private final PIDController m_greenShooterPID = new PIDController(ShooterConstants.kShooterP, 0, 0);
 	private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.65, 0);
 
 	private boolean m_runningIntake = false;
@@ -52,14 +54,16 @@ public class ShooterSubsystem extends SubsystemBase {
 	public ShooterSubsystem() {
 		m_arm.setIdleMode(IdleMode.kBrake);
 		m_arm.setInverted(true);
-		m_flywheel.setNeutralMode(NeutralMode.Coast);
+		m_blackFlywheel.setNeutralMode(NeutralMode.Coast);
+		m_greenFlywheel.setNeutralMode(NeutralMode.Coast);
 		CANSparkMax leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
 		CANSparkMax rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
 		m_intake.setInverted(true);
 		leftFeeder.setInverted(true);
 		rightFeeder.setInverted(false);
 		m_sideFeeders = new MotorControllerGroup(leftFeeder, rightFeeder);
-		m_shooterPID.setTolerance(50);
+		m_blackShooterPID.setTolerance(50);
+		m_greenShooterPID.setTolerance(50);
 		m_armPID.setTolerance(2);
 
 		m_shootingTimer.start();
@@ -68,18 +72,34 @@ public class ShooterSubsystem extends SubsystemBase {
 	// top feeder run for how long?
 	@Override
 	public void periodic() {
-		double pidOutput = m_shooterPID.calculate(Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
-		if (m_shooterPID.getSetpoint() > 0) {
-			m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
+		double blackPIDOutput = m_blackShooterPID.calculate(Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
+		double greenPIDOutput = m_blackShooterPID.calculate(Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
+		if (m_blackShooterPID.getSetpoint() > 0) {
+			m_blackFlywheel.set(blackPIDOutput + m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
 		} else {
-			m_flywheel.set(0);
+			m_blackFlywheel.set(0);
 		}
 
-		if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_shooterPID.getSetpoint() > 0
-				&& Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 0.95 * ShooterConstants.kShooterSpeedRPM) {
+		if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_blackShooterPID.getSetpoint() > 0
+				&& Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()) > 0.95
+						* ShooterConstants.kBlackShooterSpeedRPM) {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
 			if (isShooterPrimed()) {
 				m_shootingTimer.reset();
+			}
+			if (m_blackShooterPID.getSetpoint() > 0) {
+				m_greenFlywheel.set(greenPIDOutput + m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
+			} else {
+				m_greenFlywheel.set(0);
+			}
+
+			if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_blackShooterPID.getSetpoint() > 0
+					&& Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()) > 0.95
+							* ShooterConstants.kGreenShooterSpeedRPM) {
+				m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
+				if (isShooterPrimed()) {
+					m_shootingTimer.reset();
+				}
 			}
 		} else if (!isShooterPrimed() && m_runningIntake) {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedSlow);
@@ -88,12 +108,23 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Shooter PID Output", pidOutput);
-			SmartDashboard.putNumber("Shooter PID velocity error", m_shooterPID.getVelocityError());
-			SmartDashboard.putNumber("Shooter PID position error", m_shooterPID.getPositionError());
-			SmartDashboard.putNumber("Shooter Feedforward output", m_feedforward.calculate(m_shooterPID.getSetpoint()));
-			SmartDashboard.putNumber("Shooter Power", m_flywheel.get());
-			SmartDashboard.putNumber("Shooter RPM", Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
+			SmartDashboard.putNumber("Black Shooter PID Output", blackPIDOutput);
+			SmartDashboard.putNumber("Green Shooter PID Output", greenPIDOutput);
+
+			SmartDashboard.putNumber("Black Shooter Feedforward Output",
+					m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
+			SmartDashboard.putNumber("Green Shooter Feedforward Output",
+					m_feedforward.calculate(m_greenShooterPID.getSetpoint()));
+
+			SmartDashboard.putNumber("Black Shooter Power", m_blackFlywheel.get());
+			SmartDashboard.putNumber("Green Shooter Power", m_greenFlywheel.get());
+
+			SmartDashboard.putNumber("Black Shooter RPM", Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
+			SmartDashboard.putNumber("Green Shooter RPM", Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
+
+			SmartDashboard.putNumber("Black Shooter RPM Error", m_blackShooterPID.getPositionError());
+			SmartDashboard.putNumber("Green Shooter RPM Error", m_greenShooterPID.getPositionError());
+
 			SmartDashboard.putNumber("Side Feeder Speed", m_sideFeeders.get());
 			SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
 			SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
@@ -154,17 +185,33 @@ public class ShooterSubsystem extends SubsystemBase {
 	/**
 	 * Shoots the ball(s)
 	 * 
-	 * @param speed Speed of the shooter in ticks per decisecond.
+	 * @param speed Speed of the black flywheel in RPM.
 	 */
-	public void setShooterSpeed(double RPM) {
-		m_shooterPID.setSetpoint(RPM);
+	public void setBlackShooterSpeed(double RPM) {
+		m_blackShooterPID.setSetpoint(RPM);
 		if (RPM == 0) {
 			m_sideFeeders.set(0);
 		} else {
 			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 		}
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Target Shooter Speed", RPM);
+			SmartDashboard.putNumber("Black Target Shooter Speed", RPM);
+		}
+	}
+	/**
+	 * Shoots the ball(s)
+	 * 
+	 * @param speed Speed of the green flywheel in RPM.
+	 */
+	public void setGreenShooterSpeed(double RPM) {
+		m_greenShooterPID.setSetpoint(RPM);
+		if (RPM == 0) {
+			m_sideFeeders.set(0);
+		} else {
+			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
+		}
+		if (OIConstants.kTelemetry) {
+			SmartDashboard.putNumber("Green Target Shooter Speed", RPM);
 		}
 	}
 
