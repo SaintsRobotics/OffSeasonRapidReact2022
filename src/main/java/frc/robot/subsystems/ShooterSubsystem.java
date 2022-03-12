@@ -13,6 +13,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,7 +23,6 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.DutyCycleAbsoluteEncoder;
 import frc.robot.MUX;
-import frc.robot.MUX.Port;
 import frc.robot.REVColorSensorV3;
 import frc.robot.Utils;
 
@@ -38,7 +39,10 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final WPI_TalonFX m_greenFlywheel = new WPI_TalonFX(ShooterConstants.kGreenFlywheelPort);
 
 	private final MUX m_MUX = new MUX();
-	private final REVColorSensorV3 m_proximitySensor = new REVColorSensorV3(m_MUX, Port.kTwo);
+	private final REVColorSensorV3 m_queueColorSensor = new REVColorSensorV3(m_MUX,
+			ShooterConstants.kQueueColorSensorPort);
+	private final REVColorSensorV3 m_shooterColorSensor = new REVColorSensorV3(m_MUX,
+			ShooterConstants.kShooterColorSensorPort);
 
 	// TODO tune
 	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
@@ -74,6 +78,20 @@ public class ShooterSubsystem extends SubsystemBase {
 	public void periodic() {
 		double blackPIDOutput = m_blackShooterPID.calculate(Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
 		double greenPIDOutput = m_blackShooterPID.calculate(Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
+		final boolean queueIsBlue = m_queueColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
+		final boolean queueIsRed = m_queueColorSensor.getRed() > ShooterConstants.kRedThreshold;
+		final boolean shooterIsBlue = m_shooterColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
+		final boolean shooterIsRed = m_shooterColorSensor.getRed() > ShooterConstants.kRedThreshold;
+
+		// Checks if the color of ball is opposite that of the alliance.
+		if ((queueIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
+				(queueIsRed && DriverStation.getAlliance() == Alliance.Blue) ||
+				(shooterIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
+				(shooterIsRed && DriverStation.getAlliance() == Alliance.Blue)) {
+			// TODO also run the feeders in reverse
+			intakeReverse();
+		}
+
 		if (m_blackShooterPID.getSetpoint() > 0) {
 			m_blackFlywheel.set(blackPIDOutput + m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
 		} else {
@@ -130,7 +148,15 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
 			SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
 			SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
-			SmartDashboard.putNumber("proximity", m_proximitySensor.getProximity());
+
+			SmartDashboard.putNumber("Queue Proximity", m_queueColorSensor.getProximity());
+			SmartDashboard.putBoolean("Queue Is Blue", queueIsBlue);
+			SmartDashboard.putBoolean("Queue Is Red", queueIsRed);
+
+			SmartDashboard.putNumber("Shooter Proximity", m_shooterColorSensor.getProximity());
+			SmartDashboard.putBoolean("Shooter Is Blue", shooterIsBlue);
+			SmartDashboard.putBoolean("Shooter Is Red", shooterIsRed);
+
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 		}
 	}
@@ -198,6 +224,7 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Black Target Shooter Speed", RPM);
 		}
 	}
+
 	/**
 	 * Shoots the ball(s)
 	 * 
@@ -216,28 +243,6 @@ public class ShooterSubsystem extends SubsystemBase {
 	}
 
 	private boolean isShooterPrimed() {
-		return m_proximitySensor.getProximity() >= 180;
+		return m_queueColorSensor.getProximity() >= 180;
 	}
-
-	/*
-	 * private boolean isCorrectColor() {
-	 * if (DriverStation.getAlliance() == Alliance.Red && m_colorSensor.getRed() >
-	 * 300)
-	 * return true;
-	 * if (DriverStation.getAlliance() == Alliance.Blue && m_colorSensor.getBlue() >
-	 * 300)
-	 * return true;
-	 * 
-	 * return false;
-	 * }
-	 * 
-	 * private void printColor() {
-	 * if (m_colorSensor.getRed() > 300)
-	 * SmartDashboard.putString("color sensed", "red");
-	 * if (m_colorSensor.getBlue() > 300)
-	 * SmartDashboard.putString("color sensed", "blue");
-	 * 
-	 * SmartDashboard.putString("color sensed", "none");
-	 * }
-	 */
 }
