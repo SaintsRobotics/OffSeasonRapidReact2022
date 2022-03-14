@@ -145,6 +145,11 @@ public class RobotContainer {
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kRightTrigger.value) > 0.5)
 				.whenActive(new InstantCommand(() -> m_shooterSubsystem.intakeReverse()))
 				.whenInactive(new InstantCommand(() -> m_shooterSubsystem.intakeOff()));
+				
+		new JoystickButton(m_operatorController, Button.kA.value)
+				.whileHeld(() -> m_shooterSubsystem.topFeederOn())
+				.whenReleased(() -> m_shooterSubsystem.topFeederOff());
+
 	}
 
 	/**

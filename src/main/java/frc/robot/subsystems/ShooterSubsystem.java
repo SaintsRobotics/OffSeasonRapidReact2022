@@ -35,8 +35,8 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final MotorControllerGroup m_sideFeeders;
 	private final CANSparkMax m_topFeeder = new CANSparkMax(ShooterConstants.kTopFeederPort, MotorType.kBrushless);
 
-	private final WPI_TalonFX m_blackFlywheel = new WPI_TalonFX(ShooterConstants.kBlackFlywheelPort);
-	private final WPI_TalonFX m_greenFlywheel = new WPI_TalonFX(ShooterConstants.kGreenFlywheelPort);
+	private final WPI_TalonFX m_bottomFlywheel = new WPI_TalonFX(ShooterConstants.kBottomFlywheelPort);
+	private final WPI_TalonFX m_topFlywheel = new WPI_TalonFX(ShooterConstants.kTopFlywheelPort);
 
 	private final MUX m_MUX = new MUX();
 	private final REVColorSensorV3 m_queueColorSensor = new REVColorSensorV3(m_MUX,
@@ -44,40 +44,43 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final REVColorSensorV3 m_shooterColorSensor = new REVColorSensorV3(m_MUX,
 			ShooterConstants.kShooterColorSensorPort);
 
-	// TODO tune
 	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
-	private final PIDController m_blackShooterPID = new PIDController(ShooterConstants.kShooterP, 0, 0);
-	private final PIDController m_greenShooterPID = new PIDController(ShooterConstants.kShooterP, 0, 0);
-	private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.65, 0);
+	private final PIDController m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterP, 0, 0);
+	private final PIDController m_topShooterPID = new PIDController(ShooterConstants.kTopShooterP, 0, 0); // TODO: THIS
+																											// PID NEEDS
+																											// TUNING
+	private final SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(0.35, 0);
+	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(0.8, 0);
 
 	private boolean m_runningIntake = false;
 	private boolean m_reversingIntake = false;
-	private Timer m_shootingTimer = new Timer();
+	private Timer m_feederTimer = new Timer();
 
 	/** Creates a new {@link ShooterSubsystem}. */
 	public ShooterSubsystem() {
 		m_arm.setIdleMode(IdleMode.kBrake);
 		m_arm.setInverted(true);
-		m_blackFlywheel.setNeutralMode(NeutralMode.Coast);
-		m_greenFlywheel.setNeutralMode(NeutralMode.Coast);
+		m_bottomFlywheel.setNeutralMode(NeutralMode.Coast);
+		m_topFlywheel.setNeutralMode(NeutralMode.Coast);
 		CANSparkMax leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
 		CANSparkMax rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
 		m_intake.setInverted(true);
 		leftFeeder.setInverted(true);
 		rightFeeder.setInverted(false);
 		m_sideFeeders = new MotorControllerGroup(leftFeeder, rightFeeder);
-		m_blackShooterPID.setTolerance(50);
-		m_greenShooterPID.setTolerance(50);
+		m_bottomShooterPID.setTolerance(0.05 * ShooterConstants.kTopShooterSpeedRPM, 100 / 0.02);
+		m_topShooterPID.setTolerance(0.05 * ShooterConstants.kBottomShooterSpeedRPM, 100 / 0.02);
 		m_armPID.setTolerance(2);
 
-		m_shootingTimer.start();
+		m_feederTimer.start();
 	}
 
 	// top feeder run for how long?
 	@Override
 	public void periodic() {
-		double blackPIDOutput = m_blackShooterPID.calculate(Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
-		double greenPIDOutput = m_blackShooterPID.calculate(Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
+		double bottomPIDOutput = m_bottomShooterPID
+				.calculate(Utils.toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
+		double topPIDOutput = m_topShooterPID.calculate(Utils.toRPM(m_topFlywheel.getSelectedSensorVelocity()));
 		final boolean queueIsBlue = m_queueColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
 		final boolean queueIsRed = m_queueColorSensor.getRed() > ShooterConstants.kRedThreshold;
 		final boolean shooterIsBlue = m_shooterColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
@@ -92,56 +95,53 @@ public class ShooterSubsystem extends SubsystemBase {
 			intakeReverse();
 		}
 
-		if (m_blackShooterPID.getSetpoint() > 0) {
-			m_blackFlywheel.set(blackPIDOutput + m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
+		if (m_bottomShooterPID.getSetpoint() > 0) {
+			m_bottomFlywheel.set(bottomPIDOutput + m_bottomFeedforward.calculate(m_bottomShooterPID.getSetpoint()));
+			m_topFlywheel.set(topPIDOutput + m_topFeedforward.calculate(m_topShooterPID.getSetpoint()));
 		} else {
-			m_blackFlywheel.set(0);
+			m_bottomFlywheel.set(0);
+			m_topFlywheel.set(0);
 		}
 
-		if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_blackShooterPID.getSetpoint() > 0
-				&& Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()) > 0.95
-						* ShooterConstants.kBlackShooterSpeedRPM) {
+		if (m_feederTimer.get() > 0) {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
-			if (isShooterPrimed()) {
-				m_shootingTimer.reset();
+			if (m_feederTimer.get() > 3) {
+				m_feederTimer.stop();
+				m_feederTimer.reset();
 			}
-			if (m_blackShooterPID.getSetpoint() > 0) {
-				m_greenFlywheel.set(greenPIDOutput + m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
-			} else {
-				m_greenFlywheel.set(0);
-			}
-
-			if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_blackShooterPID.getSetpoint() > 0
-					&& Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()) > 0.95
-							* ShooterConstants.kGreenShooterSpeedRPM) {
-				m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
-				if (isShooterPrimed()) {
-					m_shootingTimer.reset();
-				}
-			}
-		} else if (!isShooterPrimed() && m_runningIntake) {
+		} else if (m_bottomShooterPID.atSetpoint() && m_topShooterPID.atSetpoint() && isShooterPrimed()
+				&& m_bottomShooterPID.getSetpoint() > 0) {
+			m_feederTimer.start();
+		} else if (!isShooterPrimed() && m_runningIntake) { // if we're trying to intake - prime the first ball
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedSlow);
-		} else if (!m_reversingIntake) {
+		} else if (!m_reversingIntake) { // as long as we're not trying to spit out the wrong color, set to zero
 			m_topFeeder.set(0);
 		}
 
+		SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
+
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Black Shooter PID Output", blackPIDOutput);
-			SmartDashboard.putNumber("Green Shooter PID Output", greenPIDOutput);
+			SmartDashboard.putNumber("Bottom Shooter PID Output", bottomPIDOutput);
+			SmartDashboard.putNumber("Top Shooter PID Output", topPIDOutput);
 
-			SmartDashboard.putNumber("Black Shooter Feedforward Output",
-					m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
-			SmartDashboard.putNumber("Green Shooter Feedforward Output",
-					m_feedforward.calculate(m_greenShooterPID.getSetpoint()));
+			SmartDashboard.putNumber("Bottom Shooter Feedforward Output",
+					m_bottomFeedforward.calculate(m_bottomShooterPID.getSetpoint()));
+			SmartDashboard.putNumber("Top Shooter Feedforward Output",
+					m_topFeedforward.calculate(m_topShooterPID.getSetpoint()));
 
-			SmartDashboard.putNumber("Black Shooter Power", m_blackFlywheel.get());
-			SmartDashboard.putNumber("Green Shooter Power", m_greenFlywheel.get());
+			SmartDashboard.putBoolean("top at setpoint", m_topShooterPID.atSetpoint());
+			SmartDashboard.putBoolean("bottom at setpoint", m_bottomShooterPID.atSetpoint());
 
-			SmartDashboard.putNumber("Black Shooter RPM", Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
-			SmartDashboard.putNumber("Green Shooter RPM", Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
+			SmartDashboard.putNumber("Bottom Shooter Power", m_bottomFlywheel.get());
+			SmartDashboard.putNumber("Top Shooter Power", m_topFlywheel.get());
 
-			SmartDashboard.putNumber("Black Shooter RPM Error", m_blackShooterPID.getPositionError());
-			SmartDashboard.putNumber("Green Shooter RPM Error", m_greenShooterPID.getPositionError());
+			SmartDashboard.putNumber("Bottom Shooter RPM", Utils.toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
+			SmartDashboard.putNumber("Top Shooter RPM", Utils.toRPM(m_topFlywheel.getSelectedSensorVelocity()));
+
+			SmartDashboard.putNumber("Bottom Shooter RPM Error", m_bottomShooterPID.getPositionError());
+			SmartDashboard.putNumber("Top Shooter RPM Error", m_topShooterPID.getPositionError());
+
+			SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
 
 			SmartDashboard.putNumber("Side Feeder Speed", m_sideFeeders.get());
 			SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
@@ -213,36 +213,37 @@ public class ShooterSubsystem extends SubsystemBase {
 	 * 
 	 * @param speed Speed of the black flywheel in RPM.
 	 */
-	public void setBlackShooterSpeed(double RPM) {
-		m_blackShooterPID.setSetpoint(RPM);
-		if (RPM == 0) {
+	public void setShooterSpeeds(double bottomTargetRPM, double topTargetRPM) {
+		m_bottomShooterPID.setSetpoint(bottomTargetRPM);
+		m_topShooterPID.setSetpoint(topTargetRPM);
+		if (bottomTargetRPM == 0) {
 			m_sideFeeders.set(0);
 		} else {
 			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 		}
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Black Target Shooter Speed", RPM);
+			SmartDashboard.putNumber("Bottom Target Shooter Speed", bottomTargetRPM);
+			SmartDashboard.putNumber("Top Target Shooter Speed", topTargetRPM);
+
 		}
 	}
 
 	/**
 	 * Shoots the ball(s)
 	 * 
-	 * @param speed Speed of the green flywheel in RPM.
+	 * @param speed Speed of the roller in RPM.
 	 */
-	public void setGreenShooterSpeed(double RPM) {
-		m_greenShooterPID.setSetpoint(RPM);
-		if (RPM == 0) {
-			m_sideFeeders.set(0);
-		} else {
-			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
-		}
-		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Green Target Shooter Speed", RPM);
-		}
-	}
 
 	private boolean isShooterPrimed() {
 		return m_queueColorSensor.getProximity() >= 180;
 	}
+
+	public void topFeederOn() {
+		m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
+	}
+
+	public void topFeederOff() {
+		m_topFeeder.set(0);
+	}
+
 }

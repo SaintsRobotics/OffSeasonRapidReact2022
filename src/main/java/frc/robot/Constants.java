@@ -75,10 +75,9 @@ public final class Constants {
 		public static final double kDrivingGearRatio = 8.14;
 	}
 
-	// TODO update ports and speeds
 	public static final class ShooterConstants {
-		public static final int kBlackFlywheelPort = 9;
-		public static final int kGreenFlywheelPort = 62;
+		public static final int kBottomFlywheelPort = 9;
+		public static final int kTopFlywheelPort = 23;
 
 		public static final int kArmPort = 13;
 		public static final int kIntakeWheelsPort = 8;
@@ -89,8 +88,8 @@ public final class Constants {
 		public static final Port kQueueColorSensorPort = Port.kTwo;
 		public static final Port kShooterColorSensorPort = Port.kThree;
 
-		public static final double kBlackShooterSpeedRPM = 3520;
-		public static final double kGreenShooterSpeedRPM = 3520;
+		public static final double kBottomShooterSpeedRPM = 2200;
+		public static final double kTopShooterSpeedRPM = 5000; // TODO: THIS RPM NEEDS UPDATING
 
 		public static final int kLowerArmAngle = 170;
 		public static final int kUpperArmAngle = 74;
@@ -104,7 +103,8 @@ public final class Constants {
 
 		public static final int kRedThreshold = 300;
 		public static final int kBlueThreshold = 300;
-		public static final double kShooterP = 0.0005;
+		public static final double kBottomShooterP = 0.0006;
+		public static final double kTopShooterP = 0.00025; //0.000015;
 	}
 
 	/** Constants for the climber. */
