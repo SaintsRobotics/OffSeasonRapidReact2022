@@ -86,8 +86,19 @@ public class RobotContainer {
 		Limelight.setCameraMode(1);
 
 		m_swerveDriveSubsystem.setDefaultCommand(m_defaultMoveCommand);
+
+		final DoubleSupplier leftClimbSpeed = () -> -Utils
+				.oddSquare(MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband))
+				* 0.5;
+		final DoubleSupplier rightClimbSpeed = () -> -Utils
+				.oddSquare(MathUtil.applyDeadband(m_operatorController.getRightY(), OIConstants.kControllerDeadband))
+				* 0.5;
+
+		// Allows for independent control of climbers when enabled in test mode.
+		// Otherwise climbers are controlled together.
 		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> m_climberSubsystem.setSpeed(
-				-MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband) * 0.5),
+				leftClimbSpeed.getAsDouble(),
+				DriverStation.isTest() ? rightClimbSpeed.getAsDouble() : leftClimbSpeed.getAsDouble()),
 				m_climberSubsystem));
 	}
 
@@ -145,11 +156,10 @@ public class RobotContainer {
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kRightTrigger.value) > 0.5)
 				.whenActive(new InstantCommand(() -> m_shooterSubsystem.intakeReverse()))
 				.whenInactive(new InstantCommand(() -> m_shooterSubsystem.intakeOff()));
-				
+
 		new JoystickButton(m_operatorController, Button.kA.value)
 				.whileHeld(() -> m_shooterSubsystem.topFeederOn())
 				.whenReleased(() -> m_shooterSubsystem.topFeederOff());
-
 	}
 
 	/**

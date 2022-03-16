@@ -123,8 +123,6 @@ public final class Constants {
 
 		public static final double kRightServoLockedPosition = 0.5;
 		public static final double kRightServoUnlockedPosition = 1;
-
-		public static final double kServoDeadband = 0.05;
 	}
 
 	public static final class OIConstants {
