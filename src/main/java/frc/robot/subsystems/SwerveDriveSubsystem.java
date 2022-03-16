@@ -175,27 +175,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 			m_frontRight.setDesiredState();
 			m_rearRight.setDesiredState();
 		} else {
-			SwerveModuleState[] swerveModuleStates = SwerveConstants.kDriveKinematics.toSwerveModuleStates(
+			setModuleStates(SwerveConstants.kDriveKinematics.toSwerveModuleStates(
 					fieldRelative
 							? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, m_gyro.getRotation2d())
-							: new ChassisSpeeds(xSpeed, ySpeed, rotation));
-
-			SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
-
-			m_frontLeft.setDesiredState(swerveModuleStates[0]);
-			m_rearLeft.setDesiredState(swerveModuleStates[1]);
-			m_frontRight.setDesiredState(swerveModuleStates[2]);
-			m_rearRight.setDesiredState(swerveModuleStates[3]);
+							: new ChassisSpeeds(xSpeed, ySpeed, rotation)));
 		}
-
-		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Desired X", xSpeed);
-			SmartDashboard.putNumber("Desired Y", ySpeed);
-			SmartDashboard.putNumber("Desired Rot", Math.toDegrees(rotation));
-		}
-
-		// Adds the change in angle to the current angle.
-		m_simulatedYaw.set(m_simulatedYaw.get() - Math.toDegrees(rotation) * Robot.kDefaultPeriod);
 	}
 
 	/** Zeroes the heading of the robot. */
@@ -233,5 +217,17 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		m_rearLeft.setDesiredState(desiredStates[1]);
 		m_frontRight.setDesiredState(desiredStates[2]);
 		m_rearRight.setDesiredState(desiredStates[3]);
+
+		final ChassisSpeeds chassisSpeeds = SwerveConstants.kDriveKinematics.toChassisSpeeds(desiredStates);
+		final double rotDegrees = Math.toDegrees(chassisSpeeds.omegaRadiansPerSecond);
+
+		// Adds the change in angle to the current angle.
+		m_simulatedYaw.set(m_simulatedYaw.get() - rotDegrees * Robot.kDefaultPeriod);
+
+		if (OIConstants.kTelemetry) {
+			SmartDashboard.putNumber("Desired X", chassisSpeeds.vxMetersPerSecond);
+			SmartDashboard.putNumber("Desired Y", chassisSpeeds.vyMetersPerSecond);
+			SmartDashboard.putNumber("Desired Rot", rotDegrees);
+		}
 	}
 }
