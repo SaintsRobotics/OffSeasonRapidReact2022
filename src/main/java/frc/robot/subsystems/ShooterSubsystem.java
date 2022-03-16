@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -21,7 +22,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.DutyCycleAbsoluteEncoder;
 import frc.robot.MUX;
 import frc.robot.REVColorSensorV3;
 import frc.robot.Utils;
@@ -29,7 +29,7 @@ import frc.robot.Utils;
 /** Subsystem that controls the arm, intake, feeders, and shooter flywheel. */
 public class ShooterSubsystem extends SubsystemBase {
 	private final CANSparkMax m_arm = new CANSparkMax(ShooterConstants.kArmPort, MotorType.kBrushless);
-	private final DutyCycleAbsoluteEncoder m_armEncoder = new DutyCycleAbsoluteEncoder(9);
+	private final DutyCycleEncoder m_armEncoder = new DutyCycleEncoder(9);
 
 	private final CANSparkMax m_intake = new CANSparkMax(ShooterConstants.kIntakeWheelsPort, MotorType.kBrushless);
 	private final MotorControllerGroup m_sideFeeders;
@@ -60,9 +60,14 @@ public class ShooterSubsystem extends SubsystemBase {
 	public ShooterSubsystem() {
 		m_arm.setIdleMode(IdleMode.kBrake);
 		m_arm.setInverted(true);
-		m_bottomFlywheel.setNeutralMode(NeutralMode.Coast);
+
+		// TODO change to getAngle if WPILib adds it
+		m_armEncoder.setDistancePerRotation(360);
+
+    m_bottomFlywheel.setNeutralMode(NeutralMode.Coast);
 		m_topFlywheel.setNeutralMode(NeutralMode.Coast);
-		CANSparkMax leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
+
+    CANSparkMax leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
 		CANSparkMax rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
 		m_intake.setInverted(true);
 		leftFeeder.setInverted(true);
@@ -147,7 +152,7 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
 			SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
 			SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
-			SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
+			SmartDashboard.putNumber("Arm Angle", m_armEncoder.getDistance());
 
 			SmartDashboard.putNumber("Queue Proximity", m_queueColorSensor.getProximity());
 			SmartDashboard.putBoolean("Queue Is Blue", queueIsBlue);
@@ -167,7 +172,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		if (m_armPID.atSetpoint())
 			m_arm.set(0);
 		else
-			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getAbsolutePosition()), -0.25, -0.1));
+			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getDistance()), -0.25, -0.1));
 	}
 
 	/** Lowers the arm. */
@@ -176,7 +181,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		if (m_armPID.atSetpoint())
 			m_arm.set(0);
 		else
-			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getAbsolutePosition()), 0.1, 0.25));
+			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getDistance()), 0.1, 0.25));
 	}
 
 	public void stopArm() {

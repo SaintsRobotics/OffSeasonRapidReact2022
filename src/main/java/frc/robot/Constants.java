@@ -91,8 +91,8 @@ public final class Constants {
 		public static final double kBottomShooterSpeedRPM = 2200;
 		public static final double kTopShooterSpeedRPM = 5000; // TODO: THIS RPM NEEDS UPDATING
 
-		public static final int kLowerArmAngle = 170;
-		public static final int kUpperArmAngle = 74;
+		public static final int kLowerArmAngle = 50;
+		public static final int kUpperArmAngle = -50;
 		public static final double kIntakeSpeed = 0.7;
 		public static final double kTopFeederSpeedSlow = 0.1;
 		public static final double kTopFeederSpeedFast = 1;
