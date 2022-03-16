@@ -1,18 +1,8 @@
 {
-  "HALProvider": {
-    "Other Devices": {
-      "navX-Sensor[0]": {
-        "header": {
-          "open": true
-        }
-      }
-    }
-  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/ClimberArmSubsystem": "Subsystem",
-      "/LiveWindow/ClimberSubsystem": "Subsystem",
       "/LiveWindow/IntakeSubsystem": "Subsystem",
       "/LiveWindow/ShooterSubsystem": "Subsystem",
       "/LiveWindow/SwerveDriveSubsystem": "Subsystem",
@@ -33,17 +23,7 @@
       "/LiveWindow/Ungrouped/PIDController[21]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[22]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[23]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[24]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[25]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[26]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[27]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[28]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[29]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[30]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[31]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[32]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[33]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[5]": "PIDController",
@@ -59,7 +39,6 @@
     },
     "windows": {
       "/SmartDashboard/Field": {
-        "image": "C:\\Users\\User\\PathWeaver\\Games\\2022-field.png",
         "window": {
           "visible": true
         }
@@ -68,9 +47,6 @@
   },
   "NetworkTables": {
     "SmartDashboard": {
-      "Field": {
-        "open": true
-      },
       "open": true
     }
   }

@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.Constants;
 import frc.robot.Robot;
 
 /** Controls the drivetrain of the robot using swerve. */
@@ -83,11 +82,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 				m_rearLeft.getState(),
 				m_frontRight.getState(),
 				m_rearRight.getState());
-
-		// m_simulatedYaw.set(m_odometry.getPoseMeters().getRotation().getDegrees());
-		// m_simulatedYaw.set(m_simulatedYaw.get() - m_odometry.getPoseMeters().getRotation().getDegrees());
 		m_field2d.setRobotPose(m_odometry.getPoseMeters());
-		// m_field2d.setRobotPose(m_odometry.getPoseMeters().getX(), m_odometry.getPoseMeters().getY(), m_odometry.getPoseMeters().getRotation());
 
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
@@ -238,9 +233,5 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		m_rearLeft.setDesiredState(desiredStates[1]);
 		m_frontRight.setDesiredState(desiredStates[2]);
 		m_rearRight.setDesiredState(desiredStates[3]);
-		if (!Robot.isReal()) {
-			double rotation = Math.toDegrees(SwerveConstants.kDriveKinematics.toChassisSpeeds(desiredStates).omegaRadiansPerSecond * Robot.kDefaultPeriod);
-			m_simulatedYaw.set(m_simulatedYaw.get() - rotation);
-		}
 	}
 }

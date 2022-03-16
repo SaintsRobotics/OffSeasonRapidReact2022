@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -12,7 +11,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class AutonArm extends CommandBase {
 	ShooterSubsystem m_subsystem;
 	double m_setpoint;
-	private final Timer m_timer = new Timer();
+	double timer = 0;
 
 	/** Creates a new AutonIntake. */
 	public AutonArm(ShooterSubsystem subsystem, double setpoint) {
@@ -25,13 +24,12 @@ public class AutonArm extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		m_timer.reset();
-		m_timer.start();
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
+		timer += 0.02;
 		if (m_setpoint == ShooterConstants.kUpperArmAngle) {
 			m_subsystem.raiseArm();
 		} else if (m_setpoint == ShooterConstants.kLowerArmAngle) {
@@ -48,6 +46,6 @@ public class AutonArm extends CommandBase {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return m_timer.get() > 2;
+		return timer > 2;
 	}
 }
