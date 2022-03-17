@@ -25,12 +25,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.commands.AutonArm;
-import frc.robot.commands.AutonIntake;
-import frc.robot.commands.AutonShoot;
+import frc.robot.commands.ArmCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.PathWeaverCommand;
+import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -168,13 +168,14 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
+		// Two ball autonomous routine.
 		return new SequentialCommandGroup(
-				new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+				new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
 				new ParallelCommandGroup(
-						new AutonIntake(m_shooterSubsystem),
-						new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall1", true)),
-				new AutonArm(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
+						new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall1", true),
+						new IntakeCommand(m_shooterSubsystem)),
+				new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
 				new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall2", false),
-				new AutonShoot(m_shooterSubsystem));
+				new ShootCommand(m_shooterSubsystem));
 	}
 }

@@ -4,43 +4,44 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class AutonShoot extends CommandBase {
-	ShooterSubsystem m_subsystem;
-	double timer = 0;
+/** Command that shoots up to two balls */
+public class ShootCommand extends CommandBase {
+	private final ShooterSubsystem m_subsystem;
+	private final Timer m_timer = new Timer();
 
-	/** Creates a new AutonIntake. */
-	public AutonShoot(ShooterSubsystem subsystem) {
-		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(subsystem);
+	/**
+	 * Creates a new {@link ShootCommand}.
+	 * 
+	 * @param subsystem The required subsystem.
+	 */
+	public ShootCommand(ShooterSubsystem subsystem) {
 		m_subsystem = subsystem;
+		addRequirements(m_subsystem);
 	}
 
-	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
+		m_timer.reset();
+		m_timer.start();
 	}
 
-	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		timer += 0.02;
 		m_subsystem.setShooterSpeeds(ShooterConstants.kBottomShooterSpeedRPM, ShooterConstants.kTopShooterSpeedRPM);
-	
 	}
 
-	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
 		m_subsystem.setShooterSpeeds(0, 0);
 	}
 
-	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return timer > 5;
+		return m_timer.get() > 3;
 	}
 }
