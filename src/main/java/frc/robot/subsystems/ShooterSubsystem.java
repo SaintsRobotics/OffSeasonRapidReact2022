@@ -64,10 +64,10 @@ public class ShooterSubsystem extends SubsystemBase {
 		// TODO change to getAngle if WPILib adds it
 		m_armEncoder.setDistancePerRotation(360);
 
-    m_bottomFlywheel.setNeutralMode(NeutralMode.Coast);
+		m_bottomFlywheel.setNeutralMode(NeutralMode.Coast);
 		m_topFlywheel.setNeutralMode(NeutralMode.Coast);
 
-    CANSparkMax leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
+		CANSparkMax leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
 		CANSparkMax rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
 		m_intake.setInverted(true);
 		leftFeeder.setInverted(true);
@@ -110,7 +110,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
 		if (m_feederTimer.get() > 0) {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
-			if (m_feederTimer.get() > 3) {
+			if (m_feederTimer.get() > 5) {
 				m_feederTimer.stop();
 				m_feederTimer.reset();
 			}
@@ -122,8 +122,6 @@ public class ShooterSubsystem extends SubsystemBase {
 		} else if (!m_reversingIntake) { // as long as we're not trying to spit out the wrong color, set to zero
 			m_topFeeder.set(0);
 		}
-
-		SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
 
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Bottom Shooter PID Output", bottomPIDOutput);

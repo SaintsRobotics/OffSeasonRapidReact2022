@@ -103,8 +103,8 @@ public final class Constants {
 
 		public static final int kRedThreshold = 300;
 		public static final int kBlueThreshold = 300;
-		public static final double kBottomShooterP = 0.0006;
-		public static final double kTopShooterP = 0.00025; //0.000015;
+		public static final double kBottomShooterP = 0.00045;
+		public static final double kTopShooterP = 0.000005;
 	}
 
 	/** Constants for the climber. */
