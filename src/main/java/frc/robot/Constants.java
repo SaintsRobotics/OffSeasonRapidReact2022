@@ -115,8 +115,8 @@ public final class Constants {
 		public static final int kLeftServoPort = 1;
 		public static final int kRightServoPort = 0;
 
-		public static final boolean kLeftArmReversed = true;
-		public static final boolean kRightArmReversed = false;
+		public static final boolean kLeftClimberReversed = true;
+		public static final boolean kRightClimberReversed = false;
 
 		public static final double kLeftServoLockedPosition = 1;
 		public static final double kLeftServoUnlockedPosition = 0.5;

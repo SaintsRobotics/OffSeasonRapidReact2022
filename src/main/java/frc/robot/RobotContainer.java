@@ -96,10 +96,13 @@ public class RobotContainer {
 
 		// Allows for independent control of climbers when enabled in test mode.
 		// Otherwise climbers are controlled together.
-		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> m_climberSubsystem.setSpeed(
-				leftClimbSpeed.getAsDouble(),
-				DriverStation.isTest() ? rightClimbSpeed.getAsDouble() : leftClimbSpeed.getAsDouble()),
-				m_climberSubsystem));
+		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> {
+			if (DriverStation.isTest()) {
+				m_climberSubsystem.set(leftClimbSpeed.getAsDouble(), rightClimbSpeed.getAsDouble());
+			} else {
+				m_climberSubsystem.set(leftClimbSpeed.getAsDouble());
+			}
+		}, m_climberSubsystem));
 	}
 
 	/**

@@ -21,29 +21,17 @@ public class ClimberSubsystem extends SubsystemBase {
 	private final Servo m_leftServo = new Servo(ClimberConstants.kLeftServoPort);
 	private final Servo m_rightServo = new Servo(ClimberConstants.kRightServoPort);
 
-	private double m_leftSpeed;
-	private double m_rightSpeed;
-
 	/** Creates a new {@link ClimberSubsystem}. */
 	public ClimberSubsystem() {
-		m_leftClimber.setInverted(ClimberConstants.kLeftArmReversed);
-		m_rightClimber.setInverted(ClimberConstants.kRightArmReversed);
+		m_leftClimber.setInverted(ClimberConstants.kLeftClimberReversed);
+		m_rightClimber.setInverted(ClimberConstants.kRightClimberReversed);
 	}
 
 	@Override
 	public void periodic() {
-		// Unlocks the servos before raising the left climber.
-		m_leftServo.set(m_leftSpeed > 0 ? ClimberConstants.kLeftServoUnlockedPosition
-				: ClimberConstants.kLeftServoLockedPosition);
-		m_rightServo.set(m_rightSpeed > 0 ? ClimberConstants.kRightServoUnlockedPosition
-				: ClimberConstants.kRightServoLockedPosition);
-
-		m_leftClimber.set(m_leftSpeed);
-		m_rightClimber.set(m_rightSpeed);
-
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Climber Power Left", m_leftClimber.get());
-			SmartDashboard.putNumber("Climber Power Right", m_rightClimber.get());
+			SmartDashboard.putNumber("Climber Speed Left", m_leftClimber.get());
+			SmartDashboard.putNumber("Climber Speed Right", m_rightClimber.get());
 			SmartDashboard.putNumber("Climber Servo Position Left", m_leftServo.get());
 			SmartDashboard.putNumber("Climber Servo Position Right", m_rightServo.get());
 		}
@@ -54,8 +42,8 @@ public class ClimberSubsystem extends SubsystemBase {
 	 * 
 	 * @param speed Speed from -1 to 1.
 	 */
-	public void setSpeed(double speed) {
-		setSpeed(speed, speed);
+	public void set(double speed) {
+		set(speed, speed);
 	}
 
 	/**
@@ -64,8 +52,14 @@ public class ClimberSubsystem extends SubsystemBase {
 	 * @param leftSpeed  Speed from -1 to 1.
 	 * @param rightSpeed Speed from -1 to 1.
 	 */
-	public void setSpeed(double leftSpeed, double rightSpeed) {
-		m_leftSpeed = leftSpeed;
-		m_rightSpeed = rightSpeed;
+	public void set(double leftSpeed, double rightSpeed) {
+		// Unlocks the servos before raising the left climber.
+		m_leftServo.set(leftSpeed > 0 ? ClimberConstants.kLeftServoUnlockedPosition
+				: ClimberConstants.kLeftServoLockedPosition);
+		m_rightServo.set(rightSpeed > 0 ? ClimberConstants.kRightServoUnlockedPosition
+				: ClimberConstants.kRightServoLockedPosition);
+
+		m_leftClimber.set(leftSpeed);
+		m_rightClimber.set(rightSpeed);
 	}
 }
