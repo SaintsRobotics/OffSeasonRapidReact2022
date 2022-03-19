@@ -140,6 +140,9 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Bottom Shooter Power", m_bottomFlywheel.get());
 			SmartDashboard.putNumber("Top Shooter Power", m_topFlywheel.get());
 
+			SmartDashboard.putNumber("Bottom Target RPM", m_bottomShooterPID.getSetpoint());
+			SmartDashboard.putNumber("Top Target RPM", m_topShooterPID.getSetpoint());
+
 			SmartDashboard.putNumber("Bottom Shooter RPM", Utils.toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
 			SmartDashboard.putNumber("Top Shooter RPM", Utils.toRPM(m_topFlywheel.getSelectedSensorVelocity()));
 
@@ -214,30 +217,20 @@ public class ShooterSubsystem extends SubsystemBase {
 	}
 
 	/**
-	 * Shoots the ball(s)
+	 * Sets the speed of the shooter.
 	 * 
-	 * @param speed Speed of the black flywheel in RPM.
+	 * @param bottomRPM Target RPM for the bottom flywheel.
+	 * @param topRPM    Target RPM for the top flywheel.
 	 */
-	public void setShooterSpeeds(double bottomTargetRPM, double topTargetRPM) {
-		m_bottomShooterPID.setSetpoint(bottomTargetRPM);
-		m_topShooterPID.setSetpoint(topTargetRPM);
-		if (bottomTargetRPM == 0) {
+	public void setShooterSpeed(double bottomRPM, double topRPM) {
+		m_bottomShooterPID.setSetpoint(bottomRPM);
+		m_topShooterPID.setSetpoint(topRPM);
+		if (bottomRPM == 0) {
 			m_sideFeeders.set(0);
 		} else {
 			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 		}
-		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Bottom Target Shooter Speed", bottomTargetRPM);
-			SmartDashboard.putNumber("Top Target Shooter Speed", topTargetRPM);
-
-		}
 	}
-
-	/**
-	 * Shoots the ball(s)
-	 * 
-	 * @param speed Speed of the roller in RPM.
-	 */
 
 	private boolean isShooterPrimed() {
 		return m_queueColorSensor.getProximity() >= 180;
@@ -250,5 +243,4 @@ public class ShooterSubsystem extends SubsystemBase {
 	public void topFeederOff() {
 		m_topFeeder.set(0);
 	}
-
 }
