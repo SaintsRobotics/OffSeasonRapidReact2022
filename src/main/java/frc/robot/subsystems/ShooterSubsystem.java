@@ -47,7 +47,7 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
 	private final PIDController m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterP, 0, 0);
 
-	private final PIDController m_topShooterPID = new PIDController(ShooterConstants.kTopShooterP, 0, 0); 
+	private final PIDController m_topShooterPID = new PIDController(ShooterConstants.kTopShooterP, 0, 0);
 	private final SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(0.33, 0);
 	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(0.84, 0);
 
@@ -108,8 +108,8 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 		if (m_feederTimer.get() > 0) {
-			if (m_bottomShooterPID.atSetpoint() && m_topShooterPID.atSetpoint()){
-						m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
+			if (m_bottomShooterPID.atSetpoint() && m_topShooterPID.atSetpoint()) {
+				m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
 			}
 
 			if (m_feederTimer.get() > 3) {
@@ -125,11 +125,6 @@ public class ShooterSubsystem extends SubsystemBase {
 			m_topFeeder.set(0);
 		}
 
-		SmartDashboard.putNumber("Bottom Shooter RPM", Utils.toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
-		SmartDashboard.putNumber("Top Shooter RPM", Utils.toRPM(m_topFlywheel.getSelectedSensorVelocity()));
-		SmartDashboard.putBoolean("top at setpoint", m_topShooterPID.atSetpoint());
-		SmartDashboard.putBoolean("bottom at setpoint", m_bottomShooterPID.atSetpoint());
-
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Bottom Shooter PID Output", bottomPIDOutput);
 			SmartDashboard.putNumber("Top Shooter PID Output", topPIDOutput);
@@ -139,8 +134,8 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Top Shooter Feedforward Output",
 					m_topFeedforward.calculate(m_topShooterPID.getSetpoint()));
 
-			SmartDashboard.putBoolean("top at setpoint", m_topShooterPID.atSetpoint());
-			SmartDashboard.putBoolean("bottom at setpoint", m_bottomShooterPID.atSetpoint());
+			SmartDashboard.putBoolean("Bottom Shooter At Setpoint", m_bottomShooterPID.atSetpoint());
+			SmartDashboard.putBoolean("Top Shooter At Setpoint", m_topShooterPID.atSetpoint());
 
 			SmartDashboard.putNumber("Bottom Shooter Power", m_bottomFlywheel.get());
 			SmartDashboard.putNumber("Top Shooter Power", m_topFlywheel.get());
