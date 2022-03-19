@@ -105,7 +105,7 @@ public class RobotContainer {
 			}
 		}, m_climberSubsystem));
 
-		SmartDashboard.putString("Autonomous Path", "Type Path Name Here");
+		SmartDashboard.putString("Autonomous Path", "BlueHangar");
 	}
 
 	/**
