@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -173,12 +174,14 @@ public class RobotContainer {
 	public Command getAutonomousCommand() {
 		// Two ball autonomous routine.
 		return new SequentialCommandGroup(
-				new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-				new ParallelCommandGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationTwoBall1", true),
-						new IntakeCommand(m_shooterSubsystem)),
-				new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-				new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationTwoBall2", false),
-				new ShootCommand(m_shooterSubsystem));
+
+			new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+			new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
+					SmartDashboard.getString("AutonPath", "BlueHangarTwoBall") + "1", true),
+					new IntakeCommand(m_shooterSubsystem)),
+			new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
+			new PathWeaverCommand(m_swerveDriveSubsystem, SmartDashboard.getString("AutonPath", "BlueHangarTwoBall") + "2", false),
+			new ShootCommand(m_shooterSubsystem));
+
 	}
 }
