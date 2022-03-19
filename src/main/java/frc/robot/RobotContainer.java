@@ -139,6 +139,11 @@ public class RobotContainer {
 				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())
 				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
 
+		// Slowly drives forward while X is held.
+		new JoystickButton(m_driveController, Button.kX.value)
+				.whileHeld(() -> m_swerveDriveSubsystem.drive(0.1, 0, 0, false), m_swerveDriveSubsystem)
+				.whenReleased(() -> m_swerveDriveSubsystem.drive(0, 0, 0, false), m_swerveDriveSubsystem);
+
 		// raises the arm while left bumper held
 		new JoystickButton(m_operatorController, Button.kLeftBumper.value)
 				.whileHeld(() -> m_shooterSubsystem.raiseArm())
