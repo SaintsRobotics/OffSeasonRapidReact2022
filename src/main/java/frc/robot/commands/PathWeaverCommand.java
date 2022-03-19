@@ -79,8 +79,8 @@ public class PathWeaverCommand extends CommandBase {
 
 	@Override
 	public void end(boolean interrupted) {
-		m_command.end(interrupted);
 		m_subsystem.drive(0, 0, 0, false);
+		m_command.end(interrupted);
 	}
 
 	@Override
