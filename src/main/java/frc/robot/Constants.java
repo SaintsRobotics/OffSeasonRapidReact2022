@@ -88,8 +88,8 @@ public final class Constants {
 		public static final Port kQueueColorSensorPort = Port.kTwo;
 		public static final Port kShooterColorSensorPort = Port.kThree;
 
-		public static final double kBottomShooterSpeedRPM = 2200;
-		public static final double kTopShooterSpeedRPM = 5500;
+		public static final double kBottomShooterSpeedRPM = 2100;
+		public static final double kTopShooterSpeedRPM = 5300;
 
 		public static final int kLowerArmAngle = 50;
 		public static final int kUpperArmAngle = -50;
