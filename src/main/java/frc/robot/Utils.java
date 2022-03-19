@@ -4,11 +4,17 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import frc.robot.Constants.OIConstants;
+
 /**
  * Class for holding utility methods that do not apply to any specific command
  * or subsystem.
  */
 public class Utils {
+	// Plugging a wire into DIO port 0 enables telemetry.
+	private static DigitalInput m_digitalInput = new DigitalInput(0);
+
 	/**
 	 * Makes lower inputs smaller which allows for finer joystick control.
 	 * 
@@ -28,5 +34,14 @@ public class Utils {
 	 */
 	public static double toRPM(double ticksPerDecisecond) {
 		return ticksPerDecisecond * 600 / 2048;
+	}
+
+	/**
+	 * Returns whether the robot should print values to {@link SmartDashboard}.
+	 * 
+	 * @return Whether the robot should print values to {@link SmartDashboard}.
+	 */
+	public static boolean isTelemetryEnabled() {
+		return !m_digitalInput.get() || Robot.isSimulation() || OIConstants.kTelemetry;
 	}
 }

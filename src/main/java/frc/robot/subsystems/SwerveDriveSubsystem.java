@@ -19,9 +19,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Robot;
+import frc.robot.Utils;
 
 /** Controls the drivetrain of the robot using swerve. */
 public class SwerveDriveSubsystem extends SubsystemBase {
@@ -84,7 +84,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 				m_rearRight.getState());
 		m_field2d.setRobotPose(m_odometry.getPoseMeters());
 
-		if (OIConstants.kTelemetry) {
+		if (Utils.isTelemetryEnabled()) {
 			SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
 			SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
 			SmartDashboard.putNumber("Module Angle Front Right", m_frontRight.getState().angle.getDegrees());
@@ -157,14 +157,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
 		if ((xSpeed == 0 && ySpeed == 0) || m_headingCorrectionTimer.get() < SwerveConstants.kTurningStopTime) {
 			m_headingCorrectionPID.setSetpoint(currentAngle);
-			if (OIConstants.kTelemetry) {
-				SmartDashboard.putString("Heading Correction", "Setting Setpoint");
-			}
 		} else {
 			rotation = m_headingCorrectionPID.calculate(currentAngle);
-			if (OIConstants.kTelemetry) {
-				SmartDashboard.putString("Heading Correction", "Correcting Heading");
-			}
 		}
 
 		// this check prevents the wheels from resetting to straight when the robot
@@ -224,7 +218,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		// Adds the change in angle to the current angle.
 		m_simulatedYaw.set(m_simulatedYaw.get() - rotDegrees * Robot.kDefaultPeriod);
 
-		if (OIConstants.kTelemetry) {
+		if (Utils.isTelemetryEnabled()) {
 			SmartDashboard.putNumber("Desired X", chassisSpeeds.vxMetersPerSecond);
 			SmartDashboard.putNumber("Desired Y", chassisSpeeds.vyMetersPerSecond);
 			SmartDashboard.putNumber("Desired Rot", rotDegrees);
