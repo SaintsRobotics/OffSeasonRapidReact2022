@@ -73,8 +73,12 @@ public class PathWeaverCommand extends CommandBase {
 		if (m_resetOdometry) {
 			m_subsystem.resetOdometry(m_trajectory.getInitialPose());
 		}
+		m_command.initialize();
+	}
 
-		m_command.schedule();
+	@Override
+	public void execute() {
+		m_command.execute();
 	}
 
 	@Override
