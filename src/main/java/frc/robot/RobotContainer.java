@@ -174,15 +174,14 @@ public class RobotContainer {
 	public Command getAutonomousCommand() {
 		// Two ball autonomous routine.
 		return new SequentialCommandGroup(
-
-			new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-			new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
-					SmartDashboard.getString("AutonPath", "BlueHangarTwoBall") + "1", true),
-					new IntakeCommand(m_shooterSubsystem)),
-			new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-			new PathWeaverCommand(m_swerveDriveSubsystem, SmartDashboard.getString("AutonPath", "BlueHangarTwoBall") + "2", false),
-			new ShootCommand(m_shooterSubsystem));
-
-
+				new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+				new ParallelCommandGroup(
+						new PathWeaverCommand(m_swerveDriveSubsystem,
+								SmartDashboard.getString("AutonPath", "BlueHangarTwoBall") + "1", true),
+						new IntakeCommand(m_shooterSubsystem)),
+				new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
+				new PathWeaverCommand(m_swerveDriveSubsystem,
+						SmartDashboard.getString("AutonPath", "BlueHangarTwoBall") + "2", false),
+				new ShootCommand(m_shooterSubsystem));
 	}
 }
