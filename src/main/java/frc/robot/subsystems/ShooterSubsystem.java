@@ -50,7 +50,7 @@ public class ShooterSubsystem extends SubsystemBase {
 																											// PID NEEDS
 																											// TUNING
 	private final SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(0.35, 0);
-	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(0.84, 0);
+	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(0.87, 0);
 
 	private boolean m_runningIntake = false;
 	private boolean m_reversingIntake = false;
@@ -113,7 +113,7 @@ public class ShooterSubsystem extends SubsystemBase {
 				m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
 			}
 
-			if (m_feederTimer.get() > 5) {
+			if (m_feederTimer.get() > 3) {
 				m_feederTimer.stop();
 				m_feederTimer.reset();
 			}
@@ -125,6 +125,11 @@ public class ShooterSubsystem extends SubsystemBase {
 		} else if (!m_reversingIntake) { // as long as we're not trying to spit out the wrong color, set to zero
 			m_topFeeder.set(0);
 		}
+
+		SmartDashboard.putNumber("Bottom Shooter RPM", Utils.toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
+		SmartDashboard.putNumber("Top Shooter RPM", Utils.toRPM(m_topFlywheel.getSelectedSensorVelocity()));
+		SmartDashboard.putBoolean("top at setpoint", m_topShooterPID.atSetpoint());
+		SmartDashboard.putBoolean("bottom at setpoint", m_bottomShooterPID.atSetpoint());
 
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Bottom Shooter PID Output", bottomPIDOutput);

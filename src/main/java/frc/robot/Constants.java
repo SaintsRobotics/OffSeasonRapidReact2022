@@ -89,7 +89,7 @@ public final class Constants {
 		public static final Port kShooterColorSensorPort = Port.kThree;
 
 		public static final double kBottomShooterSpeedRPM = 2200;
-		public static final double kTopShooterSpeedRPM = 5300;
+		public static final double kTopShooterSpeedRPM = 5500;
 
 		public static final int kLowerArmAngle = 50;
 		public static final int kUpperArmAngle = -50;
@@ -103,7 +103,7 @@ public final class Constants {
 
 		public static final int kRedThreshold = 300;
 		public static final int kBlueThreshold = 300;
-		public static final double kBottomShooterP = 0.0003;
+		public static final double kBottomShooterP = 0.00025;
 		public static final double kTopShooterP = 0.000007;
 	}
 
