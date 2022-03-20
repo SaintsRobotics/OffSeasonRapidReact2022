@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
 
 /**
@@ -31,6 +33,6 @@ public class Utils {
 	 * @return Whether the robot should print values to {@link SmartDashboard}.
 	 */
 	public static boolean isTelemetryEnabled() {
-		return !m_digitalInput.get() || Robot.isSimulation() || OIConstants.kTelemetry;
+		return !m_digitalInput.get() || DriverStation.isTest() || Robot.isSimulation() || OIConstants.kTelemetry;
 	}
 }
