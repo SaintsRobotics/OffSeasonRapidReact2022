@@ -82,8 +82,8 @@ public class ShooterSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		double bottomPIDOutput = m_bottomShooterPID
-				.calculate(Utils.toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
-		double topPIDOutput = m_topShooterPID.calculate(Utils.toRPM(m_topFlywheel.getSelectedSensorVelocity()));
+				.calculate(toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
+		double topPIDOutput = m_topShooterPID.calculate(toRPM(m_topFlywheel.getSelectedSensorVelocity()));
 		final boolean queueIsBlue = m_queueColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
 		final boolean queueIsRed = m_queueColorSensor.getRed() > ShooterConstants.kRedThreshold;
 		final boolean shooterIsBlue = m_shooterColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
@@ -142,8 +142,8 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Bottom Target RPM", m_bottomShooterPID.getSetpoint());
 			SmartDashboard.putNumber("Top Target RPM", m_topShooterPID.getSetpoint());
 
-			SmartDashboard.putNumber("Bottom Shooter RPM", Utils.toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
-			SmartDashboard.putNumber("Top Shooter RPM", Utils.toRPM(m_topFlywheel.getSelectedSensorVelocity()));
+			SmartDashboard.putNumber("Bottom Shooter RPM", toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
+			SmartDashboard.putNumber("Top Shooter RPM", toRPM(m_topFlywheel.getSelectedSensorVelocity()));
 
 			SmartDashboard.putNumber("Bottom Shooter RPM Error", m_bottomShooterPID.getPositionError());
 			SmartDashboard.putNumber("Top Shooter RPM Error", m_topShooterPID.getPositionError());
@@ -241,5 +241,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	public void topFeederOff() {
 		m_topFeeder.set(0);
+	}
+
+	/**
+	 * Converts the speed of a TalonFX from the default units of ticks per
+	 * decisecond to RPM.
+	 * 
+	 * @param ticksPerDecisecond The speed in ticks per decisecond.
+	 * @return The speed in RPM.
+	 */
+	private double toRPM(double ticksPerDecisecond) {
+		return ticksPerDecisecond * 600 / 2048;
 	}
 }
