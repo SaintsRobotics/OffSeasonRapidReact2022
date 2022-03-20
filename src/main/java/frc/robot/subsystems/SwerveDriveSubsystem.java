@@ -112,6 +112,27 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
 			SmartDashboard.putData("Field", m_field2d);
 		}
+
+		SmartDashboard.putNumber("Temperature Front Left Drive", m_frontLeft.getDriveMotor().getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Rear Left Drive", m_rearLeft.getDriveMotor().getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Front Right Drive", m_frontRight.getDriveMotor().getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Rear Right Drive", m_rearRight.getDriveMotor().getMotorTemperature());
+
+		SmartDashboard.putNumber("Temperature Front Left Turning", m_frontLeft.getTurningMotor().getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Rear Left Turning", m_rearLeft.getTurningMotor().getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Front Right Turning",
+				m_frontRight.getTurningMotor().getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Rear Right Turning", m_rearRight.getTurningMotor().getMotorTemperature());
+
+		SmartDashboard.putNumber("Current Front Left Drive", m_frontLeft.getDriveMotor().getOutputCurrent());
+		SmartDashboard.putNumber("Current Rear Left Drive", m_rearLeft.getDriveMotor().getOutputCurrent());
+		SmartDashboard.putNumber("Current Front Right Drive", m_frontRight.getDriveMotor().getOutputCurrent());
+		SmartDashboard.putNumber("Current Rear Right Drive", m_rearRight.getDriveMotor().getOutputCurrent());
+
+		SmartDashboard.putNumber("Current Front Left Turning", m_frontLeft.getTurningMotor().getOutputCurrent());
+		SmartDashboard.putNumber("Current Rear Left Turning", m_rearLeft.getTurningMotor().getOutputCurrent());
+		SmartDashboard.putNumber("Current Front Right Turning", m_frontRight.getTurningMotor().getOutputCurrent());
+		SmartDashboard.putNumber("Current Rear Right Turning", m_rearRight.getTurningMotor().getOutputCurrent());
 	}
 
 	/**

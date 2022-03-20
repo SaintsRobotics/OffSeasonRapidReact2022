@@ -31,7 +31,11 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final DutyCycleEncoder m_armEncoder = new DutyCycleEncoder(9);
 
 	private final CANSparkMax m_intake = new CANSparkMax(ShooterConstants.kIntakeWheelsPort, MotorType.kBrushless);
-	private final MotorControllerGroup m_sideFeeders;
+
+	private final CANSparkMax m_leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
+	private final CANSparkMax m_rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
+	private final MotorControllerGroup m_sideFeeders = new MotorControllerGroup(m_leftFeeder, m_rightFeeder);
+
 	private final CANSparkMax m_topFeeder = new CANSparkMax(ShooterConstants.kTopFeederPort, MotorType.kBrushless);
 
 	private final WPI_TalonFX m_bottomFlywheel = new WPI_TalonFX(ShooterConstants.kBottomFlywheelPort);
@@ -65,12 +69,10 @@ public class ShooterSubsystem extends SubsystemBase {
 		m_bottomFlywheel.setNeutralMode(NeutralMode.Coast);
 		m_topFlywheel.setNeutralMode(NeutralMode.Coast);
 
-		CANSparkMax leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
-		CANSparkMax rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
 		m_intake.setInverted(true);
-		leftFeeder.setInverted(true);
-		rightFeeder.setInverted(false);
-		m_sideFeeders = new MotorControllerGroup(leftFeeder, rightFeeder);
+		m_leftFeeder.setInverted(true);
+		m_rightFeeder.setInverted(false);
+
 		m_bottomShooterPID.setTolerance(0.08 * ShooterConstants.kTopShooterSpeedRPM, 100 / 0.02);
 		m_topShooterPID.setTolerance(0.08 * ShooterConstants.kBottomShooterSpeedRPM, 100 / 0.02);
 		m_armPID.setTolerance(2);
@@ -166,6 +168,22 @@ public class ShooterSubsystem extends SubsystemBase {
 
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 		}
+
+		SmartDashboard.putNumber("Temperature Arm", m_arm.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Intake", m_intake.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Left Feeder", m_leftFeeder.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Right Feeder", m_rightFeeder.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Top Feeder", m_topFeeder.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Bottom Flywheel", m_topFlywheel.getTemperature());
+		SmartDashboard.putNumber("Temperature Top Flywheel", m_bottomFlywheel.getTemperature());
+
+		SmartDashboard.putNumber("Current Arm", m_arm.getOutputCurrent());
+		SmartDashboard.putNumber("Current Intake", m_intake.getOutputCurrent());
+		SmartDashboard.putNumber("Current Left Feeder", m_leftFeeder.getOutputCurrent());
+		SmartDashboard.putNumber("Current Right Feeder", m_rightFeeder.getOutputCurrent());
+		SmartDashboard.putNumber("Current Top Feeder", m_topFeeder.getOutputCurrent());
+		SmartDashboard.putNumber("Current Bottom Flywheel", m_topFlywheel.getStatorCurrent());
+		SmartDashboard.putNumber("Current Top Flywheel", m_bottomFlywheel.getStatorCurrent());
 	}
 
 	/** Raises the arm. */

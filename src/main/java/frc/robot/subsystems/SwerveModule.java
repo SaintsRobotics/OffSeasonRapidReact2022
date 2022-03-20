@@ -90,6 +90,24 @@ public class SwerveModule {
 	}
 
 	/**
+	 * Returns the turning motor.
+	 * 
+	 * @return The turning motor.
+	 */
+	public CANSparkMax getTurningMotor() {
+		return m_turningMotor;
+	}
+
+	/**
+	 * Returns the drive motor.
+	 * 
+	 * @return The drive motor.
+	 */
+	public CANSparkMax getDriveMotor() {
+		return m_driveMotor;
+	}
+
+	/**
 	 * Stops the module from driving and turning. Use this so the wheels don't reset
 	 * to straight.
 	 */
