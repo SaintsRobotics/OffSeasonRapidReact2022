@@ -24,6 +24,7 @@ All commit messages must start with one of the following prefixes.
 * **"refactor:"** - Changes that affect code organization
 * **"style:"** - Changes that are formatting related (white-space, formatting, missing semi-colons, etc)
 * **"test:"** - New tests or correcting existing tests
+* **"perf:"** - Improves performance
 * **"chore:"** - Miscellaneous changes
 
 ### Examples
