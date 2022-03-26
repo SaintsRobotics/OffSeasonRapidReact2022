@@ -250,7 +250,7 @@ public class ShooterSubsystem extends SubsystemBase {
 	}
 
 	private boolean isShooterPrimed() {
-		return m_queueColorSensor.getProximity() >= 180;
+		return m_shooterColorSensor.getProximity() >= 180;
 	}
 
 	public void topFeederOn() {
