@@ -76,6 +76,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		m_bottomShooterPID.setTolerance(0.08 * ShooterConstants.kTopShooterSpeedRPM, 100 / 0.02);
 		m_topShooterPID.setTolerance(0.08 * ShooterConstants.kBottomShooterSpeedRPM, 100 / 0.02);
 		m_armPID.setTolerance(2);
+		m_armPID.enableContinuousInput(-180, 180);
 
 		// m_feederTimer.start();
 	}
