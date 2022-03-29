@@ -51,8 +51,8 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final PIDController m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterP, 0, 0);
 
 	private final PIDController m_topShooterPID = new PIDController(ShooterConstants.kTopShooterP, 0, 0);
-	private final SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(0.33, 0);
-	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(0.84, 0);
+	private final SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(0.4, 0);
+	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(0.4, 0);
 
 	private boolean m_runningIntake = false;
 	private boolean m_reversingIntake = false;
@@ -68,12 +68,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
 		m_bottomFlywheel.setNeutralMode(NeutralMode.Coast);
 		m_topFlywheel.setNeutralMode(NeutralMode.Coast);
-
+		
+		m_topFlywheel.setInverted(true);
 		m_intake.setInverted(true);
 		m_leftFeeder.setInverted(true);
 		m_rightFeeder.setInverted(false);
 
-		m_bottomShooterPID.setTolerance(0.08 * ShooterConstants.kTopShooterSpeedRPM, 100 / 0.02);
+		m_bottomShooterPID.setTolerance(0.08 * ShooterConstants.kTopMotorSpeedRPM, 100 / 0.02);
 		m_topShooterPID.setTolerance(0.08 * ShooterConstants.kBottomShooterSpeedRPM, 100 / 0.02);
 		m_armPID.setTolerance(2);
 		m_armPID.enableContinuousInput(-180, 180);

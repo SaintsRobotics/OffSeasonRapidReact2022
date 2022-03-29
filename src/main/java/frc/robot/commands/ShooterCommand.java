@@ -24,7 +24,7 @@ public class ShooterCommand extends CommandBase {
 
 	@Override
 	public void initialize() {
-		m_shooterSubsystem.setShooterSpeed(ShooterConstants.kBottomShooterSpeedRPM, ShooterConstants.kTopShooterSpeedRPM);
+		m_shooterSubsystem.setShooterSpeed(ShooterConstants.kBottomShooterSpeedRPM, ShooterConstants.kTopMotorSpeedRPM);
 	}
 
 	@Override
