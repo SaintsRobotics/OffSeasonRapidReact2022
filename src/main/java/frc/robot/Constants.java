@@ -19,6 +19,7 @@ import frc.robot.MUX.Port;
  * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
+	/** Constants for the drivetrain. */
 	public static final class SwerveConstants {
 		public static final int kFrontLeftDriveMotorPort = 9;
 		public static final int kRearLeftDriveMotorPort = 12;
@@ -68,6 +69,7 @@ public final class Constants {
 		public static final double kTurningStopTime = 0.2;
 	}
 
+	/** Constants for the swerve modules. */
 	public static final class ModuleConstants {
 		public static final double kWheelDiameterMeters = 0.1;
 
@@ -75,32 +77,41 @@ public final class Constants {
 		public static final double kDrivingGearRatio = 8.14;
 	}
 
+	/** Constants for the arm, intake, feeders, and shooter. */
 	public static final class ShooterConstants {
-		public static final int kBottomFlywheelPort = 9;
-		public static final int kTopFlywheelPort = 23;
-
 		public static final int kArmPort = 13;
-		public static final int kIntakeWheelsPort = 8;
+		public static final int kIntakePort = 8;
 		public static final int kLeftFeederPort = 10;
 		public static final int kRightFeederPort = 6;
 		public static final int kTopFeederPort = 14;
+		public static final int kBottomFlywheelPort = 9;
+		public static final int kTopFlywheelPort = 23;
 
 		public static final Port kQueueColorSensorPort = Port.kTwo;
 		public static final Port kShooterColorSensorPort = Port.kThree;
 
-//Motor and shooter are the same for the bottom flywheel, as there is a 1:1 ratio
+		public static final boolean kArmReversed = true;
+		public static final boolean kIntakeReversed = true;
+		public static final boolean kLeftFeederReversed = true;
+		public static final boolean kRightFeederReversed = false;
+		public static final boolean kTopFeederReversed = false;
+		public static final boolean kBottomFlywheelReversed = false;
+		public static final boolean kTopFlywheelReversed = true;
+
 		public static final double kBottomShooterSpeedRPM = 2500;
-		public static final double kTopMotorSpeedRPM = (ShooterConstants.kTopShooterSpeedRPM * 18)/52;
+
+		// Motor RPM and shooter RPM are different only for the top flywheel because of
+		// the gear ratio.
+		public static final double kTopMotorSpeedRPM = ShooterConstants.kTopShooterSpeedRPM * 18 / 52;
 		public static final double kTopShooterSpeedRPM = 5500;
+
 		public static final double kLowerArmAngle = 50.6;
 		public static final double kUpperArmAngle = -54.6;
+
 		public static final double kIntakeSpeed = 0.7;
 		public static final double kTopFeederSpeedSlow = 0.1;
 		public static final double kTopFeederSpeedFast = 0.9;
 		public static final double kSideFeederSpeed = 0.6;
-		public static final boolean kIntakeReversed = true;
-		public static final boolean kLeftFeederReversed = true;
-		public static final boolean kRightFeederReversed = false;
 
 		public static final int kRedThreshold = 300;
 		public static final int kBlueThreshold = 300;
@@ -126,6 +137,7 @@ public final class Constants {
 		public static final double kRightServoUnlockedPosition = 1;
 	}
 
+	/** Constants for outputs and inputs. */
 	public static final class OIConstants {
 		public static final int kDriverControllerPort = 0;
 		public static final int kOperatorControllerPort = 1;

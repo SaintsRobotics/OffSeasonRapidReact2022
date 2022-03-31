@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.I2C;
  */
 public class MUX {
 	public static final Port Port = null;
-    private final I2C m_I2C = new I2C(I2C.Port.kMXP, 0x70);
+	private final I2C m_I2C = new I2C(I2C.Port.kMXP, 0x70);
 
 	/** Represents a port for the mux as a single byte array. */
 	public enum Port {
