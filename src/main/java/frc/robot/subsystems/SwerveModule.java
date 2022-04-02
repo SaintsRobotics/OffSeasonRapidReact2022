@@ -90,6 +90,9 @@ public class SwerveModule implements Sendable {
 	public void setDesiredState() {
 		m_turningMotor.set(0);
 		m_driveMotor.set(0);
+
+		// To eliminate drift in simulator.
+		m_desiredState = new SwerveModuleState();
 	}
 
 	/**
