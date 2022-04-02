@@ -12,7 +12,7 @@ Here is a list of all the things the code can do.
 * Unit tests for utility methods.
 * Controlling shooter speeds with a PID controller and feedforward.
 * Following paths using PathWeaver.
-* 2 ball autonomous routine.
+* 2 and 4 ball autonomous routines.
 
 ## Commit Message Prefixes
 
