@@ -130,8 +130,8 @@ public final class Constants {
 		public static final boolean kLeftClimberReversed = true;
 		public static final boolean kRightClimberReversed = false;
 
-		public static final double kLeftServoLockedPosition = 1;
-		public static final double kLeftServoUnlockedPosition = 0.5;
+		public static final double kLeftServoLockedPosition = 0.5;
+		public static final double kLeftServoUnlockedPosition = 1;
 
 		public static final double kRightServoLockedPosition = 0.5;
 		public static final double kRightServoUnlockedPosition = 1;
