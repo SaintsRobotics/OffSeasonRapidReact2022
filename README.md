@@ -36,5 +36,3 @@ All commit messages must start with one of the following prefixes.
 * style: formatted the gradle file
 * test: fixed deadzone test
 * chore: licensing and credits
-
-Remember to add your name at the end of a commit when not using your own account. This will help us know who to talk to about commits.
