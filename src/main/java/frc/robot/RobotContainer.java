@@ -31,7 +31,8 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.PathWeaverCommand;
-import frc.robot.commands.ShootCommand;
+import frc.robot.commands.ShootFender;
+import frc.robot.commands.ShootTarmac;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -154,9 +155,13 @@ public class RobotContainer {
 				.whileHeld(() -> m_shooterSubsystem.lowerArm())
 				.whenReleased(() -> m_shooterSubsystem.stopArm());
 
-		// Turns on shooter when Y button is held.
+		// Turns on shooter for tarmac shots when Y button is held.
 		new JoystickButton(m_operatorController, Button.kY.value)
-				.whenHeld(new ShooterCommand(m_shooterSubsystem));
+				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterSubsystem.Mode.kTarmac));
+
+		// Turns on shooter for fender shots when B button is held.
+		new JoystickButton(m_operatorController, Button.kB.value)
+				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterSubsystem.Mode.kFender));
 
 		// runs intake forward while left trigger is held
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kLeftTrigger.value) > 0.5)
@@ -190,7 +195,7 @@ public class RobotContainer {
 				new ParallelDeadlineGroup(
 						new PathWeaverCommand(m_swerveDriveSubsystem, path + "TwoBall2", false),
 						new IntakeCommand(m_shooterSubsystem)),
-				new ShootCommand(m_shooterSubsystem));
+				new ShootTarmac(m_shooterSubsystem));
 
 		SequentialCommandGroup fourBallAuton = new SequentialCommandGroup(
 				twoBallAuton,
@@ -200,7 +205,7 @@ public class RobotContainer {
 				new ParallelDeadlineGroup(
 						new PathWeaverCommand(m_swerveDriveSubsystem, path + "FourBall4", false),
 						new IntakeCommand(m_shooterSubsystem)),
-				new ShootCommand(m_shooterSubsystem));
+				new ShootTarmac(m_shooterSubsystem));
 
 		return fourBallAuton;
 	}

@@ -10,7 +10,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 
 /** Command that shoots up to two balls */
-public class ShootCommand extends CommandBase {
+public class ShootTarmac extends CommandBase {
 	private final ShooterSubsystem m_subsystem;
 	private final Timer m_timer = new Timer();
 
@@ -19,7 +19,7 @@ public class ShootCommand extends CommandBase {
 	 * 
 	 * @param subsystem The required subsystem.
 	 */
-	public ShootCommand(ShooterSubsystem subsystem) {
+	public ShootTarmac(ShooterSubsystem subsystem) {
 		m_subsystem = subsystem;
 		addRequirements(m_subsystem);
 	}
@@ -32,12 +32,12 @@ public class ShootCommand extends CommandBase {
 
 	@Override
 	public void execute() {
-		m_subsystem.setShooterSpeed(ShooterConstants.kBottomShooterSpeedRPM, ShooterConstants.kTopMotorSpeedRPM);
+		m_subsystem.setShooterSpeed(ShooterSubsystem.Mode.kTarmac);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		m_subsystem.setShooterSpeed(0, 0);
+		m_subsystem.setShooterSpeed(ShooterSubsystem.Mode.kEnd);
 	}
 
 	@Override

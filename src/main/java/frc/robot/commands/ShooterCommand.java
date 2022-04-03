@@ -11,24 +11,25 @@ import frc.robot.subsystems.ShooterSubsystem;
 /** Command that turns the shooter on and off. */
 public class ShooterCommand extends CommandBase {
 	private final ShooterSubsystem m_shooterSubsystem;
-
+	private final ShooterSubsystem.Mode m_mode;
 	/**
 	 * Creates a new {@link ShooterCommand}.
 	 * 
 	 * @param subsystem The required subsystem.
 	 */
-	public ShooterCommand(ShooterSubsystem subsystem) {
+	public ShooterCommand(ShooterSubsystem subsystem, ShooterSubsystem.Mode mode) {
 		m_shooterSubsystem = subsystem;
+		m_mode = mode;
 		addRequirements(m_shooterSubsystem);
 	}
 
 	@Override
 	public void initialize() {
-		m_shooterSubsystem.setShooterSpeed(ShooterConstants.kBottomShooterSpeedRPM, ShooterConstants.kTopMotorSpeedRPM);
+		m_shooterSubsystem.setShooterSpeed(m_mode);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		m_shooterSubsystem.setShooterSpeed(0, 0);
+		m_shooterSubsystem.setShooterSpeed(ShooterSubsystem.Mode.kEnd);
 	}
 }
