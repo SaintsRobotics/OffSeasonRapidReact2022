@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -56,6 +57,8 @@ public class RobotContainer {
 
 	private final XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
 	private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+
+	private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -107,7 +110,15 @@ public class RobotContainer {
 			}
 		}, m_climberSubsystem));
 
-		SmartDashboard.putString("Autonomous Path", m_autonPath);
+		m_chooser.addOption("BlueHangarFourBall", "BlueHangar FourBall");
+		m_chooser.addOption("BlueHangarThreeBall", "BlueHangar ThreeBall");
+		m_chooser.addOption("BlueHangarTwoBall", "BlueHangar TwoBall");
+		m_chooser.addOption("BlueMidFourBall", "BlueMid FourBall");
+		m_chooser.addOption("BlueMidThreeBall", "BlueMid ThreeBall");
+		m_chooser.addOption("BlueMidTwoBall", "BlueMid TwoBall");
+		m_chooser.addOption("BlueStationThreeBall", "BlueStation ThreeBall");
+		m_chooser.addOption("BlueStationTwoBall", "BlueStation TwoBall");
+		SmartDashboard.putData(m_chooser);
 	}
 
 	/**
@@ -185,29 +196,60 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
-		String path = SmartDashboard.getString("Autonomous Path", m_autonPath);
+		// Returns null if a path has not been selected.
+		String[] path;
+		if (m_chooser.getSelected() != null) {
+			// Splits the selection into a location and number of balls.
+			// Ex: {"BlueMid", "FourBall"}
+			path = m_chooser.getSelected().split(" ");
+		} else {
+			return null;
+		}
 
 		SequentialCommandGroup twoBallAuton = new SequentialCommandGroup(
 				new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path + "TwoBall1", true),
+						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "TwoBall1", true),
 						new SequentialCommandGroup(
 								new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
 								new IntakeCommand(m_shooterSubsystem))),
 				new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path + "TwoBall2", false),
+						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "TwoBall2", false),
 						new IntakeCommand(m_shooterSubsystem)),
 				new ShootTarmac(m_shooterSubsystem));
-
+		SequentialCommandGroup threeBallAuton = new SequentialCommandGroup(
+				new ShootTarmac(m_shooterSubsystem),
+				new ParallelDeadlineGroup(
+						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall1", true),
+						new SequentialCommandGroup(
+								new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+								new IntakeCommand(m_shooterSubsystem))),
+				new ParallelDeadlineGroup(
+						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall2", true),
+						new IntakeCommand(m_shooterSubsystem)),
+				new ParallelDeadlineGroup(
+						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall3", false),
+						new IntakeCommand(m_shooterSubsystem)),
+				new ShootTarmac(m_shooterSubsystem));
 		SequentialCommandGroup fourBallAuton = new SequentialCommandGroup(
-				twoBallAuton,
-				new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path + "FourBall3", false),
+			twoBallAuton,
+			new ParallelDeadlineGroup(
+						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall3", false),
 						new IntakeCommand(m_shooterSubsystem)),
-				new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path + "FourBall4", false),
+			new ParallelDeadlineGroup(
+						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall4", false),
 						new IntakeCommand(m_shooterSubsystem)),
-				new ShootTarmac(m_shooterSubsystem));
+			new ShootTarmac(m_shooterSubsystem));
+		
 
-		return fourBallAuton;
+		switch (path[1]) {
+			case ("TwoBall"):
+				return twoBallAuton;
+			case ("ThreeBall"):
+				return threeBallAuton;
+			case ("FourBall"):
+				return fourBallAuton;
+			default:
+				return null;
+		}
 	}
 }
