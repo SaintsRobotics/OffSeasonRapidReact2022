@@ -46,8 +46,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-	private final String m_autonPath = "BlueHangar";
-	
+
 	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
 	private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 	private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
@@ -119,6 +118,7 @@ public class RobotContainer {
 		m_chooser.addOption("BlueStationThreeBall", "BlueStation ThreeBall");
 		m_chooser.addOption("BlueStationTwoBall", "BlueStation TwoBall");
 		SmartDashboard.putData(m_chooser);
+		SmartDashboard.putString("Autonomous Mode", "BlueHangar TwoBall");
 	}
 
 	/**
@@ -203,7 +203,7 @@ public class RobotContainer {
 			// Ex: {"BlueMid", "FourBall"}
 			path = m_chooser.getSelected().split(" ");
 		} else {
-			return null;
+			path = SmartDashboard.getString("Autonomous Mode", "BlueHangar TwoBall").split(" ");
 		}
 
 		SequentialCommandGroup twoBallAuton = new SequentialCommandGroup(
@@ -230,16 +230,6 @@ public class RobotContainer {
 						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall3", false),
 						new IntakeCommand(m_shooterSubsystem)),
 				new ShootTarmac(m_shooterSubsystem));
-		SequentialCommandGroup fourBallAuton = new SequentialCommandGroup(
-			twoBallAuton,
-			new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall3", false),
-						new IntakeCommand(m_shooterSubsystem)),
-			new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall4", false),
-						new IntakeCommand(m_shooterSubsystem)),
-			new ShootTarmac(m_shooterSubsystem));
-		
 
 		switch (path[1]) {
 			case ("TwoBall"):
@@ -247,7 +237,15 @@ public class RobotContainer {
 			case ("ThreeBall"):
 				return threeBallAuton;
 			case ("FourBall"):
-				return fourBallAuton;
+				return new SequentialCommandGroup(
+						twoBallAuton,
+						new ParallelDeadlineGroup(
+								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall3", false),
+								new IntakeCommand(m_shooterSubsystem)),
+						new ParallelDeadlineGroup(
+								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall4", false),
+								new IntakeCommand(m_shooterSubsystem)),
+						new ShootTarmac(m_shooterSubsystem));
 			default:
 				return null;
 		}
