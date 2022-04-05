@@ -164,7 +164,6 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
 			SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
 			SmartDashboard.putNumber("Arm Angle", m_armEncoder.getDistance());
-
 			
 			SmartDashboard.putBoolean("Queue Is Blue", queueIsBlue);
 			SmartDashboard.putBoolean("Queue Is Red", queueIsRed);
