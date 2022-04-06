@@ -41,6 +41,6 @@ public class ShootFender extends CommandBase {
 
 	@Override
 	public boolean isFinished() {
-		return m_timer.get() > 5;
+		return m_timer.get() > 2;
 	}
 }
