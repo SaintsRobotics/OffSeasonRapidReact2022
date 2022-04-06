@@ -109,13 +109,9 @@ public class RobotContainer {
 			}
 		}, m_climberSubsystem));
 
-		m_chooser.addOption("BlueHangarFourBall", "BlueHangar FourBall");
-		m_chooser.addOption("BlueHangarThreeBall", "BlueHangar ThreeBall");
 		m_chooser.addOption("BlueHangarTwoBall", "BlueHangar TwoBall");
 		m_chooser.addOption("BlueMidFourBall", "BlueMid FourBall");
-		m_chooser.addOption("BlueMidThreeBall", "BlueMid ThreeBall");
 		m_chooser.addOption("BlueMidTwoBall", "BlueMid TwoBall");
-		m_chooser.addOption("BlueStationThreeBall", "BlueStation ThreeBall");
 		m_chooser.addOption("BlueStationTwoBall", "BlueStation TwoBall");
 		SmartDashboard.putData(m_chooser);
 	}
