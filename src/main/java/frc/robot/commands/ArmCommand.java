@@ -51,6 +51,6 @@ public class ArmCommand extends CommandBase {
 
 	@Override
 	public boolean isFinished() {
-		return m_timer.get() > 0.75;
+		return m_timer.get() > 0.6;
 	}
 }
