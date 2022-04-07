@@ -91,9 +91,9 @@ public final class Constants {
 		public static final Port kShooterColorSensorPort = Port.kThree;
 
 //Motor and shooter are the same for the bottom flywheel, as there is a 1:1 ratio
-		public static final double kBottomMotorRPMTarmac = 2000;
+		public static final double kBottomMotorRPMTarmac = 2200;
 		public static final double kTopMotorRPMTarmac = (5800 * 18)/52;
-		public static final double kBottomFeedforwardTarmac = 0.35;
+		public static final double kBottomFeedforwardTarmac = 0.37;
 		public static final double kTopFeedforwardTarmac = 0.35;
 
 		public static final double kBottomMotorRPMFender = 2750;
