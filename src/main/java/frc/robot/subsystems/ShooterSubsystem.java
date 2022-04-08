@@ -167,6 +167,7 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putBoolean("Top at Setpoint", m_topShooterPID.atSetpoint());
 		}
 
+		SmartDashboard.putNumber("arm encoder", m_armEncoder.getDistance());
 	}
 
 	/** Raises the arm. */
