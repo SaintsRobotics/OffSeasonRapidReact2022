@@ -28,7 +28,7 @@ public class IntakeCommand extends CommandBase {
 		m_timer.reset();
 		m_timer.start();
 	}
-	
+
 	@Override
 	public void execute() {
 		m_subsystem.intake();
@@ -41,6 +41,6 @@ public class IntakeCommand extends CommandBase {
 
 	@Override
 	public boolean isFinished() {
-		return m_timer.get() > 1.5;
+		return m_timer.get() > 2;
 	}
 }
