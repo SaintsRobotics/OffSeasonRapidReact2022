@@ -91,7 +91,7 @@ public final class Constants {
 		public static final Port kShooterColorSensorPort = Port.kThree;
 
 //Motor and shooter are the same for the bottom flywheel, as there is a 1:1 ratio
-		public static final double kBottomMotorRPMTarmac = 2200;
+		public static final double kBottomMotorRPMTarmac = 2200; // if you change bottom motor or top motor RPM, change them in ShootTarmac too.
 		public static final double kTopMotorRPMTarmac = (5800 * 18)/52;
 		public static final double kBottomFeedforwardTarmac = 0.37;
 		public static final double kTopFeedforwardTarmac = 0.35;
@@ -101,8 +101,8 @@ public final class Constants {
 		public static final double kBottomFeedforwardFender = 0.45;
 		public static final double kTopFeedforwardFender = 0.3;
 
-		public static final double kLowerArmAngle = 49;
-		public static final double kUpperArmAngle = -54;
+		public static final double kLowerArmAngle = 48;
+		public static final double kUpperArmAngle = -51;
 
 		public static final boolean kArmReversed = true;
 		public static final boolean kIntakeReversed = true;

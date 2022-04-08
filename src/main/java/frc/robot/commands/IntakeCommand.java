@@ -27,11 +27,20 @@ public class IntakeCommand extends CommandBase {
 	public void initialize() {
 		m_timer.reset();
 		m_timer.start();
+	}
+
+	@Override
+	public void execute() {
 		m_subsystem.intake();
 	}
 
 	@Override
 	public void end(boolean interrupted) {
 		m_subsystem.intakeOff();
+	}
+
+	@Override
+	public boolean isFinished() {
+		return m_timer.get() > 3.5;
 	}
 }

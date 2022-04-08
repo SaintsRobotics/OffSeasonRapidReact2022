@@ -191,6 +191,7 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
+		// return new SequentialCommandGroup(new ShootTarmac(m_shooterSubsystem), new MoveCommand(m_swerveDriveSubsystem).withRobotRelativeX(-1.2));
 		// Returns null if a path has not been selected.
 		String[] path;
 		if (m_chooser.getSelected() != null) {
@@ -200,6 +201,7 @@ public class RobotContainer {
 		} else {
 			return null;
 		}
+
 
 		SequentialCommandGroup twoBallAuton = new SequentialCommandGroup(
 				new ParallelDeadlineGroup(
@@ -233,7 +235,7 @@ public class RobotContainer {
 			case ("FourBall"):
 				return new SequentialCommandGroup(
 						twoBallAuton,
-						new ParallelDeadlineGroup(
+						new ParallelCommandGroup(
 								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall3", false),
 								new IntakeCommand(m_shooterSubsystem)),
 						new ParallelDeadlineGroup(
