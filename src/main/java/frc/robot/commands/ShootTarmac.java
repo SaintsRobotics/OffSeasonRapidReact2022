@@ -41,6 +41,6 @@ public class ShootTarmac extends CommandBase {
 
 	@Override
 	public boolean isFinished() {
-		return m_timer.get() > 2.5;
+		return m_timer.get() > 2;
 	}
 }
