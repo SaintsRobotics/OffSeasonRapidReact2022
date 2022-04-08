@@ -166,9 +166,9 @@ public class RobotContainer {
 		new JoystickButton(m_operatorController, Button.kY.value)
 				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterSubsystem.Mode.kTarmac));
 
-		// Turns on shooter for fender shots when B button is held.
-		new JoystickButton(m_operatorController, Button.kB.value)
-				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterSubsystem.Mode.kFender));
+		// // Turns on shooter for fender shots when B button is held.
+		// new JoystickButton(m_operatorController, Button.kB.value)
+		// 		.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterSubsystem.Mode.kFender));
 
 		// runs intake forward while left trigger is held
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kLeftTrigger.value) > 0.5)
