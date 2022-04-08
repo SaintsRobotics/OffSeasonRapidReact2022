@@ -34,4 +34,8 @@ public class IntakeCommand extends CommandBase {
 	public void end(boolean interrupted) {
 		m_subsystem.intakeOff();
 	}
+
+	public boolean isFinished() {
+		return m_timer.get() > 1.5;
+	}
 }

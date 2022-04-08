@@ -233,7 +233,7 @@ public class RobotContainer {
 			case ("FourBall"):
 				return new SequentialCommandGroup(
 						twoBallAuton,
-						new ParallelDeadlineGroup(
+						new ParallelCommandGroup(
 								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall3", false),
 								new IntakeCommand(m_shooterSubsystem)),
 						new ParallelDeadlineGroup(
