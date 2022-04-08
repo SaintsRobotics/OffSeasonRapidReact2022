@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.MUX;
 import frc.robot.REVColorSensorV3;
@@ -134,22 +135,22 @@ public class ShooterSubsystem extends SubsystemBase {
 			m_topFeeder.set(0);
 		}
 
-		if (Robot.isReal()) {
-			// SmartDashboard.putNumber("Temperature Arm", m_arm.getMotorTemperature());
-			// SmartDashboard.putNumber("Temperature Intake", m_intake.getMotorTemperature());
-			// SmartDashboard.putNumber("Temperature Left Feeder", m_leftFeeder.getMotorTemperature());
-			// SmartDashboard.putNumber("Temperature Right Feeder", m_rightFeeder.getMotorTemperature());
-			// SmartDashboard.putNumber("Temperature Top Feeder", m_topFeeder.getMotorTemperature());
-			// SmartDashboard.putNumber("Temperature Bottom Flywheel", m_topFlywheel.getTemperature());
-			// SmartDashboard.putNumber("Temperature Top Flywheel", m_bottomFlywheel.getTemperature());
+		if (Robot.isReal() && OIConstants.kMotorLogging) {
+			SmartDashboard.putNumber("Temperature Arm", m_arm.getMotorTemperature());
+			SmartDashboard.putNumber("Temperature Intake", m_intake.getMotorTemperature());
+			SmartDashboard.putNumber("Temperature Left Feeder", m_leftFeeder.getMotorTemperature());
+			SmartDashboard.putNumber("Temperature Right Feeder", m_rightFeeder.getMotorTemperature());
+			SmartDashboard.putNumber("Temperature Top Feeder", m_topFeeder.getMotorTemperature());
+			SmartDashboard.putNumber("Temperature Bottom Flywheel", m_topFlywheel.getTemperature());
+			SmartDashboard.putNumber("Temperature Top Flywheel", m_bottomFlywheel.getTemperature());
 
-			// SmartDashboard.putNumber("Current Arm", m_arm.getOutputCurrent());
-			// SmartDashboard.putNumber("Current Intake", m_intake.getOutputCurrent());
-			// SmartDashboard.putNumber("Current Left Feeder", m_leftFeeder.getOutputCurrent());
-			// SmartDashboard.putNumber("Current Right Feeder", m_rightFeeder.getOutputCurrent());
-			// SmartDashboard.putNumber("Current Top Feeder", m_topFeeder.getOutputCurrent());
-			// SmartDashboard.putNumber("Current Bottom Flywheel", m_topFlywheel.getStatorCurrent());
-			// SmartDashboard.putNumber("Current Top Flywheel", m_bottomFlywheel.getStatorCurrent());
+			SmartDashboard.putNumber("Current Arm", m_arm.getOutputCurrent());
+			SmartDashboard.putNumber("Current Intake", m_intake.getOutputCurrent());
+			SmartDashboard.putNumber("Current Left Feeder", m_leftFeeder.getOutputCurrent());
+			SmartDashboard.putNumber("Current Right Feeder", m_rightFeeder.getOutputCurrent());
+			SmartDashboard.putNumber("Current Top Feeder", m_topFeeder.getOutputCurrent());
+			SmartDashboard.putNumber("Current Bottom Flywheel", m_topFlywheel.getStatorCurrent());
+			SmartDashboard.putNumber("Current Top Flywheel", m_bottomFlywheel.getStatorCurrent());
 		}
 
 		if (Utils.isTelemetryEnabled()) {
@@ -165,7 +166,6 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Top feedforward", m_topFeedforward.calculate(ShooterConstants.kTopFeedforwardTarmac));
 			SmartDashboard.putBoolean("Top at Setpoint", m_topShooterPID.atSetpoint());
 		}
-		SmartDashboard.putNumber("arm encoder", m_armEncoder.getDistance());
 
 	}
 

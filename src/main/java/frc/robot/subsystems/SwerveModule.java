@@ -19,6 +19,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Robot;
 
@@ -125,7 +126,7 @@ public class SwerveModule implements Sendable {
 	public void initSendable(SendableBuilder builder) {
 		builder.setSmartDashboardType("SwerveModule");
 
-		if (Robot.isReal()) {
+		if (Robot.isReal() && OIConstants.kMotorLogging) {
 			builder.addDoubleProperty("Absolute Angle",
 					() -> DriverStation.isTest()
 							? MathUtil.inputModulus(Math.toDegrees(m_turningEncoder.getAbsolutePosition())
