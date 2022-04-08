@@ -150,6 +150,6 @@ public final class Constants {
 		public static final int kOperatorControllerPort = 1;
 		public static final double kControllerDeadband = 0.2;
 
-		public static final boolean kTelemetry = false;
+		public static final boolean kTelemetry = true;
 	}
 }
