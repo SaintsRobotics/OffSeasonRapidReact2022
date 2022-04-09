@@ -120,7 +120,7 @@ public final class Constants {
 		public static final int kBlueThreshold = 300;
 		
 		public static final double kBottomShooterPTarmac = 0.00025;
-		public static final double kTopShooterPTarmac = 0.000025;
+		public static final double kTopShooterPTarmac = 0.000028;
 		//TODO: update these values with fender tuning 
 		public static final double kBottomShooterPFender = 0.00025;
 		public static final double kTopShooterPFender = 0.00025;
