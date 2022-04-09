@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.time.Instant;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -101,12 +102,15 @@ public class RobotContainer {
 
 		// Allows for independent control of climbers when enabled in test mode.
 		// Otherwise climbers are controlled together.
-		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> {
-			if (DriverStation.isTest()) {
-				m_climberSubsystem.set(leftClimbSpeed.getAsDouble(), rightClimbSpeed.getAsDouble());
-			} else {
-				m_climberSubsystem.set(leftClimbSpeed.getAsDouble());
-			}
+		// m_climberSubsystem.setDefaultCommand(new RunCommand(() -> {
+		// 	if (DriverStation.isTest()) {
+		// 		m_climberSubsystem.set(leftClimbSpeed.getAsDouble(), rightClimbSpeed.getAsDouble());
+		// 	} else {
+		// 		m_climberSubsystem.set(leftClimbSpeed.getAsDouble());
+		// 	}
+		// }, m_climberSubsystem));
+		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> {			
+				m_climberSubsystem.set(leftClimbSpeed.getAsDouble(), rightClimbSpeed.getAsDouble());			
 		}, m_climberSubsystem));
 
 		m_chooser.addOption("BlueHangarTwoBall", "BlueHangar TwoBall");
@@ -166,9 +170,13 @@ public class RobotContainer {
 		new JoystickButton(m_operatorController, Button.kY.value)
 				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterSubsystem.Mode.kTarmac));
 
-		// // Turns on shooter for fender shots when B button is held.
-		// new JoystickButton(m_operatorController, Button.kB.value)
-		// 		.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterSubsystem.Mode.kFender));
+		final DoubleSupplier leftClimbSpeed = () -> -Utils
+				.oddSquare(MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband))
+				* 0.5;
+		
+		// Climbers are controlled together while B is held
+		new JoystickButton(m_operatorController, Button.kB.value)
+				.whileHeld(new RunCommand(() -> m_climberSubsystem.set(leftClimbSpeed.getAsDouble())));
 
 		// runs intake forward while left trigger is held
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kLeftTrigger.value) > 0.5)
@@ -191,7 +199,8 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
-		// return new SequentialCommandGroup(new ShootTarmac(m_shooterSubsystem), new MoveCommand(m_swerveDriveSubsystem).withRobotRelativeX(-1.2));
+		// return new SequentialCommandGroup(new ShootTarmac(m_shooterSubsystem), new
+		// MoveCommand(m_swerveDriveSubsystem).withRobotRelativeX(-1.2));
 		// Returns null if a path has not been selected.
 		String[] path;
 		if (m_chooser.getSelected() != null) {
@@ -201,7 +210,6 @@ public class RobotContainer {
 		} else {
 			return null;
 		}
-
 
 		SequentialCommandGroup twoBallAuton = new SequentialCommandGroup(
 				new ParallelDeadlineGroup(
