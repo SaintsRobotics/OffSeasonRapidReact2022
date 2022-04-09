@@ -101,8 +101,8 @@ public final class Constants {
 		public static final double kBottomFeedforwardFender = 0.45;
 		public static final double kTopFeedforwardFender = 0.3;
 
-		public static final double kLowerArmAngle = 48;
-		public static final double kUpperArmAngle = -51;
+		public static final double kLowerArmAngle = 50.55;
+		public static final double kUpperArmAngle = 309;
 
 		public static final boolean kArmReversed = true;
 		public static final boolean kIntakeReversed = true;
@@ -150,7 +150,7 @@ public final class Constants {
 		public static final int kOperatorControllerPort = 1;
 		public static final double kControllerDeadband = 0.2;
 
-		public static final boolean kTelemetry = true;
+		public static final boolean kTelemetry = false;
 		public static final boolean kMotorLogging = false;
 	}
 }
