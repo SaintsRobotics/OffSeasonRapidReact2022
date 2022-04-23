@@ -92,21 +92,16 @@ public class RobotContainer {
 
 		m_swerveDriveSubsystem.setDefaultCommand(m_defaultMoveCommand);
 
+		// Allows for independent control of climbers when enabled in test mode.
+		// Otherwise climbers are controlled together.
 		final DoubleSupplier leftClimbSpeed = () -> -Utils
 				.oddSquare(MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband))
 				* 0.5;
 		final DoubleSupplier rightClimbSpeed = () -> -Utils
 				.oddSquare(MathUtil.applyDeadband(m_operatorController.getRightY(), OIConstants.kControllerDeadband))
 				* 0.5;
-
-		// Allows for independent control of climbers when enabled in test mode.
-		// Otherwise climbers are controlled together.
 		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> {
-			if (DriverStation.isTest()) {
-				m_climberSubsystem.set(leftClimbSpeed.getAsDouble(), rightClimbSpeed.getAsDouble());
-			} else {
-				m_climberSubsystem.set(leftClimbSpeed.getAsDouble());
-			}
+			m_climberSubsystem.set(leftClimbSpeed.getAsDouble(), rightClimbSpeed.getAsDouble());
 		}, m_climberSubsystem));
 
 		m_chooser.addOption("BlueHangarTwoBall", "BlueHangar TwoBall");
@@ -165,10 +160,12 @@ public class RobotContainer {
 		// Turns on shooter for tarmac shots when Y button is held.
 		new JoystickButton(m_operatorController, Button.kY.value)
 				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterSubsystem.Mode.kTarmac));
-
-		// Turns on shooter for fender shots when B button is held.
+		final DoubleSupplier leftClimbSpeed = () -> -Utils
+				.oddSquare(MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband))
+				* 0.5;
+		// Climbers are controlled together while B is held
 		new JoystickButton(m_operatorController, Button.kB.value)
-				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterSubsystem.Mode.kFender));
+				.whileHeld(new RunCommand(() -> m_climberSubsystem.set(leftClimbSpeed.getAsDouble())));
 
 		// runs intake forward while left trigger is held
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kLeftTrigger.value) > 0.5)

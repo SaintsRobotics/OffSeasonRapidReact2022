@@ -101,8 +101,8 @@ public final class Constants {
 		public static final double kBottomFeedforwardFender = 0.45;
 		public static final double kTopFeedforwardFender = 0.3;
 
-		public static final double kLowerArmAngle = 49.5;
-		public static final double kUpperArmAngle = -54.6;
+		public static final double kLowerArmAngle = 50.55;
+		public static final double kUpperArmAngle = 309;
 
 		public static final boolean kArmReversed = true;
 		public static final boolean kIntakeReversed = true;
@@ -137,8 +137,8 @@ public final class Constants {
 		public static final boolean kLeftClimberReversed = true;
 		public static final boolean kRightClimberReversed = false;
 
-		public static final double kLeftServoLockedPosition = 0.45;
-		public static final double kLeftServoUnlockedPosition = 0.6;
+		public static final double kLeftServoLockedPosition = 0.6;
+		public static final double kLeftServoUnlockedPosition = 0.45;
 
 		public static final double kRightServoLockedPosition = 0.5;
 		public static final double kRightServoUnlockedPosition = 1;
