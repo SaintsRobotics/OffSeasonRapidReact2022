@@ -1,6 +1,6 @@
 # RapidReact2022
 
-Saints Robotics 1899's code for the 2022 season.
+Saints Robotics 1899's code for the 2022 off-season.
 
 ## Status
 
