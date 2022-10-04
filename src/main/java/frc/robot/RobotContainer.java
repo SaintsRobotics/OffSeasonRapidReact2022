@@ -75,7 +75,7 @@ public class RobotContainer {
 				.oddSquare(MathUtil.applyDeadband(-m_driveController.getRightX(),
 						OIConstants.kControllerDeadband))
 				* SwerveConstants.kMaxAngularSpeedRadiansPerSecond;
-		BooleanSupplier fieldRelative = () -> m_driveController.getRightBumper();
+		BooleanSupplier fieldRelative = () -> !m_driveController.getRightBumper();
 		m_defaultMoveCommand = new MoveCommand(m_swerveDriveSubsystem)
 				.withXSpeedSupplier(x)
 				.withYSpeedSupplier(y)
