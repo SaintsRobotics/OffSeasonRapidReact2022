@@ -80,6 +80,7 @@ public final class Constants {
 	/** Constants for the arm, intake, feeders, and shooter. */
 	public static final class ShooterConstants {
 		public static final int kArmPort = 13;
+		public static final int kArmEncoderPort = 9;
 		public static final int kIntakePort = 8;
 		public static final int kLeftFeederPort = 10;
 		public static final int kRightFeederPort = 6;
