@@ -102,8 +102,8 @@ public final class Constants {
 		public static final double kBottomFeedforwardFender = 0.45;
 		public static final double kTopFeedforwardFender = 0.3;
 
-		public static final double kLowerArmAngle = 50.55;
-		public static final double kUpperArmAngle = 309;
+		public static final double kLowerArmAngle = 49.1;
+		public static final double kUpperArmAngle = -47.3;
 
 		public static final boolean kArmReversed = true;
 		public static final boolean kIntakeReversed = true;
