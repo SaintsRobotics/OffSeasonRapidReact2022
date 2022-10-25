@@ -30,6 +30,7 @@ import frc.robot.Utils;
 public class ShooterSubsystem extends SubsystemBase {
 	private final CANSparkMax m_arm = new CANSparkMax(ShooterConstants.kArmPort, MotorType.kBrushless);
 	private final DutyCycleEncoder m_armEncoder = new DutyCycleEncoder(ShooterConstants.kArmEncoderPort);
+	private String m_armbool="null";
 
 	private final CANSparkMax m_intake = new CANSparkMax(ShooterConstants.kIntakePort, MotorType.kBrushless);
 
@@ -135,6 +136,8 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 		if (Robot.isReal()) {
+			SmartDashboard.putString("ArmState", m_armbool);
+
 			SmartDashboard.putNumber("Temperature Arm", m_arm.getMotorTemperature());
 			SmartDashboard.putNumber("Temperature Intake", m_intake.getMotorTemperature());
 			SmartDashboard.putNumber("Temperature Left Feeder", m_leftFeeder.getMotorTemperature());
@@ -170,23 +173,33 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	/** Raises the arm. */
 	public void raiseArm() {
+		/*
 		m_armPID.setSetpoint(ShooterConstants.kUpperArmAngle);
 		if (m_armPID.atSetpoint())
 			m_arm.set(0);
-		else
+		else 
 			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getDistance()), -0.5, -0.1));
+			*/
+			m_armbool="raising";
+
+			m_arm.set(-0.2);
 	}
 
 	/** Lowers the arm. */
-	public void lowerArm() {
+	public void lowerArm() {/*
 		m_armPID.setSetpoint(ShooterConstants.kLowerArmAngle);
 		if (m_armPID.atSetpoint())
 			m_arm.set(0);
 		else
-			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getDistance()), 0.1, 0.7));
+			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getDistance()), 0.1, 0.7)); */
+			m_armbool="lowering";
+			m_arm.set(0.2);
+
 	}
 
 	public void stopArm() {
+		m_armbool="null";
+
 		m_arm.set(0);
 	}
 
