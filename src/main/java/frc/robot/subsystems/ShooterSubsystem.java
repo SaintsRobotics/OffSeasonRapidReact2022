@@ -28,7 +28,7 @@ import frc.robot.Utils;
 
 /** Subsystem that controls the arm, intake, feeders, and shooter flywheel. */
 public class ShooterSubsystem extends SubsystemBase {
-	private final CANSparkMax m_arm = new CANSparkMax(ShooterConstants.kArmPort, MotorType.kBrushless);
+	private final CANSparkMax m_arm = new CANSparkMax(ShooterConstants.kArmMotorPort, MotorType.kBrushless);
 	private final DutyCycleEncoder m_armEncoder = new DutyCycleEncoder(ShooterConstants.kArmEncoderPort);
 
 	private final CANSparkMax m_intake = new CANSparkMax(ShooterConstants.kIntakePort, MotorType.kBrushless);
