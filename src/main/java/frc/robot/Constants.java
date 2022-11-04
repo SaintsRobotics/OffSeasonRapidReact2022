@@ -21,7 +21,7 @@ import frc.robot.MUX.Port;
 public final class Constants {
 	/** Constants for the drivetrain. */
 	public static final class SwerveConstants {
-		public static final int kFrontLeftDriveMotorPort = 9;
+		public static final int kFrontLeftDriveMotorPort = 15;
 		public static final int kRearLeftDriveMotorPort = 12;
 		public static final int kFrontRightDriveMotorPort = 5;
 		public static final int kRearRightDriveMotorPort = 2;
