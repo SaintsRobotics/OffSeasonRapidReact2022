@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.robot.MUX.Port;
+
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -56,8 +59,8 @@ public final class Constants {
 				new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
 				new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
 				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
-
-		public static final double kMaxSpeedMetersPerSecond = 3.66;
+//TODO test
+		public static final double kMaxSpeedMetersPerSecond = 5880.0 / 60.0 / SdsModuleConfigurations.MK4_L2.getDriveReduction() * SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI;
 
 		// TODO update value with new robot
 		public static final double kMaxAngularSpeedRadiansPerSecond = 8.76;
