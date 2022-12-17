@@ -133,6 +133,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		} else if (!m_reversingIntake) { // as long as we're not trying to spit out the wrong color, set to zero
 			m_topFeeder.set(0);
 		}
+		SmartDashboard.putNumber("arm yes", m_intake.getOutputCurrent());
 
 		if (Robot.isReal()) {
 			SmartDashboard.putNumber("Temperature Arm", m_arm.getMotorTemperature());

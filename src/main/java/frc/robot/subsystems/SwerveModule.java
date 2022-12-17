@@ -139,4 +139,12 @@ public class SwerveModule implements Sendable {
 			builder.addDoubleProperty("Turning Motor Current", () -> m_turningMotor.getOutputCurrent(), null);
 		}
 	}
+
+	public double yes() {
+		return m_driveMotor.getOutputCurrent();
+	}
+
+	public double no() {
+		return m_turningMotor.getOutputCurrent();
+	}
 }

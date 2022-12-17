@@ -187,57 +187,61 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
-		// Returns null if a path has not been selected.
-		String[] path;
-		if (m_chooser.getSelected() != null) {
-			// Splits the selection into a location and number of balls.
-			// Ex: {"BlueMid", "FourBall"}
-			path = m_chooser.getSelected().split(" ");
-		} else {
-			return null;
-		}
 
-		SequentialCommandGroup twoBallAuton = new SequentialCommandGroup(
-				new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "TwoBall1", true),
-						new SequentialCommandGroup(
-								new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-								new IntakeCommand(m_shooterSubsystem))),
-				new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "TwoBall2", false),
-						new IntakeCommand(m_shooterSubsystem)),
-				new ShootTarmac(m_shooterSubsystem));
+		// change the path in this command (path file was deleted, go into pathplanner/generatedjson instead)
+		return new PathWeaverCommand(m_swerveDriveSubsystem, "test", true);
 
-		switch (path[1]) {
-			case ("TwoBall"):
-				return twoBallAuton;
-			case ("ThreeBall"):
-				return new SequentialCommandGroup(
-						new ShootTarmac(m_shooterSubsystem),
-						new ParallelDeadlineGroup(
-								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall1", true),
-								new SequentialCommandGroup(
-										new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-										new IntakeCommand(m_shooterSubsystem))),
-						new ParallelDeadlineGroup(
-								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall2", false),
-								new IntakeCommand(m_shooterSubsystem)),
-						new ParallelDeadlineGroup(
-								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall3", false),
-								new IntakeCommand(m_shooterSubsystem)),
-						new ShootTarmac(m_shooterSubsystem));
-			case ("FourBall"):
-				return new SequentialCommandGroup(
-						twoBallAuton,
-						new ParallelDeadlineGroup(
-								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall3", false),
-								new IntakeCommand(m_shooterSubsystem)),
-						new ParallelDeadlineGroup(
-								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall4", false),
-								new IntakeCommand(m_shooterSubsystem)),
-						new ShootTarmac(m_shooterSubsystem));
-			default:
-				return null;
-		}
+		// // Returns null if a path has not been selected.
+		// String[] path;
+		// if (m_chooser.getSelected() != null) {
+		// 	// Splits the selection into a location and number of balls.
+		// 	// Ex: {"BlueMid", "FourBall"}
+		// 	path = m_chooser.getSelected().split(" ");
+		// } else {
+		// 	return null;
+		// }
+
+		// SequentialCommandGroup twoBallAuton = new SequentialCommandGroup(
+		// 		new ParallelDeadlineGroup(
+		// 				new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "TwoBall1", true),
+		// 				new SequentialCommandGroup(
+		// 						new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+		// 						new IntakeCommand(m_shooterSubsystem))),
+		// 		new ParallelDeadlineGroup(
+		// 				new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "TwoBall2", false),
+		// 				new IntakeCommand(m_shooterSubsystem)),
+		// 		new ShootTarmac(m_shooterSubsystem));
+
+		// switch (path[1]) {
+		// 	case ("TwoBall"):
+		// 		return twoBallAuton;
+		// 	case ("ThreeBall"):
+		// 		return new SequentialCommandGroup(
+		// 				new ShootTarmac(m_shooterSubsystem),
+		// 				new ParallelDeadlineGroup(
+		// 						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall1", true),
+		// 						new SequentialCommandGroup(
+		// 								new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+		// 								new IntakeCommand(m_shooterSubsystem))),
+		// 				new ParallelDeadlineGroup(
+		// 						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall2", false),
+		// 						new IntakeCommand(m_shooterSubsystem)),
+		// 				new ParallelDeadlineGroup(
+		// 						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall3", false),
+		// 						new IntakeCommand(m_shooterSubsystem)),
+		// 				new ShootTarmac(m_shooterSubsystem));
+		// 	case ("FourBall"):
+		// 		return new SequentialCommandGroup(
+		// 				twoBallAuton,
+		// 				new ParallelDeadlineGroup(
+		// 						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall3", false),
+		// 						new IntakeCommand(m_shooterSubsystem)),
+		// 				new ParallelDeadlineGroup(
+		// 						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall4", false),
+		// 						new IntakeCommand(m_shooterSubsystem)),
+		// 				new ShootTarmac(m_shooterSubsystem));
+		// 	default:
+		// 		return null;
+		// }
 	}
 }
